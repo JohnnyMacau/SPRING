@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Demo</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/dist/css/adminlte.min.css}">
+    <!-- Google Font: Source Sans Pro -->
+    <link th:href="@{/assets/fonts/ssp.css}"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+    <!-- DataTables -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+
+    <!-- daterange picker -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/daterangepicker/daterangepicker.css}"
+          href="../../plugins/daterangepicker/daterangepicker.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/toastr/toastr.min.css}"
+          href="../../plugins/toastr/toastr.min.css">
+
+    <!--self css-->
+    <link rel="stylesheet" th:href="@{/assets/styles/self_basic.css}">
+    <link rel="stylesheet" th:href="@{/assets/styles/self_datatable.css}">
+
+
+</head>
+<body id="frameContent">
+<div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">demo page1</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active"></li>
+                        <li class="breadcrumb-item active"></li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+
+
+            <div class="row">
+
+                <div>
+                    <!--                        class="col-12"-->
+                    <div class="card">
+                        <div class="card-header">
+                            <!--                                <h3 class="card-title">&ensp;</h3>-->
+
+
+                            <table id="searchCondition1">
+                                <tr>
+                                    <td>生成日期</td>
+                                    <td>
+                                        <input onkeydown="return false" type="text" style="width: 100px"
+                                               placeholder="全部" autocomplete="off"
+                                               class="form-control self_date_picker" id="start_date"
+                                               value="">
+                                    </td>
+                                    <td>-</td>
+                                    <td>
+                                        <input onkeydown="return false" type="text" style="width: 100px"
+                                               placeholder="全部" autocomplete="off"
+                                               class="form-control self_date_picker" id="end_date"
+                                               value="">
+                                    </td>
+
+                                    <td>
+                                        <input type="text" style="width: 100px"
+                                               placeholder="" autocomplete="off"
+                                               class="form-control" id="username"
+                                               value="">
+                                    </td>
+                                    
+                                    <td>
+                                        <button type="button" style="width: 42px"
+                                                class="btn btn-block bg-gradient-primary"
+                                                onclick="search()"><i class="fa fa-search fa-align-left"></i>
+                                        </button>
+                                    </td>
+
+
+                                </tr>
+                            </table>
+
+
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+
+                            <table id="tableList" class="table table-bordered table-hover table-striped text-nowrap">
+                                <thead>
+                                <tr>
+                                    <th style="width:5px">
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input" type="checkbox" id="TableAll"/>
+                                            <label for="TableAll" class="custom-control-label"></label>
+                                        </div>
+                                    </th>
+
+                                    <th>序號</th>
+                                    <th>用户</th>
+                                    <th>密码</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+
+
+                </div>
+                <!-- /.col -->
+
+
+            </div>
+
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+
+
+    <!-- /.content-wrapper -->
+
+
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script th:src="@{/AdminLTE/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- DataTables -->
+<script th:src="@{/AdminLTE/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+
+<!-- date-range-picker -->
+<script th:src="@{/AdminLTE/plugins/daterangepicker/moment.min.js}" src="../../plugins/moment/moment.min.js"></script>
+<script th:src="@{/AdminLTE/plugins/daterangepicker/daterangepicker.js}"
+        src="../../plugins/daterangepicker/daterangepicker.js"></script>
+
+<!-- Toastr -->
+<script th:src="@{/AdminLTE/plugins/toastr/toastr.min.js}" src="../../plugins/toastr/toastr.min.js"></script>
+
+<!-- AdminLTE App -->
+<script th:src="@{/AdminLTE/dist/js/adminlte.min.js}"></script>
+<!-- self js -->
+<script th:src="@{/assets/js/myTable_checkbox.js}"></script>
+<script th:src="@{/assets/js/common.js}"></script>
+
+
+</body>
+<!-- page script -->
+<script>
+
+    var dataTable = null;
+    var columns;
+    $(function () {
+
+        //Date range picker
+        let currentYear = parseInt(moment().format('YYYY'), 10);
+        $('.self_date_picker').daterangepicker({
+            // timePicker: true,        // 选择时间
+            opens: 'right',
+            autoUpdateInput: false,
+            singleDatePicker: true,  // 只选一个
+            showDropdowns: true,
+            locale: {
+                format: 'MM/DD/YYYY'
+            },
+            minYear: 2000,
+            maxYear: currentYear + 1
+        })
+
+        //Toastr
+        toastr.options = {
+            positionClass: "toast-center-center",
+            timeOut: "2000"
+        }
+
+//         $.ajax({
+//             "url": url,
+//             "data": {
+//                 'batchProcess_checkboxs[]': batchProcess_checkboxs
+//             },
+//             "type": "post",
+//             "dataType": "json",
+//             "success": function (json) {
+//                 if (json.stateCode === 200) {
+//                     dataTable.ajax.reload();
+//                     toastr.success('修改成功!')
+//                 } else if (json.stateCode === 500) {
+//                     toastr.warning(json.message);
+//                 } else {
+//                     alert("本次操作未能成功!");
+//                 }
+//             },
+//             "error": function (xhr, text, errorThrown) {
+//                 alert("您的登录信息已经过期！請重新登录！");
+//                 document.location.replace('[[@{/login.html}]]');
+//             }
+//         });
+
+        
+        columns = [
+            {
+                "data": "id",
+                render: function (data, type, row, meta) {
+                    return '<div class="custom-control custom-checkbox">' +
+                        "<input class='save_checkboxs custom-control-input' id='checkbox_" + data +
+                        "' type=\"checkbox\" value='" + data + "'/>" +
+                        '<label for="checkbox_' + data +
+                        '" class="custom-control-label"></label>' +
+                        '</div>';
+                }
+            },
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    return meta.row + 1 + meta.settings._iDisplayStart;
+                }
+            }, // 序号
+            {"data": "username",},
+            {"data": "password",},
+        ];
+
+        search();
+    });
+
+    function getParams() {
+        let username = $("#username").val();
+        let param = {
+                "username": username
+            };
+        return param;
+    }
+
+
+    function search() {
+    	console.log("search()");
+        //设置参数，重新加载
+        let params = getParams();
+
+        if (dataTable == null) {
+            //初始化DataTables
+            dataTable = App.initDataTables("[[@{/user/searchUser}]]", columns, 2, "desc",
+                [
+                    {"bSortable": false, "aTargets": [0, 1, ]},
+                    {
+                        aTargets: [1, 2, 3,],
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            let rowspan = rowData.rowSpan;
+                            if (rowspan > 1) {
+                                $(td).attr('rowspan', rowspan)
+                            }
+                            if (rowspan == 0) {
+                                // $(td).remove();
+                                $(td).attr('style', 'display:none')
+
+                            }
+
+                        }
+                    }
+                ]
+            );
+        } else {
+            dataTable.settings()[0].ajax.data = params;
+            dataTable.ajax.reload();
+        }
+
+
+    }
+</script>
+
+</html>

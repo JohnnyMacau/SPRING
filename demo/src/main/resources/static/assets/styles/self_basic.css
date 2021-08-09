@@ -1,0 +1,46 @@
+/*sidebar_navbar*/
+.navbar_self {
+    height: 30px;
+    padding: 0;
+    background-color: whitesmoke;
+}
+.self-dropdown-width{
+    width: 50px;
+}
+
+.LOGO_style {
+    text-align: center;
+    height: 30px;
+}
+
+.brand-link {
+    line-height: 0.5;
+}
+
+/*dateRangePicker*/
+.self_date_picker {
+    caret-color: rgba(0, 0, 0, 0)
+}
+
+/*Toastr*/
+.toast-center-center {
+    top: 50%;
+    left: 50%;
+    margin-top: -30px;
+    margin-left: -150px;
+}
+
+.self_div_border_style {
+    border: 1px solid #ced4da;
+    border-radius: .25rem
+}
+.self_margin_left_25{
+    margin-left: 25px;
+}
+
+.self_sidebar_maintitle{
+    font-size: 20px;
+}
+.self_sidebar_subtitle{
+   text-align: center;
+}

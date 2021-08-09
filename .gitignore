@@ -1,0 +1,5 @@
+/.metadata/
+/demo/target/*
+/gs-spring-boot-complete/target/*
+/gs-spring-boot-initial/target/*
+/SpringBootProject/target/*

@@ -1,0 +1,78 @@
+/*body {
+    font-family: arial;
+    background: rgb(242, 244, 246);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+h3 {
+    color: rgb(199, 204, 209);
+    font-size: 28px;
+    text-align: center;
+}*/
+
+/*#elements-container {
+    text-align: center;
+}*/
+
+* {
+    moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/*.draggable-element {
+    display: inline-block;
+    width: 200px;
+    height: 200px;
+    background: white;
+    border: 1px solid rgb(196, 196, 196);
+    line-height: 200px;
+    text-align: center;
+    margin: 10px;
+    color: rgb(51, 51, 51);
+    font-size: 30px;
+    cursor: move;
+}*/
+
+.drag-list {
+    width: 400px;
+    margin: 0 auto;
+}
+
+.drag-list > li {
+    list-style: none;
+    background: rgb(255, 255, 255);
+    border: 1px solid rgb(196, 196, 196);
+    margin: 5px 0;
+    font-size: 24px;
+}
+
+.drag-list .title {
+    display: inline-block;
+    width: 130px;
+    padding: 6px 6px 6px 12px;
+    vertical-align: top;
+}
+
+.drag-list .drag-area {
+    display: inline-block;
+    background: #007bff;
+    width: 60px;
+    height: 50px;
+    /*vertical-align: top;*/
+    vertical-align: middle;
+    float: right;
+    cursor: move;
+    text-align: center;
+    color: white;
+}
+
+
+

@@ -1,0 +1,76 @@
+.card-body {
+    padding-top: 10px;
+    padding-bottom: 0;
+}
+
+/*  表專用  */
+/*.table-bordered tr:nth-child(2n+1) td{
+    background-color: #eae8fa;
+}
+.table-bordered tr:nth-child(2n) td{
+    background-color: #CCE8CF;
+}*/
+
+.table-bordered td {
+    padding: 0.5rem;
+}
+
+.table-bordered thead th {
+    background-color: #b8daff;
+}
+
+
+body {
+    background-color: whitesmoke;
+}
+
+body .card-header {
+    background-color: whitesmoke;
+}
+
+/*body .card-body{
+    background-color: whitesmoke;
+}*/
+body .card-footer {
+    background-color: whitesmoke;
+}
+
+
+/*.table-bordered .hoverd {
+    background-color: rgba(254,238,205,0.8);
+}
+*/
+
+/*.table-bordered .selected{ //在jquery.dataTables.min.css中, 指定高亮顏色
+    background-color: rgba(255,219,125,0.6);
+}*/
+
+
+table.dataTable tbody tr:hover {
+    background-color: rgba(184,218,255,0.5);
+}
+
+/*table.dataTable tbody tr:hover > .sorting_1 {
+    background-color: #ffa;
+}*/
+table.dataTable tbody tr.selected {
+    background-color: #ffa;
+}
+
+.self_paginate{
+    float: right;
+}
+.self_info{
+    float: left;
+}
+
+div.dataTables_wrapper div.dataTables_info {
+    padding-top:0;
+}
+.custom-select{
+	width:auto;
+}
+.custom-checkbox{
+	text-align:center;
+}
+
