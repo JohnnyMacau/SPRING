@@ -1,0 +1,10 @@
+.bg {
+	background: url(../images/company_bg2.png) no-repeat bottom right;
+}
+
+.t1 {
+	width: 610px;
+	height: 350px;
+	overflow-y: auto;
+	background: #fff;
+}

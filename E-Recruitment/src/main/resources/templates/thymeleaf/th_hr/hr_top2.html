@@ -1,0 +1,507 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>招聘人才</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="css/hr_top_new.css" th:href="@{/css/hr_top_new.css}" rel="stylesheet" type="text/css">
+    <link href="css/gh-buttons.css" th:href="@{/css/gh-buttons.css}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="css/daterangepicker.css" th:href="@{/css/daterangepicker.css}"/>
+
+</head>
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+
+<div id="body_div">
+    <div class="top">
+        <table id="Table_01" width="1025" height="179" border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td><img th:src="@{/images/spacer.gif}" width="197" height="1" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="55" height="1" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="5" height="1" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="51" height="1" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="11" height="1" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="50" height="1" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="17" height="1" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="33" height="1" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="62" height="1" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="51" height="1" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="63" height="1" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="51" height="1" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="23" height="1" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="39" height="1" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="28" height="1" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="25" height="1" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="57" height="1" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="76" height="1" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="130" height="1" alt=""></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td rowspan="7"><img th:src="@{/images/hr_top_01.gif}" width="197" height="173" alt=""></td>
+                <td colspan="14" rowspan="3"><img th:src="@{/images/hr_top_02.gif}" width="771" height="104" alt=""></td>
+                <td colspan="3"><img th:src="@{/images/hr_top_03.gif}" width="158" height="46" alt=""></td>
+                <td rowspan="3"><img th:src="@{/images/hr_top_04.gif}" width="130" height="104" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="1" height="46"></td>
+
+            </tr>
+            <tr>
+                <td colspan="2" rowspan="2"><img th:src="@{/images/hr_top_05.gif}" width="82" height="58" alt=""></td>
+
+                <td><img th:src="@{/images/spacer.gif}" width="1" height="23" alt=""></td>
+            </tr>
+            <tr>
+                <td><img th:src="@{/images/hr_top_07.gif}" width="76" height="35" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="1" height="35" alt=""></td>
+            </tr>
+            <tr class="tr_color">
+                <td colspan="2"><a href="/Company_info.html" th:href="@{/Company_info.html}"><img th:src="@{/images/hr_top_08a.gif}" alt="" width="60"
+                                                                 height="16"
+                                                                 border="0"></a></td>
+                <td><img th:src="@{/images/hr_top_09.gif}" width="51" height="16" alt=""></td>
+                <td colspan="2"><a href="/Company_Theory.html" th:href="@{/Company_Theory.html}"><img th:src="@{/images/hr_top_10a.gif}" alt="" width="61"
+                                                                   height="16"
+                                                                   border="0"></a></td>
+                <td colspan="2"><img th:src="@{/images/hr_top_11.gif}" width="50" height="16" alt=""></td>
+                <td><a href="#"><img th:src="@{/images/hr_top_12.gif}" alt="" width="62" height="16" border="0"></a></td>
+                <td><img th:src="@{/images/hr_top_13.gif}" width="51" height="16" alt=""></td>
+                <td><img th:src="@{/images/hr_top_14.gif}" width="63" height="16" alt=""></td>
+                <td><img th:src="@{/images/hr_top_15.gif}" width="51" height="16" alt=""></td>
+                <td colspan="2"><img th:src="@{/images/hr_top_16.gif}" width="62" height="16" alt=""></td>
+                <td colspan="2"><img th:src="@{/images/hr_top_17.gif}" width="53" height="16" alt=""></td>
+                <td><img th:src="@{/images/hr_top_18.gif}" width="57" height="16" alt=""></td>
+                <td><img th:src="@{/images/hr_top_19.gif}" width="76" height="16" alt=""></td>
+                <td><img th:src="@{/images/hr_top_20.gif}" width="130" height="16" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="1" height="16" alt=""></td>
+            </tr>
+            <tr>
+                <td colspan="18"><img th:src="@{/images/hr_top_21.gif}" width="1059" height="32" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="1" height="32" alt=""></td>
+            </tr>
+            <tr>
+                <td><a href="/hr_post_list.html" th:href="@{/hr_post_list.html}"><img th:src="@{/images/hr_top_22.gif}" alt="" width="55" height="15" border="0" class="self_job_vacancies"></a></td>
+                <td colspan="3"><a href="/hr_top_m1" th:href="@{/hr_top_m1}"><img th:src="@{/images/hr_top_23a.gif}" alt="" width="67" height="15"
+                                                              border="0"></a></td>
+                <td colspan="2"><a href="/hr_top9.html" th:href="@{/hr_top9.html}"><img th:src="@{/images/hr_top_24a.gif}" alt="" width="67" height="15"
+                                                            border="0"></a></td>
+                <td colspan="2"><a href="/hr_contact_us.html" th:href="@{/hr_contact_us.html}"><img th:src="@{/images/hr_top_25a.gif}" alt="" width="95"
+                                                                  height="15"
+                                                                  border="0"></a></td>
+
+                <td colspan="2"><img th:src="@{/images/hr_top_26.gif}" width="114" height="15" alt=""></td>
+                <td colspan="2"><img th:src="@{/images/hr_top_27.gif}" width="74" height="15" alt=""></td>
+                <td colspan="2"><img th:src="@{/images/hr_top_28.gif}" width="67" height="15" alt=""></td>
+                <td colspan="2"><img th:src="@{/images/hr_top_29.gif}" width="82" height="15" alt=""></td>
+                <td><img th:src="@{/images/hr_top_30.gif}" width="76" height="15" alt=""></td>
+                <td><img th:src="@{/images/hr_top_31.gif}" width="130" height="15" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="1" height="15" alt=""></td>
+            </tr>
+            <tr>
+                <td colspan="18" rowspan="2"><img th:src="@{/images/hr_top_32.gif}" width="1059" height="11" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="1" height="6" alt=""></td>
+            </tr>
+            <tr>
+                <td><img th:src="@{/images/hr_top_33.gif}" width="197" height="5" alt=""></td>
+                <td><img th:src="@{/images/spacer.gif}" width="1" height="5" alt=""></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="content">
+        <div class="leftfloat">
+            <table width="130" border="0" cellspacing="0" cellpadding="0">
+                <tbody>
+                <tr>
+                    <td><img th:src="@{/images/left.gif}" width="130" height="670" alt=""></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="center">
+            <table width="764" height="540" border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td valign="top" class="bg">
+                      <!--  <br>
+                        <map name="logoutmap1">
+                            <area shape="rect" coords="80,0,160,15" hidefocus="true" alt="個人資料" href="hr_top1.html">
+                            <area shape="rect" coords="160,0,240,15" hidefocus="true" alt="應徵資料" href="hr_top2.html">
+                            <area shape="rect" coords="240,0,320,15" hidefocus="true" alt="學歷" href="hr_top3.html">
+                            <area shape="rect" coords="320,0,400,15" hidefocus="true" alt="工作經驗" href="hr_top4.html">
+                            <area shape="rect" coords="400,0,480,15" hidefocus="true" alt="其他資料" href="hr_top5.html">
+                            <area shape="rect" coords="480,0,560,15" hidefocus="true" alt="可上班時間" href="hr_top6.html">
+                        </map>-->
+                        <table width="680" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr>
+                                <td width="65"><img th:src="@{/images/spacer2.gif}" width="65" height="8"></td>
+                               <!-- <td><img id="HR_bar" th:src="@{/images/HR_bar_a2.jpg" width="600" height="15"
+                                         usemap="#logoutmap1"
+                                         style="border-width: 0px 0px 0px 0px"
+                                         hidefocus="true"></td>-->
+                                <td>
+                                    <div id="tab">
+                                        <div class="tabList">
+                                            <ul>
+<!--                                                <li style="cursor: default"><a style="cursor: default" href="#">隱私權協議</a></li>-->
+                                                <!--                                        <li><a href="hr_top0.html">隱私權協議</a></li>-->
+
+<!--                                                <li><a href="hr_top1.html">個人資料</a></li>-->
+                                                <li class="cur"><a href="#">應徵資料</a></li>
+                                                <li><a class="a_goTop" th:attr="data-thref='/hr_top7_apply.html/'+${dept_pos_detail_id}"  href="#">申請記錄</a></li>
+
+                                                <!--                                                <li><a href="hr_top4.html">工作經驗</a></li>-->
+<!--                                                <li><a href="hr_top5.html">其他資料</a></li>-->
+<!--                                                <li><a href="hr_top7.html">完成</a></li>-->
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+
+                            <tr>
+                                <td width="13"><img th:src="@{/images/spacer1.gif}" width="13" height="1">
+                                </td>
+                                <td width="233" height="25">
+                                    <div class="info_mustFill_div">
+                                        <div class="info_mustFill">以下所有＊為必填項目</div>
+                                    </div>
+                                </td>
+                                <td width="100">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <form id="form-1">
+                                        <div class="t1" th:with="needShift=${DeptPositionDescVO.getNeedShift()}">
+                                            <table  id="add_part_SelectJob" width="800" border="0" cellspacing="0" cellpadding="0" class="word">
+                                                <tbody>
+                                            <!--    <tr>
+                                                    <td width="13"><img th:src="@{/images/spacer1.gif}" width="13" height="1">
+                                                    </td>
+                                                    <td width="233" height="25">
+                                                        <font size="2">＊必須填寫項目</font>
+                                                    </td>
+                                                    <td width="100">&nbsp;</td>
+                                                </tr>-->
+
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <!--   <td height="25" bgcolor="8cc63f" class="title">
+                                                       <font color="#FFFFFF"><strong>應徵職位</strong></font>
+                                                   </td>-->
+                                                <td height="25" class="title" width="100">
+                                                    <font class="page_title"><strong>應徵職位</strong></font>
+                                                </td>
+                                                <td height="50" >
+                                                    <font class="page_title"><strong th:text="${DeptPositionDescVO.getJobCode()}+'&emsp;'+${DeptPositionDescVO.getDescription()}+'&emsp;'+${DeptPositionDescVO.getJobTitle()}"></strong></font>
+                                                </td>
+                                            </tr>
+
+
+
+                                               <!-- <tr>
+                                                    <td width="13"><img th:src="@{/images/spacer1.gif}" width="13" height="1">
+
+                                                    <td height="50" width="600">
+                                                        <font class="info_title" id="department_select_font1">＊首選&emsp;&ensp;</font>
+
+                                                        <select class="info_select_long_1" id="title1" name="topTitle">
+                                                            <option value="-1">請選擇</option>
+                                                        </select></td>
+                                                </tr>-->
+
+                                                <!--  <tr>
+                                                      <td>&nbsp;</td>
+                                                      <td height="50">
+                                                          <font class="info_title" id="department_select_font">＊首選</font>
+
+                                                          <select class="info_select" id="department_select1" name="title">
+                                                              <option value="-1">請選擇</option>
+                                                          </select></td>
+                                                  </tr>
+                                                  -->
+
+
+                                                <!--                                    <input type="hidden" id="num1" value="2">-->
+
+
+                                                </tbody>
+                                            </table>
+                                            <table>
+                                                <tbody>
+                                             <!--   <tr>
+                                                    <td></td>
+                                                    <td>
+                                                        <div id="btn_add_applicant_job" class="page_title_small"
+                                                             style="cursor: pointer;width: 50px">＋添加
+                                                        </div>
+                                                    </td>
+                                                </tr>-->
+
+                                                <tr>
+                                                    <td height="50">&nbsp;</td>
+                                                    <td width="500"><font class="info_title"
+                                                                          id="expected_salary_font">＊要求待遇&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;MOP&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</font>
+                                                        <select class="info_select_small" name="expectedSalaryType"
+                                                                id="expected_salary_type">
+                                                            <option value="">請選擇</option>
+                                                            <option value="monthly">月薪</option>
+                                                            <option value="hourly">時薪</option>
+                                                        </select>
+                                                        <input class="info_input_small" type="text" name="expectedSalary"
+                                                               id="expected_salary"
+                                                               value="">
+                                                    </td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td height="50">&nbsp;</td>
+                                                    <td>
+                                                        <font class="info_title" id="notice_day_font">&emsp;離職通知期&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;</font>
+                                                        <input class="info_input_small" type="text" name="noticeDay" id="notice_day"
+                                                               value="">
+                                                        <select class="info_select_small" name="noticeDayType"
+                                                                id="notice_day_type">
+<!--                                                            <option value="">請選擇</option>-->
+                                                            <option value="day" selected>日</option>
+                                                            <option value="month">月</option>
+                                                        </select>
+                                                    </td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td height="50">&nbsp;</td>
+
+                                                    <td>
+                                                        <font class="info_title" id="day_font">&emsp;可到任日期&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;</font>
+<!--                                                        AvailableWorkDate-->
+                                                        <input onkeydown="return false" type="text"
+                                                               class="self_date_picker info_input_small" id="availableWorkDate"
+                                                               name="availableWorkDate" autocomplete="off">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td height="50">&nbsp;</td>
+                                                    <td>
+                                                        <font class="info_title" id="source_id_font">＊如何得知此職位空缺&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</font>
+                                                        <select class="info_select_small" name="sourceId" id="source_id">
+                                                            <option value="-1">請選擇</option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>&nbsp;</td>
+                                                    <td>
+                                                        <div style="float: right" id="source_ref_div">
+
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td height="50"></td>
+                                                    <td colspan="2">
+                                                        <div style="border-top:1px dotted rgba(169,169,169,0.85) "></div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <table id="part_onShift_table"  th:style="'display:'+ ${needShift==1?'':'none'}">
+                                                <tbody id="add_part_Select_onShift">
+                                                <input type="hidden" id="needShift" name="needShift" value="0" th:value="${needShift}">
+                                                <input type="hidden" id="onShift_total" name="onShift_total" value="0">
+                                                <tr class="word" id="show1">
+                                                    <td height="30">&nbsp;</td>
+                                                    <td>
+                                                        <font class="info_title" id="onShift_font">＊請提供可輪班之時間<font></td>
+
+
+                                                    <td>
+                                                        <select class="info_select_small" name="dayofweek" id="dayofweek1">
+                                                            <option value="">請選擇</option>
+                                                            <option value="every day">每日</option>
+                                                            <option value="f1t5">週一至五</option>
+                                                            <option value="6 and 7">週六日</option>
+                                                            <option value="1">週一</option>
+                                                            <option value="2">週二</option>
+                                                            <option value="3">週三</option>
+                                                            <option value="4">週四</option>
+                                                            <option value="5">週五</option>
+                                                            <option value="6">週六</option>
+                                                            <option value="7">周日</option>
+                                                        </select>
+                                                    </td>
+
+                                                    <td>
+                                                        &emsp;&emsp;由
+                                                    </td>
+                                                    <td>
+                                                        <select class="info_select_small" id="from_hour1"
+                                                                name="from_hour[]">
+                                                            <option value="-1" selected disabled style="display: none">時</option>
+                                                            <option value="0">00</option>
+                                                            <option value="1">01</option>
+                                                            <option value="2">02</option>
+                                                            <option value="3">03</option>
+                                                            <option value="4">04</option>
+                                                            <option value="5">05</option>
+                                                            <option value="6">06</option>
+                                                            <option value="7">07</option>
+                                                            <option value="8">08</option>
+                                                            <option value="9">09</option>
+                                                            <option value="10">10</option>
+                                                            <option value="11">11</option>
+                                                            <option value="12">12</option>
+                                                            <option value="13">13</option>
+                                                            <option value="14">14</option>
+                                                            <option value="15">15</option>
+                                                            <option value="16">16</option>
+                                                            <option value="17">17</option>
+                                                            <option value="18">18</option>
+                                                            <option value="19">19</option>
+                                                            <option value="20">20</option>
+                                                            <option value="21">21</option>
+                                                            <option value="22">22</option>
+                                                            <option value="23">23</option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <select class="info_select_small" id="from_min1"
+                                                                name="from_min[]">
+                                                            <option value="-1" selected disabled style="display: none">分</option>
+
+                                                            <option value="0">00</option>
+                                                            <option value="30">30</option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        &emsp;&emsp;至
+                                                    </td>
+                                                    <td>
+                                                        <select class="info_select_small" id="to_hour1"
+                                                                name="to_hour[]">
+                                                            <option value="-1" selected disabled style="display: none">時</option>
+
+                                                            <option value="0">00</option>
+                                                            <option value="1">01</option>
+                                                            <option value="2">02</option>
+                                                            <option value="3">03</option>
+                                                            <option value="4">04</option>
+                                                            <option value="5">05</option>
+                                                            <option value="6">06</option>
+                                                            <option value="7">07</option>
+                                                            <option value="8">08</option>
+                                                            <option value="9">09</option>
+                                                            <option value="10">10</option>
+                                                            <option value="11">11</option>
+                                                            <option value="12">12</option>
+                                                            <option value="13">13</option>
+                                                            <option value="14">14</option>
+                                                            <option value="15">15</option>
+                                                            <option value="16">16</option>
+                                                            <option value="17">17</option>
+                                                            <option value="18">18</option>
+                                                            <option value="19">19</option>
+                                                            <option value="20">20</option>
+                                                            <option value="21">21</option>
+                                                            <option value="22">22</option>
+                                                            <option value="23">23</option>
+                                                        </select></td>
+                                                    <td>
+                                                        <select class="info_select_small" id="to_min1"
+                                                                name="to_min[]">
+                                                            <option value="-1" selected disabled style="display: none">分</option>
+
+                                                            <option value="0">00</option>
+                                                            <option value="30">30</option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <table id="btn_onShift_table"  th:style="'display:'+ ${needShift==1?'':'none'}">
+                                                <tbody>
+                                                <tr>
+                                                    <td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td>
+                                                    <td>
+                                                        <div id="btn_add_onShift" class="page_title_small"
+                                                             style="cursor: pointer;width: 50px">＋添加
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <table width="480" border="0" cellspacing="0" cellpadding="0">
+                                            <tbody>
+                                            <tr class="word">
+                                                <td width="13" height="50">&nbsp;</td>
+                                                <td width="233">
+                                                   <!-- <input class="button" type="button" name="Submit2" value="上一步">
+                                                    <input class="button" type="button" id="onlySave" value="儲存">-->
+
+                                                    <input class="button" type="button" name="Submit" value="遞交申請">
+                                                    <input type="text" style="display:none;" th:value="${dept_pos_detail_id}" name="topTitle">
+                                                    <input type="hidden" name="noRepeatToken" th:value="${session.hrTop2NoRepeatTokenList?.get(0)}">
+
+                                                </td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td>
+                                                    <div id="error"></div>
+                                                </td>
+                                                <td>
+                                                    <div id="c_error"></div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <input type="hidden" id="type" name="type" value="">
+                                        <!--<input type="hidden" id="incomplete_page_no" name="incomplete_page_no" value="2">-->
+                                    </form>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="rightfloat">
+            <table width="126" border="0" cellspacing="0" cellpadding="0">
+                <tbody>
+                <tr>
+                    <td><img th:src="@{/images/right.gif}" width="126" height="670" alt=""></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div><img th:src="@{/images/bottom.png}" width="1024" height="50" style="padding-right: 50px" alt=""></div>
+
+    <script src="js/jquery-3.4.1.min.js" th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js" th:src="@{/js/jquery.cookie.js}"></script>
+    <script src="js/integration.js" th:src="@{/js/integration.js}"></script>
+    <script src="js/hr/common_dialog3.js" th:src="@{/js/hr/common_dialog3.js}"></script>
+    <script src="js/moment.min.js" th:src="@{/js/moment.min.js}"></script>
+    <script src="js/daterangepicker.js" th:src="@{/js/daterangepicker.js}"></script>
+
+    <script src="js/hr/hr_top2.js" th:src="@{/js/hr/hr_top2.js}" ></script>
+
+</div>
+</body>
+<div th:replace="/th_hr/commonFragment::common_dialog1"></div>
+</html>

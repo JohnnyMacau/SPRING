@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="nav_bar_1" class="top">
+    <ul>
+        <li style="text-align:left; width:75px;"><a class="color" th:href="@{/hr_post_list.html}">职位空缺</a>
+        </li>
+        <li><a th:href="@{/hr_top_m1.html}">申请职位</a></li>
+        <li><a th:href="@{/hr_top9.html}">员工福利</a></li>
+    </ul>
+</div>
+
+<div th:fragment="nav_bar_2" class="top">
+    <ul>
+        <li style="text-align:left; width:75px;"><a th:href="@{/hr_post_list.html}">职位空缺</a></li>
+        <li><a th:href="@{/hr_top_m1.html}" class="color">申请职位</a></li>
+        <li><a th:href="@{/hr_top9.html}">员工福利</a></li>
+    </ul>
+</div>
+
+<div th:fragment="nav_bar_3" class="top">
+    <ul>
+        <li style="text-align:left; width:75px;"><a th:href="@{/hr_post_list.html}">职位空缺</a></li>
+        <li><a th:href="@{/hr_top_m1.html}">申请职位</a></li>
+        <li><a th:href="@{/hr_top9.html}" class="color">员工福利</a></li>
+    </ul>
+</div>
+</html>

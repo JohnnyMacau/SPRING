@@ -1,0 +1,42 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<dialog th:fragment="common_dialog1">
+    <div>轉換分頁前請先儲存，否則內容將會消失</div>
+    <br>
+    <br>
+    <button class="button" id="closeDialog">儲存並跳轉</button>
+    <button class="button" id="goAndWithoutSave">不儲存,直接跳轉</button>
+</dialog>
+
+<!--<span th:fragment="common_nextPageBtns">
+    <input th:if="${isLogIn}" type="button" id="onlySave" value="儲存">
+    <input th:if="${isLogIn}" type="button" name="Submit" value="儲存並下一步">
+    <input th:if="!${isLogIn}" type="button" name="Submit" value="下一步">
+</span>-->
+
+<span th:fragment="common_nextPageBtns">
+    <input class="button" type="button" name="Submit" value="下一步" style='margin-left:15px;'>
+<!--    <input class="button" th:if="${isLogIn}" type="button" name="logout" id="logout" value="登出">
+    <input class="button" th:if="!${isLogIn}" type="button" name="logout" id="logout" value="退出">-->
+</span>
+<span th:fragment="common_nextPageBtns_top1">
+    <input class="button" type="button" name="Submit" value="下一步">
+    <input class="button" th:if="${isLogIn}" type="button" name="modify" id="modify" value="修改密碼">
+    <input class="button" th:if="!${isLogIn}" type="button" name="modify" id="modify" value="修改密碼" style="display: none">
+<!--    <input class="button" th:if="${isLogIn}" type="button" name="logout" id="logout" value="登出">
+    <input class="button" th:if="!${isLogIn}" type="button" name="logout" id="logout" value="退出">-->
+
+</span>
+
+<span th:fragment="self_username_logout_tr">
+     <tr>
+         <td width="65"><img src="images/spacer2.gif" width="65" height="1"></td>
+         <td align="right">
+             <span th:if="${reLogin}" th:text="${session.username}">xxx@qq.com</span>
+             <input class="button" th:if="${isLogIn}" type="button" name="logout" id="logout" value="登出">
+             <input class="button" th:if="!${isLogIn}" type="button" name="logout" id="logout" value="退出註冊">
+         </td>
+     </tr>
+</span>
+
+
