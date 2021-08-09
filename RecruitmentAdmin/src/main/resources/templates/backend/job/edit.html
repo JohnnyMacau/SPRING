@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>E - recruitment</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/dist/css/adminlte.min.css}">
+    <!-- Google Font: Source Sans Pro -->
+    <link th:href="@{/assets/fonts/ssp.css}"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+    <!-- daterange picker -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/daterangepicker/daterangepicker.css}"
+          href="../../plugins/daterangepicker/daterangepicker.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/toastr/toastr.min.css}"
+          href="../../plugins/toastr/toastr.min.css">
+    <!-- summernote -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/summernote/summernote-bs4.css}"
+          href="../../plugins/summernote/summernote-bs4.css">
+
+
+    <!--self css-->
+    <link rel="stylesheet" th:href="@{/assets/styles/self_basic.css}">
+
+
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark" id="title"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">職位空缺</li>
+                        <li class="breadcrumb-item active">管理職位</li>
+                        <li class="breadcrumb-item active">
+                            [[${departmentPositionDetail}!=null?(${showJob}?'查看職位':'編輯職位'):'新開職位']]
+                        </li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+
+
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title"></h3>
+                        </div>
+                        <form id="form_1">
+                            <div class="card-body">
+                                <input style="display: none" type="text" name="deptPosDetailId" id="deptPosDetailId"
+                                       th:if="${departmentPositionDetail}!=null and ${loadTemplate}!=true"
+                                       th:value="${departmentPositionDetail?.getDept_pos_detail_id()}">
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">預算性質</label>
+                                    <div class="col-sm-6">
+                                        <select th:with="v=${departmentPositionDetail?.getBugget_type()}+''"
+                                                class="custom-select" id="bugget_type" name="buggetType"
+                                                th:disabled="${showJob}">
+                                            <option value="1" th:selected="${v}=='1'">年度預算</option>
+                                            <option value="0" th:selected="${v}=='0'">非年度預算</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row"
+                                     th:if="${departmentPositionDetail}==null or ${loadTemplate}==true">
+                                    <label class="col-sm-2 col-form-label">職位範本</label>
+                                    <div class="col-sm-6">
+                                        <select class="custom-select" id="dept_pos_detail_id" name="templateId"
+                                                onchange="loadTemplate()">
+                                            <option></option>
+                                            <option th:each="template : ${templateList}"
+                                                    th:value="${template[1].deptPosDetailId}"
+                                                    th:selected="${deptPosDetailId}==${template[1].deptPosDetailId}">
+                                                [[${template[1].jobCode}]]&ensp;|&ensp;[[${template[0]}]]
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row"
+                                     th:switch="${departmentPositionDetail}!=null and ${loadTemplate}!=true">
+                                    <label class="col-sm-2 col-form-label">工作單位</label>
+                                    <div th:case="true" class="col-sm-6">
+                                        <input type="text" class="form-control" disabled
+                                               th:value="${departmentPositionDetail?.getOrg_name()}">
+                                    </div>
+                                    <div th:case="false" class="col-sm-6">
+                                        <select class="custom-select" id="org_id" name="orgId"
+                                                onchange="getOrgDept()">
+                                            <option th:each="org : ${organizationList}" th:value="${org.orgId}"
+                                                    th:selected="${org.orgId}==${departmentPositionDetail?.getOrg_id()}">
+                                                [[${org.code}]]&ensp;|&ensp;[[${org.desc}]]
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row"
+                                     th:switch="${departmentPositionDetail}!=null and ${loadTemplate}!=true">
+                                    <label class="col-sm-2 col-form-label">部門</label>
+                                    <div th:case="true" class="col-sm-6">
+                                        <input type="text" class="form-control" disabled
+                                               th:value="${departmentPositionDetail?.getDept_name()}">
+                                    </div>
+                                    <div th:case="false" class="col-sm-6">
+                                        <select class="custom-select" id="department_code" name="departmentCode"
+                                                onchange="departmentCodeChangeFunc()">
+                                            <option></option>
+                                            <option th:each="dept : ${departmentList}" th:value="${dept.code}"
+                                                    th:selected="${dept.code}==${departmentPositionDetail?.getDept_code()}">
+                                                [[${dept.description}]]
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row"
+                                     th:switch="${departmentPositionDetail}!=null and ${loadTemplate}!=true">
+                                    <label class="col-sm-2 col-form-label">職位名稱</label>
+                                    <div th:case="true" class="col-sm-6">
+                                        <input type="text" class="form-control" disabled
+                                               th:value="${departmentPositionDetail?.getJob_title()}">
+                                    </div>
+                                    <div th:case="false" class="col-sm-9">
+                                        <!--  <input type="text" class="form-control" name="jobTitle"
+                                          >-->
+                                        <div class="self_div_border_style">
+                                            <div id="departmentPosition_div"
+                                                 class="form-group  row">
+                                            </div>
+                                            <div class="col-sm-12 row" id="addJobTitle_div">
+                                                <table>
+                                                    <tr>
+                                                        <td><h5>請選擇部門</h5></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">職位編碼</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" name="jobCode"
+                                               th:value="${departmentPositionDetail?.getJob_code()}"
+                                               th:disabled="${showJob}">
+                                    </div>
+                                </div>
+
+                                <!--   <div class="form-group row">
+                                       <label class="col-sm-2 col-form-label">Job Requirement</label>
+                                       <div class="col-sm-9">
+                                         <textarea class="form-control" rows="9" id="job_desc" name="jobDesc"
+                                                   style="margin-top: 0; margin-bottom: 0; height: 179px;">[[${departmentPositionDetail?.job_desc}]]</textarea>
+                                       </div>
+                                       <div><a title="預覽" href="#" class="btn btn-info" id="viewButton"><i
+                                               class="fas fa-eye"></i></a>
+                                       </div>
+                                   </div>-->
+
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">職位要求</label>
+                                    <div class="col-sm-10">
+                                         <textarea class="form-control self_textarea_summernote" rows="9" id="job_desc"
+                                                   name="jobDesc"
+                                                   style="margin-top: 0; margin-bottom: 0; height: 179px;">[[${departmentPositionDetail?.job_desc}]]</textarea>
+                                    </div>
+
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">招聘人數</label>
+                                    <div class="col-sm-6">
+                                        <select th:with="v=${departmentPositionDetail?.getHeadcount()}+''"
+                                                class="custom-select" id="headcount" name="headcount"
+                                                th:disabled="${showJob}">
+                                            <option value="1" th:selected="${v}=='1'">1</option>
+                                            <option value="2" th:selected="${v}=='2'">2</option>
+                                            <option value="3" th:selected="${v}=='3'">3</option>
+                                            <option value="4" th:selected="${v}=='4'">4</option>
+                                            <option value="5" th:selected="${v}=='5'">5</option>
+                                            <option value="6" th:selected="${v}=='6'">6</option>
+                                            <option value="7" th:selected="${v}=='7'">7</option>
+                                            <option value="8" th:selected="${v}=='8'">8</option>
+                                            <option value="9" th:selected="${v}=='9'">9</option>
+                                            <option value="10" th:selected="${v}=='10'">10</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!--                                 <div class="form-group row"> -->
+                                <!--                                     <label class="col-sm-2 col-form-label">生效日期</label> -->
+                                <!--                                     <div class="col-sm-6"> -->
+                                <!--                                         <input onkeydown="return false" type="text" -->
+                                <!--                                                class="form-control self_date_picker" id="start_date" -->
+                                <!--                                                name="startDate" autocomplete="off" -->
+                                <!--                                                th:value="${departmentPositionDetail?.getStart_date()}" th:disabled="${showJob}"> -->
+                                <!--                                     </div> -->
+                                <!--                                 </div> -->
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">是否需要輪班</label>
+                                    <div class="col-sm-6">
+                                        <select
+                                                th:with="v=${departmentPositionDetail?.getNeed_shift()}+''"
+                                                class="custom-select" id="need_shift" name="needShift"
+                                                th:disabled="${showJob}">
+                                            <option value="1" th:selected="${v}=='1'">需要</option>
+                                            <option value="0" th:selected="${v}=='0'">不需要</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">聘請形式</label>
+                                    <div class="col-sm-6">
+                                        <select
+                                                th:with="v=${departmentPositionDetail?.getRecruitmentForm()}"
+                                                class="custom-select" id="recruitmentForm" name="recruitmentForm"
+                                                th:disabled="${showJob}">
+                                            <option value="full" th:selected="${v}=='full'">全職</option>
+                                            <option value="part" th:selected="${v}=='part'">兼職</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row" th:if="${editTemplate}!=true">
+                                    <label class="col-sm-2 col-form-label">狀態</label>
+                                    <div class="col-sm-6">
+                                        <select
+                                                th:with="v=${departmentPositionDetail?.getStatus()}+''"
+                                                class="custom-select" id="ddlStatus" name="status"
+                                                th:disabled="${showJob}">
+                                            <option value="D" th:selected="${v}=='D'">草稿</option>
+                                            <option value="A" th:selected="${v}=='A'">生效</option>
+                                            <option value="O" th:selected="${v}=='O'">離線</option>
+                                            <option value="S" th:selected="${v}=='S' and ${loadTemplate}!=true"
+                                                    th:if="${departmentPositionDetail}!=null">關閉
+                                            </option>
+                                        </select></div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">選擇群組</label>
+                                    <div class="col-sm-6" th:if="${loadTemplate}==true or ${editJob}==true or ${editDraft}==true or ${editTemplate}==true or ${addJob}==true">
+                                        <select
+                                                th:with="v=${departmentPositionDetail?.getRecruitment_group_id()}+''"
+                                                class="custom-select" id="recruitmentGroupId" name="recruitmentGroupId"
+                                        >
+                                            <option value=''></option>
+                                            <option th:if="${loadTemplate}==true or ${editJob}==true or ${editDraft}==true or ${editTemplate}==true"
+                                                    th:each="group:${groupList}"
+                                                    th:with="groupId=${group.getId()}"
+                                                    th:value="${groupId}"
+                                                    th:selected="${v}==${groupId}"
+                                                    th:text="${group.getName()}"
+                                            ></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6" th:if="${showJob}==true">
+                                      <!--  <input type="hidden"
+                                                th:value="{departmentPositionDetail?.getRecruitment_group_id()}+''"
+                                                class="form-control" id="recruitmentGroupId" name="recruitmentGroupId"
+                                                disabled
+                                        />-->
+                                        <select disabled
+                                                th:with="v=${departmentPositionDetail?.getRecruitment_group_id()}+''"
+                                                class="custom-select" id="recruitmentGroupId" name="recruitmentGroupId"
+                                        >
+                                            <option value=''></option>
+                                            <option th:each="group:${groupList}"
+                                                    th:with="groupId=${group.getId()}"
+                                                    th:value="${groupId}"
+                                                    th:selected="${v}==${groupId}"
+                                                    th:text="${group.getName()}"
+                                            ></option>
+                                        </select>
+                                    </div>
+
+                                </div>
+
+
+                                <input style="display: none" type="text" name="status" th:if="${editTemplate}==true"
+                                       th:value="T">
+
+                                <!--  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
+                                      Launch Default Modal
+                                  </button>-->
+                                <!-- <button type="button" class="btn btn-success toastrDefaultSuccess">
+                                     Launch Success Toast
+                                 </button>-->
+
+                                <!--                                  edit template -->
+                                <button type="button"
+                                        th:if="${departmentPositionDetail}!=null and ${editTemplate}==true"
+                                        id="confirmSaveTemplateButton"
+                                        class="btn btn-sm btn-primary" onclick="confirmSaveTemplateButton_fn()"><i
+                                        class="fa fa-save" aria-hidden="true"></i> 儲存
+                                </button>
+                                <button type="button"
+                                        th:if="${departmentPositionDetail}!=null and ${editTemplate}==true"
+                                        id="confirmSaveAsNewJobButton"
+                                        class="btn btn-sm btn-primary" onclick="confirmSaveAsNewJobButton_fn()"><i
+                                        class="fa fa-save" aria-hidden="true"></i> 儲存為新職位
+                                </button>
+                                <!--                                  edit template -->
+
+                                <!--                                  save closed as new -->
+                                <button type="button" th:if="${showJob}==true"
+                                        id="confirmSaveAsNewJobButton"
+                                        class="btn btn-sm btn-primary" onclick="confirmSaveAsNewJobButton_fn()"><i
+                                        class="fa fa-save" aria-hidden="true"></i> 儲存為新職位
+                                </button>
+                                <!--                                  save closed as new -->
+
+                                <!--                                  edit job -->
+                                <button type="button"
+                                        th:if="${departmentPositionDetail}!=null and ${loadTemplate}!=true and ${editTemplate}!=true and ${showJob}!=true"
+                                        id="confirmEditButton"
+                                        class="btn btn-sm btn-primary" onclick="confirmEditButton_fn()"><i
+                                        class="fa fa-save" aria-hidden="true"></i> 確定
+                                </button>
+                                <button type="button"
+                                        th:if="${departmentPositionDetail}!=null and ${loadTemplate}!=true and ${editTemplate}!=true and ${showJob}!=true"
+                                        id="saveAsTemplateButton"
+                                        class="btn btn-sm btn-primary" onclick="saveAsTemplateButton_fn()"><i
+                                        class="fa fa-save" aria-hidden="true"></i> 另存為模版
+                                </button>
+                                <!--                                  edit job -->
+
+                                <!--                                  add new job/use template to add job -->
+                                <button type="button" th:if="${departmentPositionDetail}==null or ${loadTemplate}==true"
+                                        id="confirmAddButton"
+                                        class="btn btn-sm btn-primary" onclick="confirmAddButton_fn()"><i
+                                        class="fa fa-save" aria-hidden="true"></i> 確定
+                                </button>
+                                <!--                                  add job -->
+
+
+                                <button th:if="${departmentPositionDetail}!=null and ${showJob}!=true"
+                                        type="reset" class="btn btn-sm btn-primary self_reset_btn"
+                                        style="float: right"><i class="fa fa-undo" aria-hidden="true"></i> 重設
+                                </button>
+                                <button th:if="${departmentPositionDetail}==null and ${showJob}!=true"
+                                        type="reset" class="btn btn-sm btn-primary self_reset_btn"
+                                        style="float: right" onclick="reset_fn()"><i class="fa fa-undo"
+                                                                                     aria-hidden="true"></i> 重設
+                                </button>
+								<button  th:if="${departmentPositionDetail}!=null"
+										type="button" id="backButton"
+                                        class="btn btn-sm btn-primary" onclick="backButton_fn()"><i
+                                        class="fa fa-reply" aria-hidden="true"></i> 返回
+                                </button>
+                            </div>
+                        </form>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+
+            </div>
+
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+
+    <!-- /.content-wrapper -->
+
+
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script th:src="@{/AdminLTE/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- date-range-picker -->
+<script th:src="@{/AdminLTE/plugins/daterangepicker/moment.min.js}" src="../../plugins/moment/moment.min.js"></script>
+<script th:src="@{/AdminLTE/plugins/daterangepicker/daterangepicker.js}"
+        src="../../plugins/daterangepicker/daterangepicker.js"></script>
+
+<!-- Toastr -->
+<script th:src="@{/AdminLTE/plugins/toastr/toastr.min.js}" src="../../plugins/toastr/toastr.min.js"></script>
+
+
+<!-- AdminLTE App -->
+<script th:src="@{/AdminLTE/dist/js/adminlte.min.js}"></script>
+<!-- Summernote -->
+<script th:src="@{/AdminLTE/plugins/summernote/summernote-bs4.min.js}"
+        src="../../plugins/summernote/summernote-bs4.min.js"></script>
+<script th:src="@{/AdminLTE/plugins/summernote/lang/summernote-zh-CN.js}"
+        src="/summernote/lang/summernote-zh-CN.js"></script>
+<!--self js-->
+<script th:src="@{/assets/js/self_basic.js}"></script>
+<script th:src="@{/assets/js/common.js}"></script>
+
+</body>
+
+
+<!-- page script -->
+<script>
+    $(function () {
+		var departmentPositionDetail = '[[${departmentPositionDetail}]]';
+        var loadTemplate = '[[${loadTemplate}]]';
+        var jobTitle = '[[${departmentPositionDetail?.getJob_title()}]]';
+        if (loadTemplate) {
+            getDepartmentPositionList();
+        }
+        if(departmentPositionDetail==null){
+            getOrgDept();
+        }
+
+        $("a#viewButton").click(newWindow);
+
+        //Date range picker
+        let currentYear = parseInt(moment().format('YYYY'), 10);
+        $('.self_date_picker').daterangepicker({
+            // timePicker: true,        // 选择时间
+            opens: 'left',
+            autoUpdateInput: false,
+            singleDatePicker: true,  // 只选一个
+            showDropdowns: true,
+            locale: {
+                format: 'MM/DD/YYYY'
+            },
+            minYear: currentYear - 5,
+            maxYear: currentYear + 5
+        })
+
+        if($("#ddlStatus").val()=="D"){
+        	$("#saveAsTemplateButton").hide();
+        }
+        $("#ddlStatus").change(function(){
+        	if($(this).val()=="D"){
+        		$("#saveAsTemplateButton").hide();
+        	}
+        	else{
+        		$("#saveAsTemplateButton").show();
+        	}
+        });
+
+
+        //Toastr
+        toastr.options = {
+            positionClass: "toast-center-center",
+            timeOut: "2000"
+        }
+        /*  $('.toastrDefaultSuccess').click(function() {
+              console.log(1)
+              toastr.success('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+          });*/
+
+        let html1 = parent.$("a.active.self_sidebar_maintitle p").html();
+        if(html1 && html1.indexOf('職位空缺')<0){
+        	$("#confirmSaveAsNewJobButton").hide();
+        	$(".self_reset_btn").hide();
+        }
+    })
+
+
+    function Popup(sURL, sName, iW, iH, iLeft, iTop) {
+        return window.open(sURL, sName, 'alwaysRaised=yes,menubar=no,toolbar=no,resizable=yes,scrollbars=yes,status=yes,left=' + iLeft + ',top=' + iTop + ',height=' + iH + ',width=' + iW);
+    }
+
+    function newWindow() {
+
+        let winWidth = document.documentElement.clientWidth;
+        let winHeight = document.documentElement.clientHeight;
+
+        let W = 810, H = 600;
+        let left = (winWidth - W) / 2 + 'px';
+        let top = (winHeight - H) / 2 + 'px';
+
+        let w = Popup('', '', W, H, left, top);
+
+        let html = $("#job_desc").val();
+        $(w.document.body).html(html);
+    }
+
+    function confirmEditButton_fn() {
+
+        if (!checkEditCanPass()) return;
+
+        document.getElementById('confirmEditButton').disabled = true;
+
+        let url = "[[@{/operate/job/edit}]]"
+
+        let data = $("#form_1");
+
+        $.ajax({
+            "url": url,
+            "data": JSON.stringify(getFormData(data)),
+            "type": "post",
+            "contentType": "application/json;charset=utf-8",
+            "dataType": "json",
+            "success": function (json) {
+                if (json.stateCode === 200) {
+                    // alert("操作成功!");
+                    toastr.success('操作成功!')
+                    setTimeout(function () {
+                        location.href = "[[@{/dispatch/job/search}]]";
+                    }, 1500);
+                } else if (json.stateCode === 500) {
+                    toastr.warning(json.message);
+                    document.getElementById('confirmEditButton').disabled = false;
+                } else {
+                    alert("本次操作未能成功!");
+                    document.getElementById('confirmEditButton').disabled = false;
+                }
+            },
+            "error": function (xhr, text, errorThrown) {
+                alert("您的登录信息已经过期！請重新登录！");
+                document.location.replace('[[@{/login.html}]]');
+            }
+        });
+    }
+
+    function saveAsTemplateButton_fn() {
+        if($("#ddlStatus").val()=='D'){
+            toastr.warning("草稿不能存為模版！");
+            return;
+        }
+
+        if (!checkEditCanPass()) return;
+
+        document.getElementById('saveAsTemplateButton').disabled = true;
+
+        let url = "[[@{/operate/job/saveAsTemplate}]]"
+
+        let data = $("#form_1");
+
+        $.ajax({
+            "url": url,
+            "data": JSON.stringify(getFormData(data)),
+            "type": "post",
+            "contentType": "application/json;charset=utf-8",
+            "dataType": "json",
+            "success": function (json) {
+                if (json.stateCode === 200) {
+                    // alert("操作成功!");
+                    toastr.success('操作成功!')
+                    setTimeout(function () {
+                        location.href = "[[@{/dispatch/job/search}]]";
+                    }, 1500);
+                } else if (json.stateCode === 500) {
+                    toastr.warning(json.message);
+                    document.getElementById('saveAsTemplateButton').disabled = false;
+                } else {
+                    alert("本次操作未能成功!");
+                    document.getElementById('saveAsTemplateButton').disabled = false;
+                }
+            },
+            "error": function (xhr, text, errorThrown) {
+                alert("您的登录信息已经过期！請重新登录！");
+                document.location.replace('[[@{/login.html}]]');
+            }
+        });
+
+    }
+
+    function confirmSaveTemplateButton_fn() {
+
+        if (!checkEditCanPass()) return;
+
+        document.getElementById('confirmSaveTemplateButton').disabled = true;
+
+        let url = "[[@{/operate/job/edit}]]"
+
+        let data = $("#form_1");
+
+        $.ajax({
+            "url": url,
+            "data": JSON.stringify(getFormData(data)),
+            "type": "post",
+            "contentType": "application/json;charset=utf-8",
+            "dataType": "json",
+            "success": function (json) {
+                if (json.stateCode === 200) {
+                    // alert("操作成功!");
+                    toastr.success('操作成功!')
+                    setTimeout(function () {
+                        location.href = "[[@{/dispatch/job/template}]]";
+                    }, 1500);
+                } else if (json.stateCode === 500) {
+                    toastr.warning(json.message);
+                    document.getElementById('confirmSaveTemplateButton').disabled = false;
+                } else {
+                    alert("本次操作未能成功!");
+                    document.getElementById('confirmSaveTemplateButton').disabled = false;
+                }
+            },
+            "error": function (xhr, text, errorThrown) {
+                alert("您的登录信息已经过期！請重新登录！");
+                document.location.replace('[[@{/login.html}]]');
+            }
+        });
+    }
+
+    function confirmSaveAsNewJobButton_fn() {
+        var deptPosDetailId = $("#deptPosDetailId").val();
+        console.log(deptPosDetailId);
+        location.href = "[[@{/dispatch/job/loadTemplate/}]]" + deptPosDetailId;
+    }
+
+
+    function checkEditCanPass() {
+        let jobCode = $('input[name="jobCode"]').val()
+        let jobDesc = $('#job_desc').val()
+
+        let recruitmentForm = $('#recruitmentForm').val();
+        let recruitmentGroupId = $('#recruitmentGroupId').val();
+
+		if($("#ddlStatus").val()=='D'){ //draft
+			return true;
+		}
+
+        if (jobCode && jobDesc && recruitmentGroupId) {
+            return true;
+        } else {
+            toastr.warning('有值為空')
+            return false;
+        }
+    }
+
+    function validateDate(fromDate, toDate) {
+        let from = new Date(fromDate);
+        let to = new Date(toDate);
+        let dateDiff = (to.getTime() - from.getTime()) / 60 / 60 / 1000 / 24;
+        return dateDiff >= 1;
+    }
+
+    function confirmAddButton_fn() {
+        if (!checkAddCanPass()) return;
+
+        let url = "[[@{/operate/job/add}]]"
+
+        let data = $("#form_1");
+        document.getElementById('confirmAddButton').disabled = true;
+
+        $.ajax({
+            "url": url,
+            "data": JSON.stringify(getFormData(data)),
+            "type": "post",
+            "contentType": "application/json;charset=utf-8",
+            "dataType": "json",
+            "success": function (json) {
+                if (json.stateCode === 200) {
+                    toastr.success('新增成功!')
+                    setTimeout(function () {
+                        location.href = "[[@{/dispatch/job/search}]]";
+                    }, 1500);
+                } else if (json.stateCode === 500) {
+                    toastr.warning(json.message);
+                    document.getElementById('confirmAddButton').disabled = false;
+                } else {
+                    alert("本次操作未能成功!");
+                    document.getElementById('confirmAddButton').disabled = false;
+                }
+            },
+            "error": function (xhr, text, errorThrown) {
+                alert("您的登录信息已经过期！請重新登录！");
+                document.location.replace('[[@{/login.html}]]');
+            }
+        });
+    }
+
+    function checkAddCanPass() {
+        let deptPosId = $(':radio[name="deptPosId"]:checked').val()
+
+        let jobCode = $('input[name="jobCode"]').val()
+        let jobDesc = $('#job_desc').val()
+
+        let recruitmentForm = $('#recruitmentForm').val();
+        let recruitmentGroupId = $('#recruitmentGroupId').val();
+
+		if($("#ddlStatus").val()=='D'){ //draft
+			if(deptPosId) {
+				return true;
+			}
+			else{
+	            toastr.warning('請選擇部門與職位。');
+				return false;
+			}
+		}
+
+        /*  alert(departmentCode + " (1) " +
+              deptPosId + " (2) " +
+              jobCode + " (3) " +
+              jobDesc + " (4) " +*/
+        if (deptPosId && jobCode && jobDesc && recruitmentGroupId) {
+            return true;
+        } else {
+            toastr.warning('有值為空')
+            return false;
+        }
+    }
+
+    function loadTemplate() {
+        var deptPosDetailId = $("#dept_pos_detail_id").val();
+        if(deptPosDetailId==''){
+        	location.href = "[[@{/dispatch/job/add}]]";
+        }
+        else{
+            location.href = "[[@{/dispatch/job/loadTemplate/}]]" + deptPosDetailId;
+        }
+    }
+
+    function getOrgDept() {
+        let orgId = $('#org_id').val();
+
+    	$("#department_code").attr("disabled",false);
+        $.get("[[@{/dataTables/getOrganizationDepartmentList}]]?orgId=" + orgId, function (json) {
+            console.log(json);
+            let info = json.data;
+            // let html = '';
+            let html = "<option value='' selected disabled></option>";
+            for (let i = 0; i < info.length; i++) {
+                html += '<option value="' + info[i].code + '">' + info[i].description +'</option>';
+            }
+            $("#department_code").html(html);
+            getDepartmentPositionList();
+        });
+
+    }
+
+
+    function departmentCodeChangeFunc() {
+        getDepartmentPositionList();
+        getRecruitmentGroupList();
+    }
+
+    function getRecruitmentGroupList() {
+        let departmentCode = $('#department_code').val();
+        $('#recruitmentGroupId').empty();
+
+        $.get("[[@{/dataTables/getRecruitmentGroupList}]]?departmentCode=" + departmentCode, function (json) {
+            let info = json.data;
+            // console.log(info)
+            let html = "<option value=''></option>";
+
+            for (let i = 0; i < info.length; i++) {
+                html += "<option value='#{id}'>#{name}</option>";
+                html = html.replace(/#{id}/g, info[i].id);
+                html = html.replace(/#{name}/g, info[i].name);
+            }
+            $("#recruitmentGroupId").append(html);
+        });
+    }
+
+
+    function getDepartmentPositionList() {
+        $('#departmentPosition_div').empty()
+        let departmentCode = $('#department_code').val();
+        let orgId = $('#org_id').val();
+        if (!departmentCode) {
+            resetAddJobTitleDiv();
+
+            return;
+        } else {
+            let html = '     <table id="opreate_table">\n' +
+                '                                                        <tr>\n' +
+                '                                                            <td>\n' +
+                '                                                                <input type="text" class="form-control"\n' +
+                '                                                                       id="addJobTitle_input"\n' +
+                '                                                                >\n' +
+                '                                                            </td>\n' +
+                '                                                            <td>\n' +
+                '                                                                <button type="button" id="addJobTitleButton"\n' +
+                '                                                                        class="btn btn-sm btn-primary"\n' +
+                '                                                                        onclick="addJobTitle()"><i class="fa fa-plus" aria-hidden="true"></i> 新增項目\n' +
+                '                                                                </button>\n' +
+                '                                                            </td>\n' +
+                '                                                        </tr>\n' +
+                '                                                    </table>';
+            $("#addJobTitle_div").find('table').replaceWith(html);
+
+        }
+
+        var deptPosId = '[[${departmentPositionDetail?.getDept_pos_id()}]]';
+
+        $.get("[[@{/dataTables/getDepartmentPositionList}]]?departmentCode=" + departmentCode+"&orgId="+orgId, function (json) {
+        	console.log(json);
+            let info = json.data;
+            for (let i = 0; i < info.length; i++) {
+                let html = ' <span class="custom-control custom-radio self_margin_left_25">\n' +
+                    '<input class="custom-control-input" type="radio" id="#{id}"\n' +
+                    'name="deptPosId" value="#{deptPosId}" #{checked}>\n' +
+                    '<label for="#{id}" style="cursor: pointer"\n' +
+                    'class="custom-control-label">#{jobTitle}</label>\n' +
+                    '</span>'
+                html = html.replace(/#{id}/g, 'customRadio' + i);
+                html = html.replace(/#{jobTitle}/g, info[i].jobTitle);
+                html = html.replace(/#{deptPosId}/g, info[i].deptPosId);
+                html = html.replace(/#{checked}/g, info[i].deptPosId == deptPosId ? 'checked' : '');
+                $("#departmentPosition_div").append(html);
+            }
+
+            if (info.length > 0) {
+                let html = '<tr><td><button type="button" id="deleteJobTitleButton"\n' +
+                    '                                                                        class="btn btn-sm btn-primary"\n' +
+                    '                                                                        onclick="deleteJobTitle()"><i class="far fa-trash-alt" aria-hidden="true"></i> 移除選取項目\n' +
+                    '                                                                </button></td></tr>' +
+                    '<tr><td>&emsp;</td></tr>';
+                $("#opreate_table").prepend(html);
+            }
+
+
+        });
+
+
+    }
+
+    function addJobTitle() {
+        let departmentCode = $('#department_code').val()
+
+        let jobTitle = $('#addJobTitle_input').val();
+
+        let orgId = $('#org_id').val();
+
+        if (!jobTitle || !departmentCode) {
+            toastr.warning('job title cannot be null')
+            return;
+        }
+
+        document.getElementById('addJobTitleButton').disabled = true;
+
+        let url = "[[@{/operate/job/addDepartmentPosition}]]"
+
+
+        $.ajax({
+            "url": url,
+            "data": JSON.stringify({"departmentCode": departmentCode, "jobTitle": jobTitle, "orgId":orgId}),
+            "type": "post",
+            "contentType": "application/json;charset=utf-8",
+            "dataType": "json",
+            "success": function (json) {
+                if (json.stateCode === 200) {
+                    toastr.success("新增成功");
+
+                    getDepartmentPositionList();
+                } else if (json.stateCode === 500) {
+                    toastr.warning(json.message);
+                } else {
+                    alert("本次操作未能成功!");
+                }
+                document.getElementById('addJobTitleButton').disabled = false;
+            },
+            "error": function (xhr, text, errorThrown) {
+                alert("您的登录信息已经过期！請重新登录！");
+                document.location.replace('[[@{/login.html}]]');
+            }
+        });
+    }
+
+    function deleteJobTitle() {
+        // let departmentCode = $('#department_code').val()
+
+        let deptPosId = $(':radio[name="deptPosId"]:checked').val()
+
+        if (!deptPosId) {
+            toastr.warning('請選擇刪除項目')
+            return;
+        }
+
+        document.getElementById('deleteJobTitleButton').disabled = true;
+
+        let url = "[[@{/operate/job/deleteDepartmentPosition}]]"
+
+
+        $.ajax({
+            "url": url,
+            "data": JSON.stringify({"deptPosId": deptPosId}),
+            "type": "post",
+            "contentType": "application/json;charset=utf-8",
+            "dataType": "json",
+            "success": function (json) {
+                if (json.stateCode === 200) {
+                    toastr.success("刪除成功");
+
+                    getDepartmentPositionList();
+                } else if (json.stateCode === 500) {
+                    toastr.warning(json.message);
+                    document.getElementById('deleteJobTitleButton').disabled = false;
+
+                } else {
+                    alert("本次操作未能成功!");
+                    document.getElementById('deleteJobTitleButton').disabled = false;
+
+                }
+            },
+            "error": function (xhr, text, errorThrown) {
+                alert("您的登录信息已经过期！請重新登录！");
+                document.location.replace('[[@{/login.html}]]');
+            }
+        });
+    }
+
+    function resetAddJobTitleDiv() {
+        let html = '<table><tr><td><h5>Please select a department</h5></td></tr></table>';
+        $("#addJobTitle_div").find('table').replaceWith(html);
+    }
+
+    function reset_fn() {
+        resetAddJobTitleDiv();
+        $('#departmentPosition_div').empty()
+    }
+    function backButton_fn () {
+        let html1 = parent.$("a.active.self_sidebar_maintitle p").html();
+        if (html1) {
+            parent.$("a.active[target=menuFrame] i").click();
+        } else {
+            history.go(-1);
+        }
+    }
+
+</script>
+<script th:inline="javascript">
+    $(function () {
+        // Summernote
+        $('.self_textarea_summernote').summernote({
+            lang: 'zh-CN',
+            fontNames: [
+                '標楷體', '黑体', '宋体',
+                'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New',
+                'Helvetica Neue', 'Helvetica', 'Impact', 'Lucida Grande',
+                'Tahoma', 'Times New Roman', 'Verdana', 'Microsoft YaHei'
+            ],
+        });
+        var disabled = "[[${showJob}]]";
+
+        if (disabled == 'true') {
+            $('.self_textarea_summernote').summernote('disable');
+        }
+
+        $('.self_reset_btn').on(
+            {
+                click: function () {
+                    // $('.self_textarea_summernote').summernote('reset');
+                    $(".self_textarea_summernote").summernote('code', [[${departmentPositionDetail?.job_desc}]]);
+                }
+            }
+        );
+        var activePlace = [[${activePlace}]];
+        if (activePlace == 'SLT') {
+            $("#org_id").val("1");
+            getOrgDept();
+        }
+
+        if (activePlace == 'FLT') {
+            $("#org_id").val("2");
+            getOrgDept();
+        }
+    })
+</script>
+</html>

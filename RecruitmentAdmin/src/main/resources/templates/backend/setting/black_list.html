@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>E - recruitment</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/dist/css/adminlte.min.css}">
+    <!-- Google Font: Source Sans Pro -->
+    <link th:href="@{/assets/fonts/ssp.css}"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+    <!-- DataTables -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+    <!--self css-->
+    <link rel="stylesheet" th:href="@{/assets/styles/self_basic.css}">
+    <link rel="stylesheet" th:href="@{/assets/styles/self_datatable.css}">
+    <!-- Toastr -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/toastr/toastr.min.css}">
+
+
+</head>
+<body id="frameContent">
+<div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark" id="title">黑名單</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">設置</li>
+                        <li class="breadcrumb-item active">黑名單</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+
+
+            <div class="row">
+
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <!--                                <h3 class="card-title">&ensp;</h3>-->
+
+
+                            <table id="searchCondition1">
+                                <tr>
+                                    <td>姓名</td>
+                                    <td>
+                                    <input type="text" class="form-control" id="name" name="name" maxlength="50"/>
+                                    </td>
+ 									<td>&emsp;</td>
+                                    <td>聯絡電話</td>
+                                    <td>
+                                    <input type="text" class="form-control" id="tel" name="tel" maxlength="50"/>
+                                    </td>
+                                    <td>&emsp;</td>
+                                    <td>證件號碼</td>
+                                    <td>
+                                    <input type="text" class="form-control" id="idNumber" name="idNumber" maxlength="50"/>
+                                    </td>
+                                    <td>&emsp;</td>
+                                    <td>
+                                        <button type="button" style="width: 42px"
+                                                class="btn btn-block bg-gradient-primary"
+                                                onclick="searchButton()"><i class="fa fa-search fa-align-left"></i>
+                                        </button>
+                                    </td>
+                                    <td>&emsp;</td>
+                                    <td>
+                                        <button type="button" style="width: 42px"
+                                                class="btn btn-block bg-gradient-primary"
+                                                onclick="clearFilter()"><i class="fa fa-times fa-align-left"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+
+                            <table id="tableList" class="table table-bordered table-hover table-striped">
+                                <thead>
+                                <tr>
+                                    <th style="width:5px">
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input" type="checkbox" id="TableAll"/>
+                                            <label for="TableAll" class="custom-control-label"></label>
+                                        </div>
+                                    </th>
+                                    <th>序號 </th>
+                                    <th>譯名 </th>
+                                    <th>姓名</th>
+                                    <th>聯絡電話</th>
+                                    <th>證件號碼 </th>
+                                    <th>狀態</th>
+                                    <th>離職日期 </th>
+                                    <th>添加時間 </th>
+                                    <th>黑名單原因 </th>
+                                    <th>編輯</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+
+
+                            </table>
+                        </div>
+
+                        <!-- /.card-body -->
+                    </div>
+          	<button type="button" id="uploadBtn" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal">
+          	<i class="fas fa-upload" aria-hidden="true">
+                上載及批量添加
+          	</i>
+          	</button>
+            <button type="button" th:if="${session.user.isHrSupervisor}" id="uploadBtn_replace" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal_replace">
+                <i class="fas fa-upload" aria-hidden="true">
+                    上載及取代
+                </i>
+            </button>
+    		<button type="button" id="addBtn" class="btn btn-sm btn-primary">
+          	<i class="fas fa-plus" aria-hidden="true">
+          	添加
+          	</i>
+          	</button>
+            <button type="button" id="batchDeleteBtn1" class="btn btn-sm btn-danger">
+            <i class="far fa-trash-alt" aria-hidden="true"></i> 刪除
+            </button>
+            <button type="button" id="batchDeleteBtn2" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#myModal2" style='display:none;'>
+            <i class="far fa-trash-alt" aria-hidden="true"></i> 刪除
+            </button>
+
+          	<button type="button" id="applyBtn" class="btn btn-sm btn-primary">
+          	<i class="fas fa-sync-alt" aria-hidden="true">
+          	刷新
+          	</i>
+          	</button>
+            <button type="button" class="btn btn-sm btn-primary" onclick="downloadExcel()">
+                <i class="fas fa-download" aria-hidden="true">
+                    下載Excel
+                </i>
+            </button>
+
+
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    確定刪除？
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                        </button>
+                        <button id="confirmDeleteBtn" type="button" data-dismiss="modal" class="btn btn-primary"> 確定 </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+                    <!-- /.card -->
+
+
+                </div>
+                <!-- /.col -->
+
+
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+
+
+    <!-- /.content-wrapper -->
+
+
+</div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg" style=''>
+                <div class="modal-content" style="width:400px; height:230px;">
+                    <div class="modal-header">
+                        <h6 class="modal-title" id="myModalLabel" style='text-align:center;width:100%;'>
+                            批量添加，請選擇要上載的excel文檔
+                        </h6>
+                        <button type="button" class="close" id="closeModalBtn" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    <div class="form-group">
+                        <input type="file" id="uploadfile" name="uploadfile" class="form-control-file">
+                    </div>
+                    <button id="confirmUploadBtn" class="btn btn-primary">上載</button>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+
+
+
+<!--上載及取代-->
+<div class="modal fade" id="myModal_replace" tabindex="-1" role="dialog" aria-labelledby="myModalLabel_replace"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" style=''>
+        <div class="modal-content" style="width:400px; height:230px;">
+            <div class="modal-header">
+                <h6 class="modal-title" id="myModalLabel_replace" style='text-align:center;width:100%;'>
+                    取代黑名單，請選擇要上載的excel文檔
+                </h6>
+                <button type="button" class="close" id="closeModalBtn_replace" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="file" id="uploadfile_replace" name="uploadfile" class="form-control-file">
+                </div>
+                <button id="confirmUploadBtn_replace" class="btn btn-primary">上載</button>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script th:src="@{/AdminLTE/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- DataTables -->
+<script th:src="@{/AdminLTE/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/AdminLTE/dist/js/adminlte.min.js}"></script>
+<!-- self js -->
+<script th:src="@{/assets/js/myTable_checkbox.js}"></script>
+<script th:src="@{/assets/js/common.js}"></script>
+<!-- Toastr -->
+<script th:src="@{/AdminLTE/plugins/toastr/toastr.min.js}" src="../../plugins/toastr/toastr.min.js"></script>
+
+
+</body>
+<!-- page script -->
+<script>
+
+
+    var dataTable;
+    $(function () {
+
+        var columns = [
+            {
+                "data": "applicantBlackListId",
+                render: function (data, type, row, meta) {
+                    	return '<div class="custom-control custom-checkbox">' +
+                        "<input class='save_checkboxs custom-control-input'" +
+                        " id='checkbox_" + data +
+                        "' type=\"checkbox\" value='" + data + "'/>" +
+                        '<label for="checkbox_' + data +
+                        '" class="custom-control-label"></label>' +
+                        '</div>';
+                }
+            },
+        	{"data" : null,
+           	 "render" : function(data, type, full, meta){
+           	 return meta.row + 1 + meta.settings._iDisplayStart;
+           	 }}, // 序号
+            {
+                "data": "nameEn",
+            },
+            {"data": "nameCn",},
+            {
+                "data": "tel",
+            },
+            {
+                "data": "idNumber",
+            },
+            {
+                "data": "status",
+                render: function (data, type, row, meta) {
+                	if(data=='A') return '生效';
+                	else return '失效';
+            	}
+            },
+            {
+                "data": "leaveDate",
+            },
+            {
+                "data": "lastModifyDate",
+            },
+            {
+                "data": "remark",
+            },
+            {
+                "data": "applicantBlackListId",
+                render: function (data, type, row, meta) {
+                    return "<a class='btn btn-info btn-sm' href='[[@{/dispatch/setting/editBlackList/}]]" + data +
+                        "'>" +
+                        "<i class='fas fa-pencil-alt'>" +
+                        "</i>" +
+                        "Edit" +
+                        "</a>";
+                }
+            },
+        ];
+        //初始化DataTables
+        dataTable = App.initDataTables("[[@{/dataTables/getBlackList}]]", columns, 2, "desc",
+            [
+                {"bSortable": false, "aTargets": [0,1,10]},
+            ]
+        );
+
+        $("#addBtn").click(function(){
+        	window.location="addBlackList";
+        });
+
+        $("#applyBtn").click(function(){
+            $.ajax({
+                        url: '/operate/setting/applyBlackListData',
+                        data: {},
+                        type: 'post',
+                       success: function(data){
+                            if(data.stateCode==200){
+                                toastr.success("已成功運用黑名單規則");
+                                dataTable.ajax.reload();
+                            }
+                            else{
+                                toastr.warning("運用失敗")
+                            }
+                        }
+             });
+        });
+
+
+        $("#confirmUploadBtn").click(function(){
+        	var file_data = $('#uploadfile').prop('files')[0];   //取得上傳檔案屬性
+        	console.log(file_data);
+        	if(file_data==undefined) {
+        		alert("請選擇文件");
+        		return;
+        	}
+            var form_data = new FormData();  //建構new FormData()
+            form_data.append('file', file_data);  //吧物件加到file後面
+
+
+            $.ajax({
+                        url: '/operate/setting/uploadBlackList',
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: form_data,     //data只能指定單一物件
+                        type: 'post',
+                       success: function(data){
+                    	   $("#closeModalBtn").click();
+                            if(data.stateCode==200){
+                                toastr.success("上載成功");
+                                dataTable.ajax.reload();
+                            }
+                            else{
+                                toastr.warning("上載失敗")
+                            }
+                        }
+             });
+        });
+
+        $("#confirmUploadBtn_replace").click(function(){
+            var file_data = $('#uploadfile_replace').prop('files')[0];   //取得上傳檔案屬性
+            console.log(file_data);
+            if(file_data==undefined) {
+                alert("請選擇文件");
+                return;
+            }
+            var form_data = new FormData();  //建構new FormData()
+            form_data.append('file', file_data);  //吧物件加到file後面
+
+
+            $.ajax({
+                url: '/operate/setting/replaceBlackList',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: form_data,     //data只能指定單一物件
+                type: 'post',
+                success: function(data){
+                    $("#closeModalBtn_replace").click();
+                    if(data.stateCode==200){
+                        toastr.success("上載成功");
+                        dataTable.ajax.reload();
+                    }
+                    else{
+                        toastr.warning("上載失敗")
+                    }
+                }
+            });
+        });
+
+        $("#batchDeleteBtn1").click(function(){
+           	let batchProcess_checkboxs = [];
+            $('.save_checkboxs:checked').each(function (index, element) {
+            	batchProcess_checkboxs.push($(this).val());
+            	console.log($("#result_"+$(this).val()).val());
+            });
+            if (batchProcess_checkboxs.length === 0) {
+                alert("沒有選中任何行");
+                return;
+            }
+            $("#batchDeleteBtn2").click();
+        });
+
+        $("#confirmDeleteBtn").click(function(){
+           	let batchProcess_checkboxs = [];
+            $('.save_checkboxs:checked').each(function (index, element) {
+            	batchProcess_checkboxs.push($(this).val());
+            });
+            if (batchProcess_checkboxs.length === 0) {
+                alert("沒有選中任何行");
+                return;
+            }
+
+            let url = "[[@{/operate/setting/batchDeleteBlackList}]]";
+
+            $.ajax({
+                "url": url,
+                "data": {
+                    'batchProcess_checkboxs[]': batchProcess_checkboxs,
+                },
+                "type": "post",
+                "dataType": "json",
+                "success": function (json) {
+                    if (json.stateCode === 200) {
+                        toastr.success('刪除成功!')
+                        dataTable.ajax.reload();
+                    } else if (json.stateCode === 500) {
+                        toastr.warning(json.message);
+                    } else {
+                        alert("本次操作未能成功!");
+                    }
+                },
+                "error": function (xhr, text, errorThrown) {
+                    alert("您的登录信息已经过期！請重新登录！");
+                    document.location.replace('[[@{/login.html}]]');
+                }
+            });
+        });
+
+    });
+
+    function getParams() {
+          let name = $("#name").val();
+          let tel = $("#tel").val();
+          let idNumber = $("#idNumber").val();
+
+          let param = {
+              "name": name,
+              "tel": tel,
+              "idNumber":idNumber,
+          };
+
+
+          if (!name) {
+              delete param["name"];
+          }
+          if (!tel) {
+              delete param["tel"];
+          }
+          if (!idNumber) {
+              delete param["idNumber"];
+          }
+
+          return param;
+    }
+
+    function searchButton() {
+        //设置参数，重新加载
+        dataTable.settings()[0].ajax.data = getParams();
+        dataTable.ajax.reload();
+    }
+
+    function clearFilter() {
+    	$("#name").val("");
+    	$("#tel").val("");
+    	$("#idNumber").val("");
+    }
+
+
+    function downloadExcel() {
+        let url = "[[@{/export/downloadBlackList}]]";
+
+        let $form = $(document.createElement('form'))
+            .css({display: 'none'})
+            .attr("method", "post")
+            .attr("action", url)
+            .attr("target", "_blank")
+        ;
+
+
+        let params = getParams();
+        for (let key in params) {
+            $form.append(
+                $(
+                    document.createElement('input')
+                ).attr('name', key)
+                    .val(params[key])
+            );
+        }
+        $("body").append($form);
+        $form.submit();
+        $form.remove();
+    }
+
+</script>
+
+</html>

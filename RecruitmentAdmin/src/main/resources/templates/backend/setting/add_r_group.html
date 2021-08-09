@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>E - recruitment</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/dist/css/adminlte.min.css}">
+    <!-- Google Font: Source Sans Pro -->
+    <link th:href="@{/assets/fonts/ssp.css}"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+    <!-- daterange picker -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/daterangepicker/daterangepicker.css}"
+          href="../../plugins/daterangepicker/daterangepicker.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/toastr/toastr.min.css}"
+          href="../../plugins/toastr/toastr.min.css">
+    <!-- summernote -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/summernote/summernote-bs4.css}"
+          href="../../plugins/summernote/summernote-bs4.css">
+
+    <!-- select2 -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/select2/css/select2.min.css}">
+
+    <!--    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />-->
+
+    <!--self css-->
+    <link rel="stylesheet" th:href="@{/assets/styles/self_basic.css}">
+
+
+    <style type="text/css">
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            color: black;
+        }
+        button{
+        margin-right:10px;
+        }
+    </style>
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark" id="title"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">設置</li>
+                        <li class="breadcrumb-item active">招聘群組管理</li>
+                        <li th:if="${type}=='type_create'" class="breadcrumb-item active">添加</li>
+                        <li th:if="${type}=='type_update'" class="breadcrumb-item active">編輯</li>
+
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+
+
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title"></h3>
+                        </div>
+                        <form id="form_1">
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">部門</label>
+                                    <!--<span style='color:red;'>*</span>-->
+
+                                    <div class="col-sm-6" th:if="${type}=='type_create'">
+                                        <select class="custom-select" id="departmentCode" name="departmentCode"
+                                                onchange="getEmployeeByDeptCode()">
+                                            <option></option>
+                                            <option th:each="dept : ${departmentList}" th:value="${dept.description}"
+                                                    data-th-data-code="${dept.code}"
+                                            >
+                                                [[${dept.description}]]
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6" th:if="${type}=='type_update'">
+                                        <input type="text" class="form-control" th:value="${group.getDeptCode()}"
+                                               disabled/>
+                                    </div>
+
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">組名</label>
+                                    <!--<span style='color:red;'>*</span>-->
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" th:value="${group?.getGroupName()}"
+                                               id="groupName" name="groupName">
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row select2-blue">
+                                    <label class="col-sm-2 col-form-label">部門主管</label>
+                                    <div class="col-sm-6">
+                                        <select id="department_head"
+                                                class="form-control select2 select2-hidden-accessible"
+                                                multiple=""
+                                                data-placeholder="請選擇"
+                                                style="width: 100%;"
+                                                tabindex="-1" aria-hidden="true"
+                                                th:with="arr=${group?.getDepartmentHead()}">
+                                            <option th:if="${type}=='type_update'"
+                                                    th:each="user:${userList}"
+                                                    th:with="employeeId=${user.getUserName()}"
+                                                    th:value="${employeeId}"
+                                                    th:text="${employeeId}+'-'+${user.getChName()}"
+                                                    th:selected="${arr} != null and ${#strings.contains(arr,employeeId)}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row select2-blue">
+                                    <label class="col-sm-2 col-form-label">經理/面試者</label>
+                                    <div class="col-sm-6">
+                                        <select id="interviewer"
+                                                class="form-control select2 select2-hidden-accessible"
+                                                multiple=""
+                                                data-placeholder="請選擇"
+                                                style="width: 100%;"
+                                                tabindex="-1" aria-hidden="true"
+                                                th:with="arr=${group?.getInterviewer()}">
+                                            <option th:if="${type}=='type_update'"
+                                                    th:each="user:${userList}"
+                                                    th:with="employeeId=${user.getUserName()}"
+                                                    th:value="${employeeId}"
+                                                    th:text="${employeeId}+'-'+${user.getChName()}"
+                                                    th:selected="${arr} != null and ${#strings.contains(arr,employeeId)}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row select2-blue">
+                                    <label class="col-sm-2 col-form-label">行政人員</label>
+                                    <div class="col-sm-6">
+                                        <select id="administrative_personnel"
+                                                class="form-control select2 select2-hidden-accessible"
+                                                multiple=""
+                                                data-placeholder="請選擇"
+                                                style="width: 100%;"
+                                                tabindex="-1" aria-hidden="true"
+                                                th:with="arr=${group?.getAdministrativePersonnel()}">
+                                            <option th:if="${type}=='type_update'"
+                                                    th:each="user:${userList}"
+                                                    th:with="employeeId=${user.getUserName()}"
+                                                    th:value="${employeeId}"
+                                                    th:text="${employeeId}+'-'+${user.getChName()}"
+                                                    th:selected="${arr} != null and ${#strings.contains(arr,employeeId)}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                <input type="hidden" name="groupId" th:value="${group?.getGroupId()}">
+
+                                <div class="form-group row">
+                                    <button type="button" id="saveBtn" class="btn btn-sm btn-primary"
+                                            th:if="${type}=='type_create'">
+                                        <i class="fa" aria-hidden="true">
+                                            新增
+                                        </i>
+                                    </button>
+                                    <button type="button" id="updateBtn" class="btn btn-sm btn-primary"
+                                            th:if="${type}=='type_update'">
+                                        <i class="fa fa-save" aria-hidden="true">
+                                            儲存
+                                        </i>
+                                    </button>
+                                    <button type="button"
+                                        id="confirmEditButton"
+                                        class="btn btn-sm btn-primary" onclick="backButton_fn()"><i
+                                        class="fa fa-reply" aria-hidden="true"></i> 返回
+                               		 </button>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+
+    <!-- /.content-wrapper -->
+
+
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script th:src="@{/AdminLTE/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- date-range-picker -->
+<script th:src="@{/AdminLTE/plugins/daterangepicker/moment.min.js}" src="../../plugins/moment/moment.min.js"></script>
+<script th:src="@{/AdminLTE/plugins/daterangepicker/daterangepicker.js}"
+        src="../../plugins/daterangepicker/daterangepicker.js"></script>
+
+<!-- Toastr -->
+<script th:src="@{/AdminLTE/plugins/toastr/toastr.min.js}" src="../../plugins/toastr/toastr.min.js"></script>
+
+
+<!-- AdminLTE App -->
+<script th:src="@{/AdminLTE/dist/js/adminlte.min.js}"></script>
+<!-- Summernote -->
+<script th:src="@{/AdminLTE/plugins/summernote/summernote-bs4.min.js}"
+        src="../../plugins/summernote/summernote-bs4.min.js"></script>
+<script th:src="@{/AdminLTE/plugins/summernote/lang/summernote-zh-CN.js}"
+        src="/summernote/lang/summernote-zh-CN.js"></script>
+<!-- select2 -->
+<script th:src="@{/AdminLTE/plugins/select2/js/select2.full.min.js}"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>-->
+
+<!--self js-->
+<script th:src="@{/assets/js/self_basic.js}"></script>
+<script th:src="@{/assets/js/common.js}"></script>
+
+</body>
+
+
+<!-- page script -->
+<script>
+    $().ready(function () {
+
+        let currentYear = parseInt(moment().format('YYYY'), 10);
+        $('.self_date_picker').daterangepicker({
+            // timePicker: true,        // 选择时间
+            opens: 'left',
+            autoUpdateInput: false,
+            singleDatePicker: true,  // 只选一个
+            showDropdowns: true,
+            locale: {
+                format: 'YYYY-MM-DD'
+            },
+            minYear: currentYear - 5,
+            maxYear: currentYear + 5
+        })
+
+        //Toastr
+        toastr.options = {
+            positionClass: "toast-center-center",
+            timeOut: "2000"
+        }
+        //select2 js-example-basic-multiple
+        $('.select2').select2({
+            // language: "zh-CN",
+            allowClear: true,
+            minimumResultsForSearch: -1,
+            // maximumSelectionLength: -1,
+            closeOnSelect: false,
+        });
+
+
+        $('#saveBtn').click(function () {
+            if (!validate()) {
+                toastr.warning('有值為空')
+                return;
+            }
+
+            /* <option value="department_head">部門主管</option>
+                 <option value="interviewer">經理/面試者</option>
+                 <option value="administrative_personnel">行政人員</option> */
+
+            let data = $("#form_1").serialize() +
+                "&" +
+                $.param({'department_head[]': getMultiSelectVal('department_head')}) +
+                "&" +
+                $.param({'interviewer[]': getMultiSelectVal('interviewer')}) +
+                "&" +
+                $.param({'administrative_personnel[]': getMultiSelectVal('administrative_personnel')})
+            ;
+
+            /*  for (s of getMultiSelectVal('department_head')) {
+                  console.log(s);
+              }*/
+
+
+            // console.log(JSON.stringify(data))
+
+            // return;
+            let url = "[[@{/operate/setting/addRecruitmentGroup}]]";
+
+            $.ajax({
+                "url": url,
+                "data": data,
+                "type": "post",
+                // "contentType": "application/json;charset=utf-8",
+                "dataType": "json",
+                "success": function (json) {
+                    if (json.stateCode === 200) {
+                        toastr.success('儲存成功!')
+                        setTimeout(function () {
+                            location.href = "[[@{/dispatch/setting/r_group}]]";
+                        }, 1500);
+                    } else {
+                        alert("本次操作未能成功!");
+                    }
+                },
+                "error": function (xhr, text, errorThrown) {
+                    alert("您的登录信息已经过期！請重新登录！");
+                    document.location.replace('[[@{/login.html}]]');
+                }
+            });
+
+        });
+        $('#updateBtn').click(function () {
+            if (!validate()) {
+                toastr.warning('有值為空')
+                return;
+            }
+
+            /* <option value="department_head">部門主管</option>
+                 <option value="interviewer">經理/面試者</option>
+                 <option value="administrative_personnel">行政人員</option> */
+
+            let data = $("#form_1").serialize() +
+                "&" +
+                $.param({'department_head[]': getMultiSelectVal('department_head')}) +
+                "&" +
+                $.param({'interviewer[]': getMultiSelectVal('interviewer')}) +
+                "&" +
+                $.param({'administrative_personnel[]': getMultiSelectVal('administrative_personnel')})
+            ;
+
+            /*  for (s of getMultiSelectVal('department_head')) {
+                  console.log(s);
+              }*/
+
+
+            // console.log(JSON.stringify(data))
+
+            // return;
+            let url = "[[@{/operate/setting/editRecruitmentGroup}]]";
+
+            $.ajax({
+                "url": url,
+                "data": data,
+                "type": "post",
+                // "contentType": "application/json;charset=utf-8",
+                "dataType": "json",
+                "success": function (json) {
+                    if (json.stateCode === 200) {
+                        toastr.success('儲存成功!')
+                        setTimeout(function () {
+                            location.href = "[[@{/dispatch/setting/r_group}]]";
+                        }, 1500);
+                    } else {
+                        alert("本次操作未能成功!");
+                    }
+                },
+                "error": function (xhr, text, errorThrown) {
+                    alert("您的登录信息已经过期！請重新登录！");
+                    document.location.replace('[[@{/login.html}]]');
+                }
+            });
+
+        });
+    })
+
+
+    //多选取值
+    function getMultiSelectVal(id) {
+        return $.map(
+            $("#" + id).select2('data'),
+            function (value) {
+                return value.id
+            }
+        );  // .join(",");
+    }
+
+    function backButton_fn () {
+        location.href = "[[@{/dispatch/setting/r_group}]]";
+    }
+
+    function validate() {
+        let groupName = $('#groupName').val();
+        return !!groupName &&
+            getMultiSelectVal('department_head').length > 0 &&
+            getMultiSelectVal('interviewer').length > 0 &&
+            getMultiSelectVal('administrative_personnel').length > 0;
+
+    }
+
+    function getEmployeeByDeptCode() {
+        $('.select2').empty();
+
+        let deptCode = $('#departmentCode').find("option:selected").attr("data-code");
+
+        if (!deptCode) {
+            return;
+        }
+        $.get("/dataTables/setting/getEmployeeByDeptCode?deptCode=" + deptCode, function (json) {
+            if (json.stateCode !== 200) {
+                return;
+            }
+            let info = json.data;
+            if (info.length == 0) {
+                return;
+            }
+            let arr = $.map(
+                info,
+                function (o) {
+                    // return {'employeeId': o.userName, 'description': o.userName + '-' + o.chName}
+                    return {'id': o.userName, 'text': o.userName + '-' + o.chName}
+                }
+            );
+            /*  let html = arr
+                  // .filter(x => !isNaN(Number(x)))
+                  .map(x => "<option value='" + x.employeeId + "' data-select2-id='" +x.employeeId +
+                      "'>" + x.description + "<option>")
+                  .join("")
+              console.log(html);*/
+
+            /*  $('#department_head').empty();
+              $('#department_head').append(html);*/
+
+            /* $('#department_head').select2({
+                 'val': " "
+             });*/
+
+            $('.select2').select2({
+                dropdownAutoWidth: true,
+                multiple: true,
+                data: arr,
+                allowClear: true,
+                closeOnSelect: false,
+
+            });
+
+        });
+    }
+</script>
+</html>

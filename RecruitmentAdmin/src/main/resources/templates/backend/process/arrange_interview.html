@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>E - recruitment</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/dist/css/adminlte.min.css}">
+    <!-- Google Font: Source Sans Pro -->
+    <link th:href="@{/assets/fonts/ssp.css}"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+    <!-- DataTables -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+
+    <!-- daterange picker -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/daterangepicker/daterangepicker.css}"
+          href="../../plugins/daterangepicker/daterangepicker.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/toastr/toastr.min.css}"
+          href="../../plugins/toastr/toastr.min.css">
+
+    <!--self css-->
+    <link rel="stylesheet" th:href="@{/assets/styles/self_basic.css}">
+    <link rel="stylesheet" th:href="@{/assets/styles/self_datatable.css}">
+
+
+</head>
+<body id="frameContent">
+<div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">安排約見</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">招聘流程</li>
+                        <li class="breadcrumb-item active">安排約見</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+
+            <select id="meeting_room_selection" class="custom-select" style='display:none;'>
+                <option th:each="meetingRoom : ${meetingRoomList}"
+                        th:value="${meetingRoom.meetingRoomId}">
+                    [[${meetingRoom.meetingRoomName}]]
+                </option>
+            </select>
+            <div class="row">
+
+                <div>
+                    <!--                        class="col-12"-->
+                    <div class="card">
+                        <div class="card-header">
+                            <!--                                <h3 class="card-title">&ensp;</h3>-->
+
+
+                            <table id="searchCondition1">
+                                <tr>
+                                    <td>申請日期</td>
+                                    <td>
+                                        <input onkeydown="return false" type="text" style="width: 100px"
+                                               placeholder="全部" autocomplete="off"
+                                               class="form-control self_date_picker" id="start_date"
+                                               value="">
+                                    </td>
+                                    <td>-</td>
+                                    <td>
+                                        <input onkeydown="return false" type="text" style="width: 100px"
+                                               placeholder="全部" autocomplete="off"
+                                               class="form-control self_date_picker" id="end_date"
+                                               value="">
+                                    </td>
+                                    <td>&emsp;</td>
+                                    <td>申請編號</td>
+                                    <td colspan="3"><input type="text" class="form-control" id="applicant_pos_id"
+                                                           maxlength="50"/>
+                                    </td>
+                                    <td>&emsp;</td>
+                                    <td>職位</td>
+                                    <td>
+                                        <select id="job_id" class="custom-select">
+                                            <option value="-1">全部</option>
+                                            <option th:each="job : ${openJobList}"
+                                                    th:value="${job.detail_id}">
+                                                [[${job.job_code}]]
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>&emsp;</td>
+                                    <td>處理狀態</td>
+                                    <td>
+                                        <select id="process_stage_code" name="process_stage_code" class="custom-select">
+                                            <option value="">全部</option>
+                                            <!--                                             		th:if="${message.code}!=11 and ${message.code}!=12"  -->
+                                            <option value="30">未預約</option>
+                                            <option value="31">已預約</option>
+                                            <option th:each="message : ${processStatusList}" th:if="${message.code}!=1 and ${message.code}!=2 and ${message.code}!=3"
+                                                    th:value="${message.code}">
+                                                [[${message.chnDesc}]]
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>&emsp;</td>
+                                    <td>
+                                        <button type="button" style="width: 42px"
+                                                class="btn btn-block bg-gradient-primary"
+                                                onclick="searchButton()"><i class="fa fa-search fa-align-left"></i>
+                                        </button>
+                                    </td>
+                                    <td>&emsp;</td>
+                                    <td>
+                                        <button type="button" style="width: 42px"
+                                                class="btn btn-block bg-gradient-primary"
+                                                onclick="clearFilter()"><i class="fa fa-times fa-align-left"></i>
+                                        </button>
+
+                                </tr>
+                            </table>
+
+
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+
+                            <table id="tableList" class="table table-bordered table-hover table-striped text-nowrap">
+                                <thead>
+                                <tr>
+                                    <th style="width:5px">
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input" type="checkbox" id="TableAll"/>
+                                            <label for="TableAll" class="custom-control-label"></label>
+                                        </div>
+                                    </th>
+                                    <th>序號</th>
+                                    <th>申請編號</th>
+                                    <th>收表日期</th>
+                                    <th>應征職位</th>
+                                    <th>收藏職位</th>
+                                    <th>廣告來源</th>
+                                    <th>姓名</th>
+                                    <th>身份證類型</th>
+                                    <th>身份證號碼</th>
+                                    <th>性別</th>
+                                    <th>年齡</th>
+                                    <th>電話</th>
+                                    <th>學歷</th>
+                                    <th>學校</th>
+                                    <th>專科</th>
+                                    <th>狀態</th>
+                                    <th>履曆</th>
+                                    <th>面試時段</th>
+                                    <th>會議室</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+
+
+                </div>
+                <!-- /.col -->
+
+
+            </div>
+            <button type="button" id="batchSaveBtn" class="batchProcessBtn btn btn-sm btn-primary" data-toggle="modal"
+                    data-target="#myModal1">
+                <i class="far fa-save" aria-hidden="true"></i> 儲存
+            </button>
+            <button type="button" id="informDeptBtn" class="batchProcessBtn btn btn-sm btn-primary" data-toggle="modal"
+                    data-target="#myModal2">
+                <i class="fas fa-bell" aria-hidden="true"></i> 通知部門
+            </button>
+            <button type="button" id="informApplicantBtn" class="batchProcessBtn btn btn-sm btn-primary"
+                    data-toggle="modal" data-target="#myModal3">
+                <i class="fas fa-bell" aria-hidden="true"></i> 通知應征者
+            </button>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+
+
+    <!-- /.content-wrapper -->
+
+
+</div>
+
+
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                確定儲存？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="confirmSaveBtn">確定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                確定發送郵件通知部門？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="confirmInformDeptBtn">確定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                確定發送郵件/短訊通知應征者？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="confirmInformApplicantBtn">確定
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script th:src="@{/AdminLTE/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- DataTables -->
+<script th:src="@{/AdminLTE/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+
+<!-- date-range-picker -->
+<script th:src="@{/AdminLTE/plugins/daterangepicker/moment.min.js}" src="../../plugins/moment/moment.min.js"></script>
+<script th:src="@{/AdminLTE/plugins/daterangepicker/daterangepicker.js}"
+        src="../../plugins/daterangepicker/daterangepicker.js"></script>
+
+<!-- Toastr -->
+<script th:src="@{/AdminLTE/plugins/toastr/toastr.min.js}" src="../../plugins/toastr/toastr.min.js"></script>
+
+<!-- AdminLTE App -->
+<script th:src="@{/AdminLTE/dist/js/adminlte.min.js}"></script>
+<!-- self js -->
+<script th:src="@{/assets/js/myTable_checkbox.js}"></script>
+<script th:src="@{/assets/js/common.js}"></script>
+
+
+</body>
+<!-- page script -->
+<script>
+
+    var dataTable = null;
+    var columns;
+    $(function () {
+
+        //Date range picker
+//         let currentYear = parseInt(moment().format('YYYY'), 10);
+//         $('.self_date_picker').daterangepicker({
+//             // timePicker: true,        // 选择时间
+//             opens: 'right',
+//             autoUpdateInput: false,
+//             singleDatePicker: true,  // 只选一个
+//             showDropdowns: true,
+//             locale: {
+//                 format: 'MM/DD/YYYY'
+//             },
+//             minYear: 2000,
+//             maxYear: currentYear + 1
+//         })
+//         $('.date_time_picker').daterangepicker({
+//             timePicker: true,        // 选择时间
+//             opens: 'right',
+//             autoUpdateInput: false,
+//             singleDatePicker: true,  // 只选一个
+//             showDropdowns: true,
+//             locale: {
+//                 format: 'MM/DD/YYYY HH:mm'
+//             },
+//             minYear: 2000,
+//             maxYear: currentYear + 1
+//         })
+
+        //Toastr
+        toastr.options = {
+            positionClass: "toast-center-center",
+            timeOut: "2000"
+        }
+
+        columns = [
+            {
+                "data": "applicant_pos_id",
+                render: function (data, type, row, meta) {
+                	if(row.process_stage_code=='3.0'){
+                    return '<div class="custom-control custom-checkbox">' +
+                        "<input class='save_checkboxs custom-control-input' data-v=" + data +
+                        " id='checkbox_" + data +
+                        "' type=\"checkbox\" value='" + data + "'/>" +
+                        '<label for="checkbox_' + data +
+                        '" class="custom-control-label"></label>' +
+                        '</div>'
+                	}
+                	else return '';
+
+                }
+            },
+            {
+                "data": "applicant_pos_id",
+                "render": function (data, type, full, meta) {
+                    return '<span id="index_' + data + '">' + (meta.row + 1 + meta.settings._iDisplayStart) + '</span>';
+                }
+            }, // 序号
+            {"data": "applicant_pos_id",},
+            {"data": "apply_date",},
+            {
+                "data": "job_Code",
+                render: function (data, type, row, meta) {
+                    return "<a class='' href='[[@{/dispatch/job/show/}]]" + row.dept_pos_detail_id + "'>" + data + "</a>";
+                }
+            },
+            {
+                "data": "bookmarked_job_code",
+                render: function (data, type, row, meta) {
+                    return "<a class='' href='[[@{/dispatch/job/show/}]]" + row.bookmarked_job_id + "'>" + data + "</a>";
+                }
+            },
+            {"data": "ad_source",},
+            {"data": "applicant_Name",},
+            {"data": "id_type",},
+            {"data": "id_card_number",},
+            {"data": "gender",},
+            {"data": "age",},
+            {"data": "mobile",},
+            {"data": "degree",},
+            {"data": "organizationName",},
+            {"data": "major",},
+            {"data": "process_stage",
+                render: function (data, type, row, meta) {
+                	 if(row.process_stage_code=='3.0'){
+                		 if (row.interview_time == '' || row.interview_time == null) {
+                			 return '<span id="process_stage_'+row.applicant_pos_id+'">未預約</span>';
+                		 }
+                		 else{
+                			 return '<span id="process_stage_'+row.applicant_pos_id+'">已預約</span>';
+                		 }
+                	 }
+                	 else{
+            			 return '<span id="process_stage_'+row.applicant_pos_id+'">'+data+'</span>';
+                	 }
+                }
+            },
+            {
+                "data": "applicant_info_id",
+                render: function (data, type, row, meta) {
+                    return "<a class='' href='[[@{/dispatch/profile/showOnlyOneApplyData/}]]" + row.applicant_pos_id + "'>查看</a>/<a class='' href='javascript:exportResume(" + row.applicant_pos_id + ")'>列印</a>";
+                }
+            },
+            {
+                "data": "interview_time",
+                render: function (data, type, row, meta) {
+                    var selected1 = '';
+                    var selected2 = '';
+                    var selected3 = '';
+                    var selected4 = '';
+                    var selected5 = '';
+                    var selected6 = '';
+                    if(row.interview_time!=''){
+                        if (row.interview_time == row.prefer_interview_time1) {
+                            selected1 = 'selected';
+                        }
+                        else if (row.interview_time == row.prefer_interview_time2) {
+                            selected2 = 'selected';
+                        }
+                        else if (row.interview_time == row.prefer_interview_time3) {
+                            selected3 = 'selected';
+                        }
+                        else if (row.interview_time == row.prefer_interview_time4) {
+                            selected4 = 'selected';
+                        }
+                        else if (row.interview_time == row.prefer_interview_time5) {
+                            selected5 = 'selected';
+                        }
+                        else {
+                        	selected6 = 'selected';
+                        }
+                    }
+                    var html = '';
+
+                    if(row.process_stage_code=='3.0'){
+//                             if (row.interview_time == '' || row.interview_time == null) {
+                                html += '<select class="custom-select" id="interview_time_' + row.applicant_pos_id + '" onchange="switchTime('+row.applicant_pos_id+')">'
+                                if (row.prefer_interview_time1 != '') html += '<option value="' + row.prefer_interview_time1 + '" ' + selected1 + '>' + row.prefer_interview_time1 + '</option>';
+                                if (row.prefer_interview_time2 != '') html += '<option value="' + row.prefer_interview_time2 + '" ' + selected2 + '>' + row.prefer_interview_time2 + '</option>';
+                                if (row.prefer_interview_time3 != '') html += '<option value="' + row.prefer_interview_time3 + '" ' + selected3 + '>' + row.prefer_interview_time3 + '</option>';
+                                if (row.prefer_interview_time4 != '') html += '<option value="' + row.prefer_interview_time4 + '" ' + selected4 + '>' + row.prefer_interview_time4 + '</option>';
+                                if (row.prefer_interview_time5 != '') html += '<option value="' + row.prefer_interview_time5 + '" ' + selected5 + '>' + row.prefer_interview_time5 + '</option>';
+                                html += '<option value="other" '+selected6+'>其它 </option>';
+                                html += '</select>';
+                                if(selected6 != 'selected'){
+                                	html += '<input id="other_' + row.applicant_pos_id + '" class="form-control date_time_picker" type="text" style="display:none;">';
+                                }
+                                else{
+                                    html += '<input id="other_' + row.applicant_pos_id + '" class="form-control date_time_picker" type="text" value="'+row.interview_time+'">';
+                                }
+//                             } else {
+//                                 html += row.interview_time;
+//                             }
+                    }
+                    return html;
+
+                }
+            },
+            {
+                "data": "applicant_pos_id",
+                render: function (data, type, row, meta) {
+                    var html = '';
+                    if(row.process_stage_code=='3.0'){
+//                         if (row.meeting_room_id == '' || row.meeting_room_id == null) {
+                            html += '<select class="custom-select" id="meeting_room_selection_' + row.applicant_pos_id + '" class="">';
+                            html += $("#meeting_room_selection").html();
+                            html += '</select>';
+                            html = html.replace('value="'+row.meeting_room_id+'"','value="'+row.meeting_room_id+'" selected');
+//                         } else {
+//                             $("#meeting_room_selection option").each(function () {
+//                                 if ($(this).val() == row.meeting_room_id) {
+//                                     html += $(this).html();
+//                                 }
+//                             })
+//                         }
+                    }
+
+                    return html;
+                }
+            },
+        ];
+
+        $(".batchProcessBtn").click(function () {
+            let batchProcess_checkboxs = [];
+            $('.save_checkboxs:checked').each(function (index, element) {
+                batchProcess_checkboxs.push($(this).val());
+            });
+            if (batchProcess_checkboxs.length === 0) {
+                alert("沒有選中任何行");
+                return false;
+            }
+        });
+
+
+        $("#batchSaveBtn").click(function () {
+            let batchProcess_checkboxs = [];
+            $('.save_checkboxs:checked').each(function (index, element) {
+                batchProcess_checkboxs.push($(this).val());
+            });
+            for (i = 0; i < batchProcess_checkboxs.length; i++) {
+                if ($("#interview_time_" + batchProcess_checkboxs[i]).length == 0) {
+                    alert("有數據已經保存過，請重新選擇。");
+                    return false;
+                }
+            }
+        });
+
+        $("#informDeptBtn, #informApplicantBtn").click(function () {
+            let batchProcess_checkboxs = [];
+            $('.save_checkboxs:checked').each(function (index, element) {
+                batchProcess_checkboxs.push($(this).val());
+            });
+            for (i = 0; i < batchProcess_checkboxs.length; i++) {
+                if ($("#process_stage_" + batchProcess_checkboxs[i]).html()!='已預約') {
+                    alert("有數據未保存面試時間與時點，請先保存。");
+                    return false;
+                }
+            }
+        });
+
+
+        $("#confirmSaveBtn").click(function () {
+            let batchProcess_checkboxs = [];
+            $('.save_checkboxs:checked').each(function (index, element) {
+                batchProcess_checkboxs.push($(this).val());
+            });
+            if (batchProcess_checkboxs.length === 0) {
+                alert("沒有選中任何行");
+                return false;
+            }
+            let batch_interview_time = [];
+            for (i = 0; i < batchProcess_checkboxs.length; i++) {
+                var interview_time_selected = $("#interview_time_" + batchProcess_checkboxs[i]).val();
+                if(interview_time_selected=='other'){
+                	interview_time_selected = $("#other_" + batchProcess_checkboxs[i]).val();
+                }
+                batch_interview_time.push(interview_time_selected);
+            }
+            let batch_meeting_room = [];
+            for (i = 0; i < batchProcess_checkboxs.length; i++) {
+                var meeting_room_selected = $("#meeting_room_selection_" + batchProcess_checkboxs[i]).val();
+                batch_meeting_room.push(meeting_room_selected);
+            }
+
+            let url = "[[@{/operate/application/batchArrangeInterview}]]";
+            console.log(batch_interview_time);
+            $.ajax({
+                "url": url,
+                "data": {
+                    'batchProcess_checkboxs[]': batchProcess_checkboxs,
+                    'batch_interview_time[]': batch_interview_time,
+                    'batch_meeting_room[]': batch_meeting_room
+                },
+                "type": "post",
+                "dataType": "json",
+                "success": function (json) {
+                    if (json.stateCode === 200) {
+                        toastr.success('儲存成功!')
+                        dataTable.ajax.reload();
+                    } else if (json.stateCode === 500) {
+                        toastr.warning(json.message);
+                    } else {
+                        alert("本次操作未能成功!");
+                    }
+                },
+                "error": function (xhr, text, errorThrown) {
+                    alert("您的登录信息已经过期！請重新登录！");
+                    document.location.replace('[[@{/login.html}]]');
+                }
+            });
+        });
+
+
+        $("#confirmInformDeptBtn").click(function () {
+            let batchProcess_checkboxs = [];
+            $('.save_checkboxs:checked').each(function (index, element) {
+                batchProcess_checkboxs.push($(this).val());
+            });
+            if (batchProcess_checkboxs.length === 0) {
+                alert("沒有選中任何行");
+                return false;
+            }
+
+        });
+
+        $("#confirmInformDeptBtn").click(function () {
+            let batchProcess_checkboxs = [];
+            $('.save_checkboxs:checked').each(function (index, element) {
+                batchProcess_checkboxs.push($(this).val());
+            });
+            if (batchProcess_checkboxs.length === 0) {
+                alert("沒有選中任何行");
+                return false;
+            }
+            let url = "[[@{/operate/application/batchInformDeptOfInterview}]]";
+
+            $.ajax({
+                "url": url,
+                "data": {
+                    'batchProcess_checkboxs[]': batchProcess_checkboxs,
+                },
+                "type": "post",
+                "dataType": "json",
+                "success": function (json) {
+                    if (json.stateCode === 200) {
+                        toastr.success('郵件已發送!')
+                        dataTable.ajax.reload();
+                    } else if (json.stateCode === 500) {
+                        toastr.warning(json.message);
+                    } else {
+                        alert("本次操作未能成功!");
+                    }
+                },
+                "error": function (xhr, text, errorThrown) {
+                    alert("您的登录信息已经过期！請重新登录！");
+                    document.location.replace('[[@{/login.html}]]');
+                }
+            });
+        });
+
+        $("#confirmInformApplicantBtn").click(function () {
+            let batchProcess_checkboxs = [];
+            $('.save_checkboxs:checked').each(function (index, element) {
+                batchProcess_checkboxs.push($(this).val());
+            });
+            if (batchProcess_checkboxs.length === 0) {
+                alert("沒有選中任何行");
+                return false;
+            }
+            let url = "[[@{/operate/application/batchInformApplicantOfInterview}]]";
+
+            $.ajax({
+                "url": url,
+                "data": {
+                    'batchProcess_checkboxs[]': batchProcess_checkboxs,
+                },
+                "type": "post",
+                "dataType": "json",
+                "success": function (json) {
+                    if (json.stateCode === 200) {
+                        toastr.success('通知已發送!')
+                        dataTable.ajax.reload();
+                    } else if (json.stateCode === 500) {
+                        toastr.warning(json.message);
+                    } else {
+                        alert("本次操作未能成功!");
+                    }
+                },
+                "error": function (xhr, text, errorThrown) {
+                    alert("您的登录信息已经过期！請重新登录！");
+                    document.location.replace('[[@{/login.html}]]');
+                }
+            });
+        });
+
+        searchButton();
+    });
+
+
+    function exportResume(applicant_position_id) {
+        let batchFinish_checkboxs = [];
+        batchFinish_checkboxs.push(applicant_position_id);
+        let url = "[[@{/export/resume}]]";
+
+        let $form = $(document.createElement('form'))
+            .css({display: 'none'})
+            .attr("method", "post")
+            .attr("action", url)
+            .attr("target", "_blank")
+        ;
+        let $formIds = $(document.createElement('input')).attr('name', "applicant_pos_ids[]").val(batchFinish_checkboxs);
+        $form.append($formIds);
+        $("body").append($form);
+        $form.submit();
+        $form.remove();
+    }
+
+    function getParams() {
+
+
+        let start_date = $("#start_date").val();
+        let end_date = $("#end_date").val();
+
+        let dateCheckIsPass = true;
+        if ((start_date && !end_date) || (!start_date && end_date)) {
+            toastr.warning("請輸入完整日期範圍")
+            dateCheckIsPass = false;
+        } else if (start_date && end_date) {
+            if (!validateDate(start_date, end_date)) {
+                toastr.warning("invalid date input")
+                dateCheckIsPass = false;
+            }
+        }
+
+        let applicant_pos_id = $("#applicant_pos_id").val();
+        let job_id = $("#job_id").val();
+        let process_stage_code = $("#process_stage_code").val();
+		let interview_arranged = -1;
+		if(process_stage_code == 30){
+			process_stage_code = 3;
+			interview_arranged = 0;
+		}
+		if(process_stage_code == 31){
+			process_stage_code = 3;
+			interview_arranged = 1;
+		}
+
+        let param = {
+            "dateCheckIsPass": dateCheckIsPass,
+            "start_date": start_date,
+            "end_date": end_date,
+            "applicant_pos_id": applicant_pos_id,
+            "belong_job_id": job_id,
+            "process_stage_code": process_stage_code==""?">2":process_stage_code,
+            "interview_arranged":interview_arranged,
+            "status":"a", //A,O,
+            "is_arrange_interview_html":"is_arrange_interview_html"
+        };
+
+        if (!start_date) {
+            delete param["start_date"];
+        }
+        if (!end_date) {
+            delete param["end_date"];
+        }
+
+        if (!applicant_pos_id) {
+            delete param["applicant_pos_id"];
+        }
+        if (!job_id) {
+            delete param["belong_job_id"];
+        }
+        return param;
+    }
+
+    function validateDate(fromDate, toDate) {
+        let from = new Date(fromDate);
+        let to = new Date(toDate);
+        let dateDiff = (to.getTime() - from.getTime()) / 60 / 60 / 1000 / 24;
+        return dateDiff >= 1;
+    }
+
+    function searchButton() {
+        //设置参数，重新加载
+        let params = getParams();
+
+        if (dataTable == null) {
+            //初始化DataTables
+            dataTable = App.initDataTables("[[@{/dataTables/searchApplication}]]", columns, 2, "desc",
+                [
+                    {"bSortable": false, "aTargets": [0, 1, 13, 14, 15, 16,17,18]},
+                    {
+                        aTargets: [2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13],
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            let rowspan = rowData.rowSpan;
+                            if (rowspan > 1) {
+                                $(td).attr('rowspan', rowspan)
+                            }
+                            if (rowspan == 0) {
+                                // $(td).remove();
+                                $(td).attr('style', 'display:none')
+                            }
+                        }
+                    }
+                ]
+            );
+        } else {
+            dataTable.settings()[0].ajax.data = params;
+            dataTable.ajax.reload();
+        }
+    }
+
+    function clearFilter() {
+        $("#start_date").val("");
+        $("#end_date").val("");
+        $("#applicant_pos_id").val("");
+        $("#job_id").val("");
+        $("#process_stage_code").val("");
+    }
+
+    function switchTime(applicant_pos_id){
+    	var selection = $("#interview_time_"+applicant_pos_id).val();
+    	if(selection == 'other'){
+    		$("#other_"+applicant_pos_id).show();
+    	}
+    	else{
+    		$("#other_"+applicant_pos_id).hide();
+    	}
+
+    }
+
+    function initTimePicker(){
+        let currentYear = parseInt(moment().format('YYYY'), 10);
+    	$('.date_time_picker').daterangepicker({
+            timePicker: true,        // 选择时间
+            opens: 'left',
+            autoUpdateInput: false,
+            singleDatePicker: true,  // 只选一个
+            showDropdowns: true,
+            locale: {
+                format: 'MM/DD/YYYY HH:mm'
+            },
+            minYear: 2000,
+            maxYear: currentYear + 1
+        })
+    }
+</script>
+
+</html>

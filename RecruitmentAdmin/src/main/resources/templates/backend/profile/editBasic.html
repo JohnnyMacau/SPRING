@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>E - recruitment</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/dist/css/adminlte.min.css}">
+    <!-- Google Font: Source Sans Pro -->
+    <link th:href="@{/assets/fonts/ssp.css}"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+    <!-- daterange picker -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/daterangepicker/daterangepicker.css}"
+          href="../../plugins/daterangepicker/daterangepicker.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/toastr/toastr.min.css}"
+          href="../../plugins/toastr/toastr.min.css">
+
+    <!--self css-->
+    <link rel="stylesheet" th:href="@{/assets/styles/self_basic.css}">
+
+    <style type="text/css">
+        /* Content > Main */
+
+        table.tablestyle2 {
+            border-width: 0px;
+            margin: 0;
+            padding: 0;
+        }
+
+        table.tablestyle2 td {
+            border-top: 1px solid #C1DAD7;
+            border-right: 1px solid #C1DAD7;
+            border-left: 1px solid #C1DAD7;
+            border-bottom: 1px solid #C1DAD7;
+            background: #fff;
+            padding: 6px 16px 6px 16px;
+            color: #666666;
+            text-align: left;
+            font: normal small Arial, Helvetica, sans-serif;
+            width: auto;
+        }
+
+
+        table.tablestyle2 th {
+            color: #333333;
+            border-right: 1px solid #C1DAD7;
+            border-bottom: 1px solid #C1DAD7;
+            border-top: 1px solid #C1DAD7;
+            border-left: 1px solid #C1DAD7;
+            text-align: left;
+            background: #CAE8EA;
+            font: bold small Arial, Helvetica, sans-serif;
+            padding-left: 14px;
+            padding-right: 14px;
+            white-space: nowrap;
+        }
+
+        table.tablestyle2 th.top {
+            color: #333333;
+            border-right: 1px solid #C1DAD7;
+            border-bottom: 1px solid #C1DAD7;
+            border-top: 1px solid #C1DAD7;
+            border-left: 1px solid #C1DAD7;
+            text-transform: uppercase;
+            text-align: center;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            background: #CAE8EA;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        table.tablestyle2 th.top2 {
+            color: #333333;
+            border-right: 1px solid #C1DAD7;
+            border-bottom: 1px solid #C1DAD7;
+            border-top: 1px solid #C1DAD7;
+            border-left: 1px solid #C1DAD7;
+            text-transform: uppercase;
+            text-align: center;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            padding-left: 12px;
+            padding-right: 12px;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        table.tablestyle2 th.left1 {
+            background: #f5fafa;
+            padding: 6px 12px 6px 12px;
+            margin-left: 6px;
+            margin-right: 6px;
+            color: #666666;
+        }
+
+        table.tablestyle2 TABLE TR TD {
+            border-width: 0px;
+            margin: 0;
+            padding: 0 0 0 5px;
+        }
+
+    </style>
+
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6" th:with="p=${personalInfo}">
+                    <h1 class="m-0 text-dark">申請人資料&emsp;[[${p.enLName}]][[${p.enFName}]]&emsp;[[${p.cnLName}]][[${p.cnFName}]]&emsp;([[${p.applicantInfoId}]])</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#" th:href="@{/dispatch/main}" target="_parent">招聘管理</a></li>
+                        <li class="breadcrumb-item active">申請人資料</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+
+
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title"></h3>
+                        </div>
+
+                        <div class="card-body">
+                            <form id="editApplicantForm" name="editApplicantForm"
+                                  action="/hr_portalvo1/main.jsp?page=RecruitmentEditApplicant">
+
+                                <span id="errorMsg" class="error"></span>
+
+
+                                <br>
+
+                                <table class="tablestyle2" th:with="p=${personalInfo}">
+                                    <tbody>
+                                    <tr>
+                                        <th colspan="3" class="top">(一) 個人資料</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">英文姓氏</th>
+                                        <td nowrap=""><input type="text" id="txtEnLastName" name="enLName"
+                                                             style="text-transform:uppercase;" th:value="${p.getEnLName()}"></td>
+                                        <td rowspan="4" align="center">
+                                            <input type="button" id="btnUpdateApplicantName"
+                                                   value="Update Name"
+                                                   class="btn btn-info btn-sm self_btn_updateRecord"
+
+                                                   onclick="updateRecord('updateName');">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">英文名字</th>
+                                        <td nowrap=""><input type="text" id="txtEnFirstName" name="enFName"
+                                                             style="text-transform:uppercase;" th:value="${p.getEnFName()}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">中文姓氏</th>
+                                        <td nowrap=""><input type="text" id="txtCnLastName" name="cnLName"
+                                                             value="灯" th:value="${p.getCnLName()}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">中文名字</th>
+                                        <td nowrap=""><input type="text" id="txtCnFirstName" name="cnFName"
+                                                             value="灯" th:value="${p.getCnFName()}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">身份證類別</th>
+                                        <td nowrap="" colspan="2"><select id="ddlIdType" name="idTypeId">
+
+                                            <option th:each="idType : ${idTypeList}"
+                                                    th:value="${idType.getId()}"
+                                                    th:text="${idType.getChnDesc()}"
+                                                    th:selected="${idType.getId()}==${personalInfo.getType_id()}"
+                                            ></option>
+
+                                        </select></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">身份證編號</th>
+                                        <td nowrap="" colspan="2">
+                                            <input type="text" id="txtIdCardNo" name="idCardNumber"
+                                                   value="440488888888888888" th:value="${p.getIdCardNumber()}">
+                                            <input type="button"
+                                                   id="btnUpdateIdCard"
+                                                   value="Update"
+                                                   class="btn btn-info btn-sm self_btn_updateRecord"
+
+                                                   onclick="updateRecord('updateIdCard');">
+                                        </td>
+                                    </tr>
+                                  <!--  <tr>
+                                        <th class="left1">国家</th>
+                                        <td nowrap="" colspan="2">[{p.country}]</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">地区</th>
+                                        <td nowrap="" colspan="2">[{p.district}]</td>
+                                    </tr>-->
+                                    <tr>
+                                        <th class="left1">户口性质</th>
+                                        <td nowrap="" colspan="2">[[${p.account}]]</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">性別</th>
+                                        <td nowrap="" colspan="2">[[${p.cnGender}]]</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">出生日期</th>
+                                        <td nowrap="" colspan="2">[[${p.dob}]]</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">手提電話</th>
+                                        <td nowrap="" colspan="2">[[${p.areaCode}]]-[[${p.mobile}]]</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">電郵地址</th>
+                                        <td nowrap="" colspan="2">
+                                            <input type="text" id="txtEmailAddress"
+                                                   th:value="${p.getEmailAddress()}"
+                                                   name="emailAddress" value="">
+                                            <input type="button" id="btnUpdateEmail" value="Update"
+                                                   class="btn btn-info btn-sm self_btn_updateRecord"
+                                                   onclick="updateRecord('updateEmail');">
+                                            <!--        <input type="hidden" id="hr_flt"
+                                                           name="hr_flt" value="FLT">-->
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">地區</th>
+                                        <td nowrap="" colspan="2" th:switch="${p.area}">
+                                            <div th:case="CN">中国大陆</div>
+                                            <div th:case="MO">澳门</div>
+                                            <div th:case="HK">香港</div>
+                                            <div th:case="OTH">其它</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">地址（地區）</th>
+                                        <td nowrap="" colspan="2">[[${p.address_1}]]</td>
+                                    </tr>
+                                    <tr></tr>
+                                    <tr>
+                                        <th class="left1">地址（街道及門牌）</th>
+                                        <td nowrap="" colspan="2">[[${p.address_2}]]</td>
+                                    </tr>
+                                    <tr></tr>
+                                    <tr>
+                                        <th class="left1">地址（大廈及單位）</th>
+                                        <td nowrap="" colspan="2">[[${p.address_3}]]</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">紧急联系人</th>
+                                        <td nowrap="" colspan="2">[[${p.contactName}]]</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">联系人电话</th>
+                                        <td nowrap="" colspan="2">
+                                            [[${p.contactPhoneAreaCode}]]-[[${p.contactPhone}]]
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">联系人关系</th>
+                                        <td nowrap="" colspan="2">[[${p.contactRelation}]]</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">社保狀況</th>
+                                        <td nowrap="" colspan="2">[[${p.social}]]</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">婚姻狀況</th>
+                                        <td nowrap="" colspan="2">[[${p.martialStatus}]]</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">是否有親戚於本公司任職</th>
+                                        <td nowrap="" colspan="2">[[${p.relative_name}!=null? '是':'否']]</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">親屬關係</th>
+                                        <td nowrap="" colspan="2">[[${p.relationship}]]</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">親屬姓名</th>
+                                        <td nowrap="" colspan="2">[[${p.relative_name}]]</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">親屬所屬部門</th>
+                                        <td nowrap="" colspan="2">[[${p.department}]]</td>
+                                    </tr>
+                                    <tr></tr>
+                                    <tr>
+                                        <th class="left1">任职状态</th>
+                                        <td nowrap="" colspan="2">[[${p.cnIn_service}]]</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <br>
+
+
+                                <table class="tablestyle2">
+                                    <tbody>
+                                    <tr>
+                                        <th colspan="5" class="top">(二) 教育程度</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="5">
+                                            <div align="center">學歷</div>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">學歷</th>
+                                        <th class="left1">由 ( 月 / 年)</th>
+                                        <th class="left1">至 ( 月 / 年)</th>
+                                        <th class="left1">學校</th>
+                                        <th class="left1">專科</th>
+                                    </tr>
+                                    <tr th:each="e : ${educationList}">
+                                        <td nowrap="">[[${e.degree}]]</td>
+                                        <td nowrap="">[[${e.fromDate}]]</td>
+                                        <td nowrap="">[[${e.toDate}]]</td>
+                                        <td nowrap="">[[${e.organizationName}]]</td>
+                                        <td nowrap="">[[${e.major}]]</td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+
+                                <table class="tablestyle2">
+                                    <tbody>
+                                    <tr>
+                                        <th colspan="3">
+                                            <div align="center">專業資格或證書</div>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">證書/認可資格</th>
+                                        <th class="left1">頒發證書日期( 月 / 年)</th>
+                                        <th class="left1">頒發機構</th>
+                                    </tr>
+                                    <tr th:each="c : ${certificationList}">
+                                        <td nowrap="">[[${c.certName}]]</td>
+                                        <td nowrap="">[[${c.issueDate}]]</td>
+                                        <td nowrap="">[[${c.organizationName}]]</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <br>
+                                <table class="tablestyle2">
+                                    <tbody>
+                                    <tr>
+                                        <th colspan="10" class="top">(三) 工作經驗</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">工作機構</th>
+                                        <th class="left1">職位</th>
+                                        <th class="left1">由 ( 月 / 年)</th>
+                                        <th class="left1">至 ( 月 / 年)</th>
+                                        <th class="left1">主要職務</th>
+                                        <th class="left1">薪本形式</th>
+                                        <!-- <th class="left1">基本薪酬(幣值)</th> -->
+                                        <th class="left1">基本薪酬</th>
+
+                                        <th class="left1">是否仍在職</th>
+                                        <th class="left1">離職原因</th>
+                                    </tr>
+                                    <tr th:each="experience : ${experienceList}">
+                                        <td nowrap="">[[${experience.companyName}]]</td>
+                                        <td nowrap="">[[${experience.position}]]</td>
+                                        <td nowrap="">[[${experience.fromDate}]]</td>
+                                        <td nowrap="">[[${experience.toDate}]]</td>
+                                        <td nowrap="">[[${experience.jobDuty}]]</td>
+                                        <td nowrap="">[[${experience.payMethod}]]</td>
+                                        <td nowrap="">[[${experience.currency}]] [[${experience.salary}]]</td>
+                                        <td nowrap="">[[${experience.stillEmployed}]]</td>
+                                        <td nowrap="">[[${experience.leaveReason}]]</td>
+                                    </tr>
+
+
+                                    </tbody>
+                                </table>
+
+                                <table class="tablestyle2" th:with="p=${personalInfo}">
+                                    <tbody>
+                                    <tr>
+                                        <td nowrap="">是否曾在本公司工作</td>
+                                        <td nowrap="">[[${p.employedBefore}]]</td>
+                                        <td nowrap="" th:if="${p.employedBefore}=='是'">
+                                            职位:[[${p.ebPosi}]];部门:[[${p.ebDept}]];員工編號:[[${p.ebUserName}]]
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td nowrap="">是否曾申請本公司之投注戶口</td>
+                                        <td nowrap="">[[${p.appliedBaccountBefore}]]</td>
+                                    </tr>
+                                    <tr>
+                                        <td nowrap="">是否曾被某個僱主終止/開除/暫停職務</td>
+                                        <td nowrap="">[[${p.terminatedBefore}]]</td>
+                                        <td nowrap="" th:if="${p.terminatedBefore}=='是'">原因:[[${p.tbCause}]]</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td nowrap="">是否涉及任何刑事罪行</td>
+                                        <td nowrap="">[[${p.criminalRecord}]]</td>
+                                        <td nowrap="" th:if="${p.criminalRecord}=='是'">原因:[[${p.crCause}]]</td>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <br>
+                                <table class="tablestyle2">
+                                    <tbody>
+                                    <tr>
+                                        <th colspan="5" class="top">(四) 其他資料</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">語言技能</th>
+                                        <th class="left1">書寫</th>
+                                        <th class="left1">會話</th>
+
+                                    </tr>
+                                    <tr th:each="l : ${languageList}">
+                                        <td nowrap="">[[${l.name}]]</td>
+                                        <td nowrap="">[[${l.written}]]</td>
+                                        <td nowrap="">[[${l.spoken}]]</td>
+                                    </tr>
+
+
+                                    </tbody>
+                                </table>
+                                <table class="tablestyle2">
+                                    <tbody>
+                                    <tr>
+                                        <th class="left1">電腦技能 / 其他技能</th>
+                                        <th class="left1">描述</th>
+
+                                    </tr>
+                                    <tr th:each="o : ${otherSkillList}">
+                                        <td nowrap="">[[${o.name}]]</td>
+                                        <td nowrap="">[[${o.degree}]]</td>
+                                    </tr>
+
+
+                                    </tbody>
+                                </table>
+                                <br>
+                                <br>
+
+
+                                <button type="button" th:if="${suspendAllApplicant}" class="btn btn-sm btn-primary" disabled title="目前已有三個應徵申請處理中">
+                                        <i class="fa fa-save" aria-hidden="true"></i> 代申請職位
+                                </button>
+                                <button type="button" th:if="!${suspendAllApplicant}" class="btn btn-sm btn-primary" onclick="goToOpeningJobListPage()">
+                                        <i class="fa fa-save" aria-hidden="true"></i> 代申請職位
+                                </button>
+                                <button type="button" class="btn btn-sm btn-primary" onclick="goExportProfile();">
+                                        <i class="fa fa-reply" aria-hidden="true"></i> 列印
+                                </button>
+                                <button type="button" class="btn btn-sm btn-primary fa-pull-right" onclick="goBack();">
+                                        <i class="fa fa-reply" aria-hidden="true"></i> 返回
+                                </button>
+
+                                <input type="hidden" id="applicantId" name="applicantInfoId" value="0"
+                                       th:value="${personalInfo.getApplicantInfoId()}">
+
+
+                            </form>
+                        </div>
+
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+
+            </div>
+
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+
+    <!-- /.content-wrapper -->
+
+
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script th:src="@{/AdminLTE/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- date-range-picker -->
+<script th:src="@{/AdminLTE/plugins/daterangepicker/moment.min.js}" src="../../plugins/moment/moment.min.js"></script>
+<script th:src="@{/AdminLTE/plugins/daterangepicker/daterangepicker.js}"
+        src="../../plugins/daterangepicker/daterangepicker.js"></script>
+
+<!-- Toastr -->
+<script th:src="@{/AdminLTE/plugins/toastr/toastr.min.js}" src="../../plugins/toastr/toastr.min.js"></script>
+
+
+<!-- AdminLTE App -->
+<script th:src="@{/AdminLTE/dist/js/adminlte.min.js}"></script>
+
+<!--self js-->
+<script th:src="@{/assets/js/self_basic.js}"></script>
+<script th:src="@{/assets/js/common.js}"></script>
+
+</body>
+
+
+<!-- page script -->
+<script>
+    $(function () {
+        //Toastr
+        toastr.options = {
+            positionClass: "toast-center-center",
+            timeOut: "2000"
+        }
+    })
+
+
+    function goBack() {
+        location.href = "[[@{/dispatch/profile/registered}]]";
+    }
+
+
+</script>
+<script>
+    function updateRecord(type) {
+
+        if (type === 'updateName') {
+            if (!confirm('確定修改 [中英文姓名] ?')) {
+                return;
+            }
+            if (!$('#txtEnLastName').val()){
+                toastr.warning( "請填寫英文/葡文姓氏");
+                return;
+            }
+            if (!$('#txtEnFirstName').val()){
+                toastr.warning( "請填寫英文/葡文名字");
+                return;
+            }
+
+        } else if (type === 'updateIdCard') {
+            if (!confirm('確定修改 [身份證編號] [身份證類別] ?')) {
+                return;
+            }
+            let val = $('#txtIdCardNo').val();
+            if (($('#ddlIdType').val() == 17) &&
+                ((val.length != 8) || (isNaN(val)))){
+                toastr.warning( "身份證號碼格式有誤");
+                return;
+            }
+        } else if (type === 'updateEmail') {
+            if (!confirm('確定修改 [電郵地址] 及 [用戶名] ?')) {
+                return;
+            }
+            let val1 = $('#txtEmailAddress').val();
+            if (!val1){
+                toastr.warning( "請填寫電郵地址");
+                return;
+            }
+            if (validateEmail(val1) === false){
+                toastr.warning( "電郵地址格式有誤");
+                return;
+            }
+        } else {
+            return;
+        }
+
+        let url = '[[@{/operate/profile/update/}]]' + type;
+
+        let data = $("#editApplicantForm");
+        $('.self_btn_updateRecord').attr("disabled", true);
+        // return;
+
+        $.ajax({
+            "url": url,
+            "data": JSON.stringify(getFormData(data)),
+            "type": "post",
+            "contentType": "application/json;charset=utf-8",
+            "dataType": "json",
+            "success": function (json) {
+                if (json.stateCode === 200) {
+                    toastr.success('修改成功!')
+                    /*     setTimeout(function () {
+                        location.href = "[[@{/dispatch/job/search}]]";
+                         }, 1500);*/
+                } else if (json.stateCode === 500) {
+                    toastr.warning(json.message);
+
+                } else {
+                    alert("本次操作未能成功!");
+                }
+                $('.self_btn_updateRecord').attr("disabled", false);
+            },
+            "error": function (xhr, text, errorThrown) {
+                alert("您的登录信息已经过期！請重新登录！");
+                document.location.replace('[[@{/login.html}]]');
+            }
+        });
+    }
+
+    function validateEmail(email) {
+        const regExp = /^[^@^\s]+@[^\.@^\s]+(\.[^\.@^\s]+)+$/;
+        return !!email.match(regExp);
+    }
+
+
+
+/*    function print_fn( ) {
+
+        var url = "[[@{/export/singleResume/}]]" + $('#applicantId').val();
+        var $form = $(document.createElement('form'))
+            .css({display: 'none'})
+            .attr("method", "get")
+            .attr("action", url)
+            .attr("target", "_blank")
+        ;
+        $("body").append($form);
+        $form.submit();
+        $form.remove();
+    }*/
+
+    function goExportProfile() {
+        exportProfile($('#applicantId').val());
+    }
+
+    function exportProfile(applicant_info_id) {
+        let batchFinish_checkboxs = [];
+        batchFinish_checkboxs.push(applicant_info_id);
+        let url = "[[@{/export/profile}]]";
+
+        let $form = $(document.createElement('form'))
+            .css({display: 'none'})
+            .attr("method", "post")
+            .attr("action", url)
+            .attr("target", "_blank")
+        ;
+        let $formIds = $(document.createElement('input')).attr('name', "applicant_info_ids[]").val(batchFinish_checkboxs);
+        $form.append($formIds);
+        $("body").append($form);
+        $form.submit();
+        $form.remove();
+    }
+
+</script>
+<script>
+    function goToOpeningJobListPage() {
+        let applicant_info_id = '[[${personalInfo?.applicantInfoId}]]';
+
+        let applicationOrg1 = '[[${param.applicationOrg}]]';
+        let applicationOrg2 = '[[${personalInfo?.applicationOrg}]]';
+        if(applicationOrg1.toLowerCase() !== applicationOrg2.toLowerCase()) {
+            toastr.warning('檔案模板改變，請先保存修改')
+            return ;
+        }
+
+        location.href = '[[@{/dispatch/profile/getOpeningJobListPage}]]' +
+            '?applicationOrg=' + applicationOrg2 + '&' +
+            'applicant_info_id=' + applicant_info_id
+        ;
+    }
+</script>
+
+</html>

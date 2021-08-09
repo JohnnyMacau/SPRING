@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>E - recruitment</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/dist/css/adminlte.min.css}">
+    <!-- Google Font: Source Sans Pro -->
+    <link th:href="@{/assets/fonts/ssp.css}"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+    <!-- daterange picker -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/daterangepicker/daterangepicker.css}"
+          href="../../plugins/daterangepicker/daterangepicker.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/toastr/toastr.min.css}"
+          href="../../plugins/toastr/toastr.min.css">
+    <!-- summernote -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/summernote/summernote-bs4.css}"
+          href="../../plugins/summernote/summernote-bs4.css">
+
+
+    <!--self css-->
+    <link rel="stylesheet" th:href="@{/assets/styles/self_basic.css}">
+
+
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">首頁</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <!--                        <li class="breadcrumb-item"><a href="#">招聘管理</a></li>-->
+                        <li class="breadcrumb-item"><a href="#" th:href="@{/dispatch/main}" target="_parent">招聘管理</a></li>
+
+                        <li class="breadcrumb-item active">首頁</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="card card-success col-6">
+                    <div class="card-header">
+                        <h3 class="card-title">SLT&emsp;近7個月註冊和申請情況</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                    class="fas fa-minus"></i>
+                            </button>
+                            <!--                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>-->
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart">
+                            <div class="chartjs-size-monitor">
+                                <div class="chartjs-size-monitor-expand">
+                                    <div class=""></div>
+                                </div>
+                                <div class="chartjs-size-monitor-shrink">
+                                    <div class=""></div>
+                                </div>
+                            </div>
+                            <canvas id="barChart"
+                                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block;"
+                                    width="405" height="250" class="chartjs-render-monitor"></canvas>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+                <div class="card card-primary col-6">
+                    <div class="card-header">
+                        <h3 class="card-title">FLT&emsp;近7個月註冊和申請情況</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                    class="fas fa-minus"></i>
+                            </button>
+                            <!--                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>-->
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart">
+                            <div class="chartjs-size-monitor">
+                                <div class="chartjs-size-monitor-expand">
+                                    <div class=""></div>
+                                </div>
+                                <div class="chartjs-size-monitor-shrink">
+                                    <div class=""></div>
+                                </div>
+                            </div>
+                            <canvas id="barChart2"
+                                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block;"
+                                    width="405" height="250" class="chartjs-render-monitor"></canvas>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+            </div>
+
+            <div class="row" th:with="today=${#dates.format(new java.util.Date().getTime(),'yyyy-MM-dd')}">
+
+                <div class="card card-success  col-6">
+                    <div class="card-header ui-sortable-handle" >
+                        <h3 class="card-title" th:text="'SLT&emsp;開啟中職位:&emsp;'+${countMslot}">
+                        </h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                    class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <ul class="todo-list ui-sortable" data-widget="todo-list">
+                            <li th:each="list:${mslotList}">
+                                <!-- todo text -->
+                                <span class="text"
+                                      th:text="${listStat.count}+'.&emsp;'+${list.getJob_title()}+'&emsp;(&emsp;'+${list.getJob_code()}+'&emsp;)'"></span>
+
+                                <span class="badge bg-danger"
+                                      th:if="${#dates.format(list.getLast_modify_date(),'yyyy-MM-dd')}==${today}">NEW</span>
+
+
+                                <!-- General tools such as edit or delete-->
+                                <div class="tools">
+                                    <a th:href="@{/dispatch/job/edit/}+${list.getDetail_id()}"
+                                       style="color:#dc3545;"><i class="fas fa-edit"></i></a>
+                                    <!--                                    <i class="fas fa-trash-o"></i>-->
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer clearfix">
+                        <a class="btn btn-info float-right" th:href="@{/dispatch/job/add}+'?activePlace=SLT'"><i
+                                class="fas fa-plus"></i> 新開職位</a>
+                    </div>
+                </div>
+
+                <div class="card card-primary  col-6">
+                    <div class="card-header ui-sortable-handle" >
+                        <h3 class="card-title" th:text="'FLT&emsp;開啟中職位:&emsp;'+${countFlt}">
+                        </h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                    class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <ul class="todo-list ui-sortable" data-widget="todo-list">
+                            <li th:each="list:${fltList}">
+                                <!-- todo text -->
+                                <span class="text"
+                                      th:text="${listStat.count}+'.&emsp;'+${list.getJob_title()}+'&emsp;(&emsp;'+${list.getJob_code()}+'&emsp;)'"></span>
+                                <span class="badge bg-danger"
+                                      th:if="${#dates.format(list.getLast_modify_date(),'yyyy-MM-dd')}==${today}">NEW</span>
+
+                                <!-- General tools such as edit or delete-->
+                                <div class="tools">
+                                    <a th:href="@{/dispatch/job/edit/}+${list.getDetail_id()}"
+                                       style="color:#dc3545;"><i class="fas fa-edit"></i></a>
+                                    <!--                                    <i class="fas fa-trash-o"></i>-->
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer clearfix">
+                        <a class="btn btn-info float-right" th:href="@{/dispatch/job/add}+'?activePlace=FLT'"><i
+                                class="fas fa-plus"></i> 新開職位</a>
+                    </div>
+                </div>
+            </div>
+
+
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+
+    <!-- /.content-wrapper -->
+
+
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script th:src="@{/AdminLTE/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- date-range-picker -->
+<script th:src="@{/AdminLTE/plugins/daterangepicker/moment.min.js}" src="../../plugins/moment/moment.min.js"></script>
+<script th:src="@{/AdminLTE/plugins/daterangepicker/daterangepicker.js}"
+        src="../../plugins/daterangepicker/daterangepicker.js"></script>
+
+<!-- Toastr -->
+<script th:src="@{/AdminLTE/plugins/toastr/toastr.min.js}" src="../../plugins/toastr/toastr.min.js"></script>
+
+<!-- ChartJS -->
+<script th:src="@{/AdminLTE/plugins/chart.js/Chart.min.js}" src="../../plugins/chart.js/Chart.min.js"></script>
+
+<!-- AdminLTE App -->
+<script th:src="@{/AdminLTE/dist/js/adminlte.min.js}"></script>
+<!-- Summernote -->
+<script th:src="@{/AdminLTE/plugins/summernote/summernote-bs4.min.js}"
+        src="../../plugins/summernote/summernote-bs4.min.js"></script>
+<script th:src="@{/AdminLTE/plugins/summernote/lang/summernote-zh-CN.js}"
+        src="/summernote/lang/summernote-zh-CN.js"></script>
+<!--self js-->
+<script th:src="@{/assets/js/self_basic.js}"></script>
+
+</body>
+
+
+<!-- page script -->
+<script th:inline="javascript">
+    var SLT_REGISTER = [[${mslotRegister}]];
+    var FLT_REGISTER = [[${fltRegister}]];
+
+    var SLT_APPLICANT = [[${mslotApplicant}]];
+    var FLT_APPLICANT = [[${fltApplicant}]];
+
+
+</script>
+<script>
+    var MONTH_ARR;
+    var MONTH_ARR_CHN;
+
+    $(function () {
+
+        /* ChartJS
+         * -------
+         * Here we will create a few charts using ChartJS
+         */
+        MONTH_ARR = getMonthArr();
+        MONTH_ARR_CHN = getMonthArrChn(MONTH_ARR);
+        var areaChartData = {
+            labels: MONTH_ARR_CHN,
+            datasets: [
+                {
+                    label: '申請次數',
+                    backgroundColor: 'rgba(60,141,188,0.9)',
+                    borderColor: 'rgba(60,141,188,0.8)',
+                    pointRadius: false,
+                    pointColor: '#3b8bba',
+                    pointStrokeColor: 'rgba(60,141,188,1)',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(60,141,188,1)',
+                    data: getData4diagram(MONTH_ARR, SLT_APPLICANT)
+                },
+                {
+                    label: '註冊人數',
+                    backgroundColor: 'rgba(210, 214, 222, 1)',
+                    borderColor: 'rgba(210, 214, 222, 1)',
+                    pointRadius: false,
+                    pointColor: 'rgba(210, 214, 222, 1)',
+                    pointStrokeColor: '#c1c7d1',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(220,220,220,1)',
+                    data: getData4diagram(MONTH_ARR, SLT_REGISTER)
+                },
+            ]
+        }
+
+        var areaChartData2 = {
+            labels: MONTH_ARR_CHN,
+            datasets: [
+                {
+                    label: '申請次數',
+                    backgroundColor: 'rgba(60,141,188,0.9)',
+                    borderColor: 'rgba(60,141,188,0.8)',
+                    pointRadius: false,
+                    pointColor: '#3b8bba',
+                    pointStrokeColor: 'rgba(60,141,188,1)',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(60,141,188,1)',
+                    data: getData4diagram(MONTH_ARR, FLT_APPLICANT)
+                },
+                {
+                    label: '註冊人數',
+                    backgroundColor: 'rgba(210, 214, 222, 1)',
+                    borderColor: 'rgba(210, 214, 222, 1)',
+                    pointRadius: false,
+                    pointColor: 'rgba(210, 214, 222, 1)',
+                    pointStrokeColor: '#c1c7d1',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(220,220,220,1)',
+                    data: getData4diagram(MONTH_ARR, FLT_REGISTER)
+                },
+            ]
+        }
+
+        //-------------
+        //- BAR CHART -
+        //-------------
+        var barChartCanvas = $('#barChart').get(0).getContext('2d')
+        var barChartData = jQuery.extend(true, {}, areaChartData)
+        var temp0 = areaChartData.datasets[0]
+        var temp1 = areaChartData.datasets[1]
+        barChartData.datasets[0] = temp1
+        barChartData.datasets[1] = temp0
+
+        var barChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            datasetFill: false
+        }
+
+        var barChart = new Chart(barChartCanvas, {
+            type: 'bar',
+            data: barChartData,
+            options: barChartOptions
+        })
+        //-------------
+        //- BAR CHART -
+        //-------------
+        var barChartCanvas2 = $('#barChart2').get(0).getContext('2d')
+        var barChartData2 = jQuery.extend(true, {}, areaChartData2)
+        var temp0_2 = areaChartData2.datasets[0]
+        var temp1_2 = areaChartData2.datasets[1]
+        barChartData2.datasets[0] = temp1_2
+        barChartData2.datasets[1] = temp0_2
+
+        var barChartOptions2 = {
+            responsive: true,
+            maintainAspectRatio: false,
+            datasetFill: false
+        }
+
+        var barChart2 = new Chart(barChartCanvas2, {
+            type: 'bar',
+            data: barChartData2,
+            options: barChartOptions2
+        })
+    });
+
+
+    var getMonthArr = function () {
+        var dataArr = [];
+        var data = new Date();//Date.parse("2017-1-22 00:21:50")
+        // var year = data.getFullYear();
+        data.setMonth(data.getMonth() + 1, 1) //获取到当前月份,设置月份
+        for (var i = 0; i < 7; i++) {
+            data.setMonth(data.getMonth() - 1); //每次循环一次 月份值减1
+            var m = data.getMonth() + 1;
+            // m = m < 10 ? "0" + m : m;
+            // dataArr.push(data.getFullYear() + "-" + (m))
+            dataArr.push(Number(m))
+        }
+        // alert(dataArr.reverse())
+        return dataArr.reverse();
+    }
+
+
+    function getData4diagram(MONTH_ARR, SLT_REGISTER) {
+        let arr = []
+        for (let montharrKey of MONTH_ARR) {
+            // alert(montharrKey + ' -- '+ MSLOT_REGISTER[montharrKey - 1])
+            arr.push(SLT_REGISTER[montharrKey - 1])
+        }
+        // alert(arr)
+        return arr;
+    }
+
+    function getMonthArrChn(MONTH_ARR) {
+        let arr = []
+        for (let montharrKey of MONTH_ARR) {
+            arr.push(montharrKey +' 月')
+        }
+        return arr;
+    }
+</script>
+</html>

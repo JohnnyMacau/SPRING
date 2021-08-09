@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>E - recruitment</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/dist/css/adminlte.min.css}">
+    <!-- Google Font: Source Sans Pro -->
+    <link th:href="@{/assets/fonts/ssp.css}"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+    <!-- DataTables -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+    <!--self css-->
+    <link rel="stylesheet" th:href="@{/assets/styles/self_basic.css}">
+    <link rel="stylesheet" th:href="@{/assets/styles/self_datatable.css}">
+    <!-- Toastr -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/toastr/toastr.min.css}" href="../../plugins/toastr/toastr.min.css">
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.css}" href="../../plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.css">
+
+
+</head>
+<body id="frameContent">
+<div class="wrapper">
+    <!-- Content Wrapper. Contains page content -->
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">開啟中職位</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item active">職位空缺</li>
+                            <li class="breadcrumb-item active">開啟中職位</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="container-fluid">
+
+				<input style="display: none" type="text" name="deptPosDetailId" id="deptPosDetailId"/>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+
+                                <table id="tableList" class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>序號</th>
+                                        <th>職位編碼</th>
+                                        <th>職位</th>
+<!--                                         <th>發布日期</th> -->
+                                        <th>已填補/空缺</th>
+                                        <th>職務及要求</th>
+                                        <th>履曆收藏</th>
+                                        <th>刊登狀態</th>
+                                        <th>關閉職位</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+
+
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+
+
+                    </div>
+                    <!-- /.col -->
+
+
+                </div>
+
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content -->
+
+
+    <!-- /.content-wrapper -->
+
+
+
+
+</div>
+<!-- ./wrapper -->
+
+
+<!-- Modal -->
+
+<div class="modal fade" id="myModal0" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                       是否確定關閉此職位空缺？
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                        </button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#myModal1">確定</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        是否將有關申請歸檔？
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="confirmCloseBtn" class="btn btn-default" data-dismiss="modal">取消(只關閉)
+                        </button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#myModal2">確定</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        請填寫結果：<select class="custom-select" id="result" name="result">
+                                            <option th:each="result : ${resultList}" th:value="${result.desc}">
+                                                [[${result.index}]]&ensp;[[${result.desc}]]
+                                            </option>
+               </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                        </button>
+                        <button id="confirmSealBtn" type="button" data-dismiss="modal" class="btn btn-primary"> 確定 </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+
+<!-- REQUIRED SCRIPTS -->
+<!-- jQuery -->
+<script th:src="@{/AdminLTE/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- DataTables -->
+<script th:src="@{/AdminLTE/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/AdminLTE/dist/js/adminlte.min.js}"></script>
+<!-- Toastr -->
+<script th:src="@{/AdminLTE/plugins/toastr/toastr.min.js}" src="../../plugins/toastr/toastr.min.js"></script>
+<script th:src="@{/AdminLTE/plugins/bootstrap-switch/js/bootstrap-switch.js}" src="../../plugins/bootstrap-switch/js/bootstrap-switch.js"></script>
+<!-- self js -->
+<script th:src="@{/assets/js/myTable_checkbox.js}"></script>
+<script th:src="@{/assets/js/common.js}"></script>
+
+
+</body>
+<!-- page script -->
+<script>
+    var dataTable;
+    $(function () {
+        var columns = [
+            {"data" : null,
+            	 "render" : function(data, type, full, meta){
+            	 return meta.row + 1 + meta.settings._iDisplayStart;
+            	 }}, // 序号
+            {"data": "job_code",},
+            {"data": "job_title",},
+//             {"data": "start_date",},
+            { "data": "detail_id",
+                render: function (data, type, row, meta) {
+                	var headcount = row.headcount;
+                	if(headcount==null) headcount = 0;
+                	if(row.recruitment_count>0){
+                        return "<a class='' href='[[@{/dispatch/application/specified/opening/recruited/}]]"+ data +
+                        "'>" +
+                            "<i class='fas'>" +
+                            "</i>" +
+                            row.recruitment_count+"/"+headcount
+                            "</a>";
+                    }
+                	else{
+                        return row.recruitment_count+"/"+headcount;
+                   }
+
+                }
+            },
+            { "data": "detail_id",
+                render: function (data, type, row, meta) {
+                    return "<a class='' href='[[@{/dispatch/job/edit/}]]"+ data +
+                    "'>" +
+                        "<i class='fas'>" +
+                        "</i>" +
+                        "查看/編輯" +
+                        "</a>";
+                }
+            },
+            { "data": "bookmark_count",
+                    render: function (data, type, row, meta) {
+						if(data>0){
+							return "<a class='' href='[[@{/dispatch/application/specified/opening/favorite/}]]"+ row.detail_id +
+                        	"'>" +
+                            "<i class='fas'>" +
+                            "</i>" +
+                            "查看(" +data+")"
+                            "</a>";
+            			}
+						else{
+							return "查看(" +data+")";
+						}
+                }
+            },
+            { "data": "detail_id",
+                render: function (data, type, row, meta) {
+                	var checked = row.status == "A"?"checked":"";
+                    return '<div class="switch"><input type="checkbox" class="make-switch" value="'+data+'" '+checked+' data-on-color="default" data-off-color="primary"></div>';
+                }
+            },
+            { "data": "detail_id",
+                render: function (data, type, row, meta) {
+                	var disabled = row.status=="S"?"disabled":"";
+                    return '<button type="button" deptPosDetailId="'+data+'" '+disabled+' class="btn btn-info btn-sm sealBtn" data-toggle="modal" data-target="#myModal0">關閉</button>';
+                }
+            },
+        ];
+        //初始化DataTables
+
+
+        dataTable = App.initDataTables("[[@{/dataTables/getOpenJobList}]]", columns, 1, "asc",
+            [
+                {"bSortable": false, "aTargets": [0]},
+                {"bSortable": false, "aTargets": [3]},
+                {"bSortable": false, "aTargets": [4]},
+                {"bSortable": false, "aTargets": [5]},
+                {"bSortable": false, "aTargets": [6]},
+                {"bSortable": false, "aTargets": [7]},
+            ]
+        );
+
+        dataTable.on('click', 'tr', function () {
+            var data = dataTable.row(this).data();
+            if(data!=undefined){
+                var deptPosDetailId = data.detail_id;
+            	$("#deptPosDetailId").val(deptPosDetailId);
+            }
+        });
+
+        //Toastr
+        toastr.options = {
+            positionClass: "toast-center-center",
+            timeOut: "2000"
+        }
+
+        $("#confirmSealBtn").click(function(){
+        	var deptPosDetailId = $("#deptPosDetailId").val();
+        	var result = $("#result").val();
+
+            let url = "[[@{/operate/job/closeAndSeal}]]";
+            $.ajax({
+                "url": url,
+                "data": {
+                    'deptPosDetailId': deptPosDetailId,
+                    'stageActionRemark': result
+                },
+                "type": "post",
+                "dataType": "json",
+                "success": function (json) {
+                    if (json.stateCode === 200) {
+                        toastr.success('封存成功!');
+//                         console.log($("button[deptposdetailid="+deptPosDetailId+"]"));
+//                         $("button[deptposdetailid="+deptPosDetailId+"]").prop("disabled","true");
+                        dataTable.ajax.reload();
+                    } else if (json.stateCode === 500) {
+                        toastr.warning(json.message);
+
+                    } else {
+                        alert("本次操作未能成功!");
+                    }
+
+                },
+                "error": function (xhr, text, errorThrown) {
+                    alert("您的登录信息已经过期！請重新登录！");
+                    document.location.replace('[[@{/login.html}]]');
+                }
+            });
+        });
+
+        $("#confirmCloseBtn").click(function(){
+        	var deptPosDetailId = $("#deptPosDetailId").val();
+        	var result = $("#result").val();
+
+            let url = "[[@{/operate/job/updateStatus}]]";
+            $.ajax({
+                "url": url,
+                "data": {
+                    'deptPosDetailId': deptPosDetailId,
+                    'status':'S' //close
+                },
+                "type": "post",
+                "dataType": "json",
+                "success": function (json) {
+                    if (json.stateCode === 200) {
+                        toastr.success('關閉成功!');
+//                         $("button[deptposdetailid="+deptPosDetailId+"]").prop("disabled","true");
+                        dataTable.ajax.reload();
+                    } else if (json.stateCode === 500) {
+                        toastr.warning(json.message);
+
+                    } else {
+                        alert("本次操作未能成功!");
+                    }
+
+                },
+                "error": function (xhr, text, errorThrown) {
+                    alert("您的登录信息已经过期！請重新登录！");
+                    document.location.replace('[[@{/login.html}]]');
+                }
+            });
+
+
+        });
+
+
+    });
+
+    function getParams() {
+
+        let param = {
+        };
+
+        return param;
+    }
+
+    function initSwitch(){
+    	  //基本初始化
+      $('.switch input').bootstrapSwitch();
+      //手动设置按钮状态
+//       $('.switch input').bootstrapSwitch('state',false);
+      //点击触发事件，监听按钮状态
+      $('.switch input').on('switchChange.bootstrapSwitch',function(event,state){
+			var deptPosDetailId = $(this).attr("value");
+			var status = state == true?"A":"O";
+
+			console.log(deptPosDetailId+" "+status);
+            let url = "[[@{/operate/job/updateStatus}]]";
+		      $.ajax({
+		          "url": url,
+		          "data": {
+		              'deptPosDetailId': deptPosDetailId,
+		              'status':status
+		          },
+		          "type": "post",
+		          "dataType": "json",
+		          "success": function (json) {
+		              if (json.stateCode === 200) {
+		                  toastr.success('操作成功!');
+		              } else if (json.stateCode === 500) {
+		                  toastr.warning(json.message);
+
+		              } else {
+		                  alert("本次操作未能成功!");
+		              }
+		          },
+		          "error": function (xhr, text, errorThrown) {
+		              alert("您的登录信息已经过期！請重新登录！");
+		              document.location.replace('[[@{/login.html}]]');
+		          }
+		      });
+      });
+
+    }
+</script>
+
+</html>

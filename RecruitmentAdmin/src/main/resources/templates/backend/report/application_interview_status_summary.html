@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>E - recruitment</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/dist/css/adminlte.min.css}">
+    <!-- Google Font: Source Sans Pro -->
+    <link th:href="@{/assets/fonts/ssp.css}"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+    <!-- DataTables -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+
+    <!-- daterange picker -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/daterangepicker/daterangepicker.css}"
+          href="../../plugins/daterangepicker/daterangepicker.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/toastr/toastr.min.css}"
+          href="../../plugins/toastr/toastr.min.css">
+
+    <!--self css-->
+    <link rel="stylesheet" th:href="@{/assets/styles/self_basic.css}">
+    <link rel="stylesheet" th:href="@{/assets/styles/self_datatable.css}">
+
+
+    <style>
+        #self_multSelect_table > tbody > tr > td {
+            padding-left: 20px;
+        }
+    </style>
+
+</head>
+<body id="frameContent">
+<div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">申請及面試情況總表</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">統計報告</li>
+                        <li class="breadcrumb-item active">申請及面試情況總表</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <input style="display: none" type="text" name="applicant_pos_id" id="applicant_pos_id"/>
+                <div>
+                    <!--                        class="col-12"-->
+                    <div class="card">
+                        <div class="card-header">
+                            <!--                                <h3 class="card-title">&ensp;</h3>-->
+
+
+                            <table id="searchCondition1">
+                                <tr>
+
+                                    <td>日期範圍</td>
+                                    <td>
+                                        <input onkeydown="return false" type="text"
+                                               placeholder="全部" autocomplete="off"
+                                               class="form-control self_date_picker" id="start_date"
+                                               value="">
+                                    </td>
+                                    <td>-</td>
+                                    <td>
+                                        <input onkeydown="return false" type="text"
+                                               placeholder="全部" autocomplete="off"
+                                               class="form-control self_date_picker" id="end_date"
+                                               value="">
+                                    </td>
+
+
+                                    <td>&emsp;</td>
+                                    <td>所屬公司</td>
+                                    <td>
+                                        <select id="s_applicationOrg" name="applicationOrg" class="custom-select">
+                                            <option th:each="org : ${organizationList}" th:value="${org.getCode()}">
+                                                [[${org.code}]]&ensp;|&ensp;[[${org.desc}]]
+                                            </option>
+                                        </select>
+                                    </td>
+
+                                    <td>&emsp;</td>
+                                    <td colspan='2'>
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <button type="button" style="width: 42px"
+                                                            class="btn btn-block bg-gradient-primary"
+                                                            onclick="searchButton()"><i
+                                                            class="fa fa-search fa-align-left"></i>
+                                                    </button>
+                                                </td>
+                                                <td>&emsp;</td>
+                                                <td>
+                                                    <button type="button" style="width: 42px"
+                                                            class="btn btn-block bg-gradient-primary"
+                                                            onclick="clearFilter()"><i
+                                                            class="fa fa-times fa-align-left"></i>
+                                                    </button>
+                                                </td>
+                                                <td>&emsp;</td>
+                                                <td>
+                                                    <button type="button" style="width: 42px" title="打印"
+                                                            class="btn btn-block bg-gradient-info"
+                                                            onclick="exportRpt()"><i
+                                                            class="fa fa-print fa-align-left"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+
+                            </table>
+
+
+                        </div>
+                        <!-- /.card-header -->
+                        <!--                         <div class="card-body" style='width:100%;height:auto;overflow:scroll;'> -->
+                        <div class="card-body" style=''>
+
+                            <h4>職位申請情況</h4>
+                            <table id="tableList" class="table table-bordered table-hover table-striped text-nowrap">
+                                <thead>
+                                <tr>
+                                    <th>代號</th>
+                                    <th>職位名稱</th>
+                                    <th>部門</th>
+                                    <th>日期</th>
+                                    <th>總計</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <br/>
+                            <br/>
+
+                            <h4>HR面試情況</h4>
+                            <table id="tableList2" class="table table-bordered table-hover table-striped text-nowrap">
+                                <thead>
+                                <tr>
+                                    <th>代號</th>
+                                    <th>職位名稱</th>
+                                    <th>部門</th>
+                                    <th>日期</th>
+                                    <th>總計</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <br/>
+                            <br/>
+
+                            <h4>部門面試情況</h4>
+                            <table id="tableList3" class="table table-bordered table-hover table-striped text-nowrap">
+                                <thead>
+                                <tr>
+                                    <th>代號</th>
+                                    <th>職位名稱</th>
+                                    <th>部門</th>
+                                    <th>日期</th>
+                                    <th>總計</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+
+
+                </div>
+                <!-- /.col -->
+
+
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+
+
+    </div>
+    <!-- /.content -->
+
+
+    <!-- /.content-wrapper -->
+
+
+</div>
+
+
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script th:src="@{/AdminLTE/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- DataTables -->
+<script th:src="@{/AdminLTE/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+
+<!-- date-range-picker -->
+<script th:src="@{/AdminLTE/plugins/daterangepicker/moment.min.js}" src="../../plugins/moment/moment.min.js"></script>
+<script th:src="@{/AdminLTE/plugins/daterangepicker/daterangepicker.js}"
+        src="../../plugins/daterangepicker/daterangepicker.js"></script>
+
+<!-- Toastr -->
+<script th:src="@{/AdminLTE/plugins/toastr/toastr.min.js}" src="../../plugins/toastr/toastr.min.js"></script>
+
+<!-- AdminLTE App -->
+<script th:src="@{/AdminLTE/dist/js/adminlte.min.js}"></script>
+<!-- self js -->
+<script th:src="@{/assets/js/myTable_interview_status_summary.js}"></script>
+<script th:src="@{/assets/js/common.js}"></script>
+
+
+</body>
+<!-- page script -->
+<script>
+    function filterReturnVal(str) {
+        return str ? str : "";
+    }
+
+    function filterReturnValAndStringNull(str) {
+        if (!str || str == 'null') {
+            return '';
+        }
+        return str;
+    }
+
+    var dataTable1 = null;
+    var dataTable2 = null;
+    var dataTable3 = null;
+    var columns;
+    $(function () {
+
+        //Date range picker
+        let currentYear = parseInt(moment().format('YYYY'), 10);
+        $('.self_date_picker').daterangepicker({
+            // timePicker: true,        // 选择时间
+            opens: 'right',
+            autoUpdateInput: false,
+            singleDatePicker: true,  // 只选一个
+            showDropdowns: true,
+            locale: {
+                format: 'MM/DD/YYYY'
+            },
+            minYear: 2000,
+            maxYear: currentYear + 1
+        })
+
+        //Toastr
+        toastr.options = {
+            positionClass: "toast-center-center",
+            timeOut: "2000"
+        }
+
+    });
+
+
+    function exportRpt() {
+        let url = "[[@{/export/application_interview_status_summary}]]";
+
+        let $form = $(document.createElement('form'))
+            .css({display: 'none'})
+            .attr("method", "post")
+            .attr("action", url)
+            .attr("target", "_blank")
+        ;
+
+
+        let params = getParams();
+        for (let key in params) {
+            $form.append(
+                $(
+                    document.createElement('input')
+                ).attr('name', key)
+                    .val(params[key])
+            );
+        }
+
+        let dateArr = selectDate(params["startDate"], params["endDate"]);
+        let tmp_titles = ["代號", "職位名稱", "部門"];
+        let final_titles = tmp_titles.concat(dateArr).concat(["總計"]);
+
+
+        let $titles = $(document.createElement('input')).attr('name', "titles[]").val(final_titles);
+        $form.append($titles);
+        // let $keys = $(document.createElement('input')).attr('name', "keys[]").val(getColumnValuesFromJSONArr(final_columns, 'data'));
+        // $form.append($keys);
+
+        $("body").append($form);
+        $form.submit();
+        $form.remove();
+    }
+
+
+    function getParams() {
+
+        let start_date = $("#start_date").val();
+        let end_date = $("#end_date").val();
+
+        let dateCheckIsPass = true;
+        if (!end_date || !start_date) {
+            toastr.warning("請輸入完整日期範圍")
+            dateCheckIsPass = false;
+        } else if (start_date && end_date) {
+            if (!validateDate(start_date, end_date)) {
+                toastr.warning("invalid date input")
+                dateCheckIsPass = false;
+            }
+        }
+
+        let applicationOrg = $("#s_applicationOrg").val();
+
+        let param = {
+            "dateCheckIsPass": dateCheckIsPass,
+            "startDate": start_date,
+            "endDate": end_date,
+            "applicationOrg": applicationOrg,
+        };
+
+        if (!start_date) {
+            delete param["startDate"];
+        }
+        if (!end_date) {
+            delete param["endDate"];
+        }
+        if (!applicationOrg) {
+            delete param["applicationOrg"];
+        }
+
+        return param;
+    }
+
+    function validateDate(fromDate, toDate) {
+        let from = new Date(fromDate);
+        let to = new Date(toDate);
+        let dateDiff = (to.getTime() - from.getTime()) / 60 / 60 / 1000 / 24;
+        return dateDiff >= 1;
+    }
+
+
+    function refreshDT1(id, dateArr, url) {
+        if (dataTable1 == null) {
+            resetTitles(id, dateArr);
+            //初始化DataTables
+            dataTable1 = App.initDataTables(id, url, 0, "desc",
+                [
+                    /*   {
+                           "bSortable": false, "aTargets": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+                               , 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+                       },*/
+                ]
+            );
+        } else {
+            // dataTable.settings()[0].ajax.data = params;
+            // dataTable.ajax.reload();
+            dataTable1.destroy();
+            resetTitles(id, dateArr);
+            dataTable1 = App.initDataTables(id, url, 0, "desc",
+                []
+            );
+
+
+        }
+    }
+
+    function refreshDT2(id, dateArr, url) {
+        if (dataTable2 == null) {
+            resetTitles(id, dateArr);
+            //初始化DataTables
+            dataTable2 = App.initDataTables(id, url, 0, "desc",
+                [
+                    /*   {
+                           "bSortable": false, "aTargets": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+                               , 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+                       },*/
+                ]
+            );
+        } else {
+            // dataTable.settings()[0].ajax.data = params;
+            // dataTable.ajax.reload();
+            dataTable2.destroy();
+            resetTitles(id, dateArr);
+            dataTable2 = App.initDataTables(id, url, 0, "desc",
+                []
+            );
+
+
+        }
+    }
+
+    function refreshDT3(id, dateArr, url) {
+        if (dataTable3 == null) {
+            resetTitles(id, dateArr);
+            //初始化DataTables
+            dataTable3 = App.initDataTables(id, url, 0, "desc",
+                [
+                    /*   {
+                           "bSortable": false, "aTargets": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+                               , 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+                       },*/
+                ]
+            );
+        } else {
+            // dataTable.settings()[0].ajax.data = params;
+            // dataTable.ajax.reload();
+            dataTable3.destroy();
+            resetTitles(id, dateArr);
+            dataTable3 = App.initDataTables(id, url, 0, "desc",
+                []
+            );
+
+
+        }
+    }
+
+    function searchButton() {
+        //设置参数，重新加载
+        let params = getParams();
+        if (!params["dateCheckIsPass"]) return;
+        let dateArr = selectDate(params["startDate"], params["endDate"]);
+
+        let url = "[[@{/dataTables/getJobApplicationStatisticsList}]]";
+        let id = "#tableList";
+        refreshDT1(id, dateArr, url);
+
+        url = "[[@{/dataTables/getHRInterviewsStatisticsList}]]";
+        id = "#tableList2";
+        refreshDT2(id, dateArr, url);
+
+        url = "[[@{/dataTables/getDepartmentInterviewsStatisticsList}]]";
+        id = "#tableList3";
+        refreshDT3(id, dateArr, url);
+
+    }
+
+    function resetTitles(id, dateArr) {
+        $(id).empty();
+
+
+        let html = '';
+        for (let i = 0; i < dateArr.length; i++) {
+            html += '<th>' + dateArr[i] + '</th>';
+        }
+
+        $(id).append(' <thead>\n' +
+            '                                <tr>\n' +
+            '                                    <th>代號</th>\n' +
+            '                                    <th>職位名稱</th>\n' +
+            '                                    <th>部門</th>\n' +
+            html +
+            '                                    <th>總計</th>\n' +
+            '\n' +
+            '                                </tr>\n' +
+            '                                </thead>\n' +
+            '                                <tbody>\n' +
+            '\n' +
+            '                                </tbody>');
+    }
+
+    function clearFilter() {
+        $("#start_date").val('');
+        $("#end_date").val('');
+    }
+
+    function selectDate(start_time, end_time) {
+        let bd = new Date(start_time), be = new Date(end_time);
+        let bd_time = bd.getTime(), be_time = be.getTime(), time_diff = be_time - bd_time;
+        let d_arr = [];
+        for (let i = 0; i <= time_diff; i += 86400000) {
+            let ds = new Date(bd_time + i);
+            d_arr.push((ds.getMonth() + 1) + '月' + ds.getDate() + '日')
+        }
+        // alert(d_arr);
+        return d_arr;
+    }
+
+
+</script>
+
+</html>

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>E - recruitment</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/dist/css/adminlte.min.css}">
+    <!-- Google Font: Source Sans Pro -->
+    <link th:href="@{/assets/fonts/ssp.css}"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+    <!-- DataTables -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+
+    <!-- daterange picker -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/daterangepicker/daterangepicker.css}"
+          href="../../plugins/daterangepicker/daterangepicker.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/toastr/toastr.min.css}"
+          href="../../plugins/toastr/toastr.min.css">
+
+    <!--self css-->
+    <link rel="stylesheet" th:href="@{/assets/styles/self_basic.css}">
+    <link rel="stylesheet" th:href="@{/assets/styles/self_datatable.css}">
+
+
+</head>
+<body id="frameContent">
+<div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">已注冊</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">履曆檔案</li>
+                        <li class="breadcrumb-item active">已注冊</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+
+
+            <div class="row">
+
+                <div>
+                    <!--                        class="col-12"-->
+                    <div class="card">
+                        <div class="card-header">
+                            <!--                                <h3 class="card-title">&ensp;</h3>-->
+
+
+                            <table id="searchCondition1">
+                                <tr>
+                                    <td style="text-align: right">姓名</td>
+                                    <td><input type="text" class="form-control" id="applicantName" maxlength="50"/>
+                                    </td>
+                                    <td>&emsp;</td>
+                                    <td style="text-align: right">身份證</td>
+                                    <td colspan="3"><input type="text" class="form-control" id="idCardNumber"
+                                                           maxlength="50"/>
+                                    </td>
+
+                                    <td>&emsp;</td>
+                                    <td style="text-align: right">創建者</td>
+                                    <td colspan="3">
+                                        <select id="registered" class="custom-select">
+                                            <option value="">全部</option>
+                                            <option value="Y">用戶自己</option>
+                                            <option value="H">HR</option>
+                                        </select>
+                                    </td>
+
+                                    <td>&emsp;</td>
+                                    <td style="text-align: right">學曆程度</td>
+                                    <td>
+                                        <select id="s_degree" class="custom-select">
+                                            <option value="">全部</option>
+                                            <option value='10'>小學畢業或以下</option>
+                                            <option value='20'>初中</option>
+                                            <option value='30'>初中畢業</option>
+                                            <option value='40'>高中</option>
+                                            <option value='50'>高中畢業</option>
+                                            <option value='60'>大專/高級文憑</option>
+<!--                                            <option value='70'>大學/大專(中)</option>-->
+                                            <option value='80'>學士</option>
+                                            <option value='90'>學士以上</option>
+                                        </select>
+                                    </td>
+
+                                    <td>&emsp;</td>
+                                    <td style="text-align: right">專科</td>
+                                    <td colspan="3"><input type="text" class="form-control" id="s_major"
+                                                           maxlength="50"/>
+                                    </td>
+
+
+                                    <td>&emsp;</td>
+                                    <td>
+                                        <button type="button" style="width: 42px"
+                                                class="btn btn-block bg-gradient-primary"
+                                                onclick="searchButton()"><i class="fa fa-search fa-align-left"></i>
+                                        </button>
+                                    </td>
+                                    <td>&emsp;</td>
+                                    <td>
+                                        <button type="button" style="width: 42px"
+                                                class="btn btn-block bg-gradient-primary"
+                                                onclick="clearFilter()"><i class="fa fa-times fa-align-left"></i>
+                                        </button>
+                                    </td>
+
+
+                                </tr>
+                            </table>
+
+
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+
+                            <table id="tableList" class="table table-bordered table-hover table-striped">
+                                <thead>
+                                <tr>
+                                    <th>序號</th>
+                                    <th>姓名</th>
+                                    <th>身份證類型</th>
+                                    <th>身份證號碼</th>
+                                    <th>性別</th>
+<!--                                    <th>學曆</th>-->
+                                    <th>學歷</th>
+                                    <th>學校</th>
+                                    <th>專科</th>
+                                    <th>創建者</th>
+                                    <th>履曆</th>
+                                    <th>求職曆史</th>
+                                    <th>黑名單</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+
+
+                </div>
+                <!-- /.col -->
+
+
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+        <button type="button" id=" createProfileBtn" class="btn btn-sm btn-primary" onclick="createProfile()">
+            <i class="fas fa-user-plus" aria-hidden="true"></i> 創建檔案
+        </button>
+    </div>
+    <!-- /.content -->
+
+
+    <!-- /.content-wrapper -->
+
+</div>
+
+
+<button type="button" id="showHistoryBtn" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal"
+        style="display:none;">
+    <i class="fa" aria-hidden="true"></i> show
+</button>
+<!--  <button type="button" class="btn btn-primary" id="showHistoryBtn"  data-toggle="modal" data-target="#myModal2" style="display:none;">確定</button> -->
+
+<!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" -->
+<!--              aria-hidden="true"> -->
+<!--             <div class="modal-dialog modal-lg" style=''> -->
+<!--                 <div class="modal-content" style="width:450px; height:230px;"> -->
+<!--                     <div class="modal-header"> -->
+<!--                         <h4 class="modal-title" id="myModalLabel" style='text-align:center;width:100%;'> -->
+<!--                         </h4> -->
+<!--                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"> -->
+<!--                             &times; -->
+<!--                         </button> -->
+<!--                     </div> -->
+<!--                     <div class="modal-body" style='text-align:center;'> -->
+<!--                     <table id='historyTable' style='margin:auto;'></table> -->
+<!--                     </div> -->
+<!--                     <div class="modal-footer"> -->
+<!--                     </div> -->
+<!--                 </div>/.modal-content -->
+<!--             </div>/.modal -->
+<!--         </div> -->
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">
+                    求職曆史
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body" style="overflow:auto;">
+                <table id='historyTable' style='width:100%' class="table table-bordered table-hover table-striped text-nowrap dataTable no-footer" role="grid" aria-describedby="tableList_info">
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="confirmDeleteBtn">確定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script th:src="@{/AdminLTE/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- DataTables -->
+<script th:src="@{/AdminLTE/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+
+<!-- date-range-picker -->
+<script th:src="@{/AdminLTE/plugins/daterangepicker/moment.min.js}" src="../../plugins/moment/moment.min.js"></script>
+<script th:src="@{/AdminLTE/plugins/daterangepicker/daterangepicker.js}"
+        src="../../plugins/daterangepicker/daterangepicker.js"></script>
+
+<!-- Toastr -->
+<script th:src="@{/AdminLTE/plugins/toastr/toastr.min.js}" src="../../plugins/toastr/toastr.min.js"></script>
+
+<!-- AdminLTE App -->
+<script th:src="@{/AdminLTE/dist/js/adminlte.min.js}"></script>
+<!-- self js -->
+<script th:src="@{/assets/js/myTable_checkbox.js}"></script>
+<script th:src="@{/assets/js/common.js}"></script>
+
+
+</body>
+<!-- page script -->
+<script>
+    $(function () {
+
+        //Toastr
+        toastr.options = {
+            positionClass: "toast-center-center",
+            timeOut: "2000"
+        }
+
+    })
+
+    var dataTable = null;
+    var columns;
+    $(function () {
+
+        columns = [
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    return meta.row + 1 + meta.settings._iDisplayStart;
+                }
+            }, // 序号
+            {"data": "applicantName",},
+            {"data": "id_type",},
+            {"data": "idCardNumber",},
+            {"data": "gender",},
+            // {"data": "education",},
+            {"data": "degree",},
+            {"data": "organizationName",},
+            {"data": "major",},
+            {
+                "data": "status",
+                render: function (data, type, row, meta) {
+                    if (data === 'H') {
+                        return "HR";
+                    } else if (data === 'O'){
+                        return "用戶自己(舊)";
+                    }else if (data === 'Y'){
+                        return "用戶自己";
+                    }else {
+                        return data;
+                    }
+                }
+            },
+            {
+                "data": "applicantInfoId",
+                render: function (data, type, row, meta) {
+                    let editType = "editBasic";//editBasic
+                    if (row.status === 'H') {
+                        editType = "editDetail";
+                    }
+                    let applicationOrgType = '?applicationOrg=SLT';
+                    if (row.applicationOrg === 'FLT') {
+                        applicationOrgType = "?applicationOrg=FLT";
+                    }
+                    return "<a class='' href='[[@{/dispatch/profile/}]]" + editType + "/" + data + applicationOrgType
+                        + "'>查看</a>/<a class='' href='javascript:exportProfile(" + data + ")'>列印</a>";
+                }
+            },
+            {
+                "data": "applicantInfoId",
+                render: function (data, type, row, meta) {
+                    return "<a class='' href='javascript:void(0);' onclick='showHistory(\"" + row.applicantInfoId + "\")'>查看</a>";
+                }
+            },
+            {
+                "data": "blackListed",
+                render: function (data, type, row, meta) {
+                    if (row.blackListed == '1')
+                        return "<img src='/assets/img/tick.png' style='width:30px;'/>";
+                    else
+                        return '';
+                }
+            },
+        ];
+
+
+        searchButton();
+    });
+
+    function exportProfile(applicant_info_id) {
+        let batchFinish_checkboxs = [];
+        batchFinish_checkboxs.push(applicant_info_id);
+        let url = "[[@{/export/profile}]]";
+
+        let $form = $(document.createElement('form'))
+            .css({display: 'none'})
+            .attr("method", "post")
+            .attr("action", url)
+            .attr("target", "_blank")
+        ;
+        let $formIds = $(document.createElement('input')).attr('name', "applicant_info_ids[]").val(batchFinish_checkboxs);
+        $form.append($formIds);
+        $("body").append($form);
+        $form.submit();
+        $form.remove();
+    }
+
+    function getParams() {
+
+        let applicantName = $("#applicantName").val();
+        let idCardNumber = $("#idCardNumber").val();
+        let registered = $("#registered").val();
+        let s_degree = $("#s_degree").val();
+        let s_major = $("#s_major").val().trim();
+
+
+        let param = {
+            "status": registered, //registered by applicant
+            "applicantName": applicantName,
+            "idCardNumber": idCardNumber,
+            "degree": s_degree,
+            "major": s_major,
+
+
+        };
+
+        if (!applicantName) {
+            delete param["applicantName"];
+        }
+        if (!idCardNumber) {
+            delete param["idCardNumber"];
+        }
+        if (!registered) {
+            delete param["status"];
+        }
+        if (!s_degree) {
+            delete param["degree"];
+        }
+        if (!s_major) {
+            delete param["major"];
+        }
+        return param;
+    }
+
+    function searchButton() {
+        //设置参数，重新加载
+        let params = getParams();
+
+        if (dataTable == null) {
+            //初始化DataTables
+            dataTable = App.initDataTables("[[@{/dataTables/searchApplicant}]]", columns, 1, "asc",
+                [
+                    {"bSortable": false, "aTargets": [0, 5,6, 7, 8,9,10]},
+
+
+                    {
+                        aTargets: [1, 2, 3, 4, 5],
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            let rowspan = rowData.rowSpan;
+                            if (rowspan > 1) {
+                                $(td).attr('rowspan', rowspan)
+                            }
+                            if (rowspan == 0) {
+                                // $(td).remove();
+                                $(td).attr('style', 'display:none')
+
+                            }
+
+                        }
+                    }
+                ]
+            );
+        } else {
+            dataTable.settings()[0].ajax.data = params;
+            dataTable.ajax.reload();
+        }
+
+
+    }
+
+    function showHistory(applicantInfoId) {
+
+        let url = '[[@{/dataTables/getApplicantProcessHistory}]]';
+        $.ajax({
+            "url": url,
+            "data": {
+                'applicantInfoId': applicantInfoId
+            },
+            "type": "post",
+            "dataType": "json",
+            "success": function (json) {
+                if (json.stateCode === 200) {
+                    console.log(json);
+                    var html = "<thead><tr><th width='16%'>應徵職位</th><th width='16%'>日期</th><th width='16%'>開始狀態</th><th width='16%'>動作</th><th width='16%'>結束狀態</th><th width='20%'>原因</th></tr></thead>";
+                    var prev = -1;
+                    html += "<tbody>";
+                    for (var i = 0; i < json.data.length; i++) {
+                    	 html += "<tr>";
+                        if (json.data[i].applicant_position_id != prev) {
+                            if (prev != -1) {
+                                html += "<tr><td colspan='6' style='background-color:#ffffff;'></td></tr>";
+                            }
+                            prev = json.data[i].applicant_position_id;
+                        }
+                        html += "<td>" + json.data[i].job_code + "</td>";
+                        html += "<td>" + json.data[i].operation_time + "</td>";
+                        html += "<td>" + json.data[i].begin_stage + "</td>";
+                        html += "<td>" + json.data[i].operation + "</td>";
+                        html += "<td >" + json.data[i].end_stage;
+                        console.log(json.data[i].operation);
+                        if (json.data[i].operation == '收藏') {
+                            html += "(已收藏)";
+                        }
+                        +"</td>";
+                        html += "<td>" + json.data[i].remark + "</td>";
+                        html += "</tr>";
+                    }
+                    html += "</tbody>";
+                    $("#historyTable").html(html);
+
+                    $("#showHistoryBtn").click();
+                } else if (json.stateCode === 500) {
+                    toastr.warning(json.message);
+                } else {
+                    alert("本次操作未能成功!");
+                }
+            },
+            "error": function (xhr, text, errorThrown) {
+                alert("您的登录信息已经过期！請重新登录！");
+                document.location.replace('[[@{/login.html}]]');
+            }
+        });
+
+    }
+
+    function clearFilter() {
+        $("#applicantName").val("");
+        $("#idCardNumber").val("");
+
+        $("#registered").val("");
+        $("#s_degree").val("");
+        $("#s_major").val("");
+
+    }
+</script>
+<style>
+    /* #historyTable th{ */
+    /* border:solid 1px; */
+    /* background-color:#c5d9f1; */
+    /* } */
+    /* #historyTable td{ */
+    /* border:solid 1px; */
+    /* background-color:#daeef3; */
+    /* } */
+</style>
+<script>
+    function createProfile() {
+        location.href = '[[@{/dispatch/profile/newDetailByHR?applicationOrg=SLT}]]'
+    }
+</script>
+</html>

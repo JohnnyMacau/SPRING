@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>E - recruitment</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/dist/css/adminlte.min.css}">
+    <!-- Google Font: Source Sans Pro -->
+    <link th:href="@{/assets/fonts/ssp.css}"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+    <!-- DataTables -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+
+    <!-- daterange picker -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/daterangepicker/daterangepicker.css}"
+          href="../../plugins/daterangepicker/daterangepicker.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/toastr/toastr.min.css}"
+          href="../../plugins/toastr/toastr.min.css">
+
+    <!--self css-->
+    <link rel="stylesheet" th:href="@{/assets/styles/self_basic.css}">
+    <link rel="stylesheet" th:href="@{/assets/styles/self_datatable.css}">
+
+
+    <style>
+        #self_multSelect_table > tbody > tr > td {
+            padding-left: 20px;
+        }
+
+        /*#tableList .selected{
+            background-color: lemonchiffon;
+        }*/
+    </style>
+
+</head>
+<body id="frameContent">
+<div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">應徵者資料總表</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">統計報告</li>
+                        <li class="breadcrumb-item active">應徵者資料總表</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <input style="display: none" type="text" name="applicant_pos_id" id="applicant_pos_id"/>
+                <div>
+                    <!--                        class="col-12"-->
+                    <div class="card">
+                        <div class="card-header">
+                            <!--                                <h3 class="card-title">&ensp;</h3>-->
+
+
+                            <table id="searchCondition1">
+                                <tr>
+                                    <td style="text-align: right">身份證類別</td>
+                                    <td colspan="3">
+                                        <select id="s_idCardTypeName" class="custom-select">
+                                            <option value="">全部</option>
+                                            <option th:each="n : ${msgIdTypeList}"
+                                                    th:value="${n.getCode()}"
+                                                    th:text="${n.getChnDesc()}">
+                                            </option>
+                                        </select>
+                                    </td>
+
+
+                                    <td>&emsp;</td>
+                                    <td style="text-align: right">教育程度</td>
+                                    <td>
+                                        <select id="s_degree" class="custom-select">
+                                            <option value="">全部</option>
+                                            <option value='10'>小學畢業或以下</option>
+                                            <option value='20'>初中</option>
+                                            <option value='30'>初中畢業</option>
+                                            <option value='40'>高中</option>
+                                            <option value='50'>高中畢業</option>
+                                            <option value='60'>大專/高級文憑</option>
+<!--                                            <option value='70'>大學/大專(中)</option>-->
+                                            <option value='80'>學士</option>
+                                            <option value='90'>學士以上</option>
+                                        </select>
+                                    </td>
+                                    <td>&emsp;</td>
+                                    <td>是否黑名單</td>
+                                    <td>
+                                        <select id="s_blackList" name="applicationOrg" class="custom-select">
+                                            <option value="">全部</option>
+                                            <option value="1">是</option>
+                                            <option value="0">否</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td colspan='2'>
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <button type="button" style="width: 42px"
+                                                            class="btn btn-block bg-gradient-primary"
+                                                            onclick="searchButton()"><i
+                                                            class="fa fa-search fa-align-left"></i>
+                                                    </button>
+                                                </td>
+                                                <td>&emsp;</td>
+                                                <td>
+                                                    <button type="button" style="width: 42px"
+                                                            class="btn btn-block bg-gradient-primary"
+                                                            onclick="clearFilter()"><i
+                                                            class="fa fa-times fa-align-left"></i>
+                                                    </button>
+                                                </td>
+                                                <td>&emsp;</td>
+                                                <td>
+                                                    <button type="button" style="width: 42px" title="打印"
+                                                            class="btn btn-block bg-gradient-info"
+                                                            onclick="exportRpt()"><i
+                                                            class="fa fa-print fa-align-left"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+                        </div>
+                        <!-- /.card-header -->
+                        <!--                         <div class="card-body" style='width:100%;height:auto;overflow:scroll;'> -->
+                        <div class="card-body" style=''>
+
+                            <table id="tableList" class="table table-bordered table-hover table-striped text-nowrap">
+
+
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+
+
+                </div>
+                <!-- /.col -->
+
+
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+
+
+    </div>
+    <!-- /.content -->
+
+
+    <!-- /.content-wrapper -->
+
+
+</div>
+
+
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script th:src="@{/AdminLTE/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- DataTables -->
+<script th:src="@{/AdminLTE/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+
+<!-- date-range-picker -->
+<script th:src="@{/AdminLTE/plugins/daterangepicker/moment.min.js}" src="../../plugins/moment/moment.min.js"></script>
+<script th:src="@{/AdminLTE/plugins/daterangepicker/daterangepicker.js}"
+        src="../../plugins/daterangepicker/daterangepicker.js"></script>
+
+<!-- Toastr -->
+<script th:src="@{/AdminLTE/plugins/toastr/toastr.min.js}" src="../../plugins/toastr/toastr.min.js"></script>
+
+<!-- AdminLTE App -->
+<script th:src="@{/AdminLTE/dist/js/adminlte.min.js}"></script>
+<!-- self js -->
+<script th:src="@{/assets/js/myTable_noOrder.js}"></script>
+<script th:src="@{/assets/js/common.js}"></script>
+
+
+</body>
+<!-- page script -->
+<script>
+    function filterReturnVal(str) {
+        return str ? str : "";
+    }
+
+    function filterReturnValAndStringNull(str) {
+        if (!str || str == 'null') {
+            return '';
+        }
+        return str;
+    }
+
+    var dataTable = null;
+    var columns;
+    $(function () {
+
+        //Date range picker
+        let currentYear = parseInt(moment().format('YYYY'), 10);
+        $('.self_date_picker').daterangepicker({
+            // timePicker: true,        // 选择时间
+            opens: 'right',
+            autoUpdateInput: false,
+            singleDatePicker: true,  // 只选一个
+            showDropdowns: true,
+            locale: {
+                format: 'MM/DD/YYYY'
+            },
+            minYear: 2000,
+            maxYear: currentYear + 1
+        })
+
+        //Toastr
+        toastr.options = {
+            positionClass: "toast-center-center",
+            timeOut: "2000"
+        }
+
+
+        columns = [
+            /*       {
+                       "data": "applicant_pos_id",
+                       render: function (data, type, row, meta) {
+                           if (row.process_stage_code != 11 && row.process_stage_code != 12) {
+                               return '<div class="custom-control custom-checkbox">' +
+                                   "<input class='save_checkboxs custom-control-input' stage=" + row.process_stage_code +
+                                   " id='checkbox_" + data +
+                                   "' type=\"checkbox\" value='" + data + "' applicant_info_id='" + row.applicant_info_id + "'/>" +
+                                   '<label for="checkbox_' + data +
+                                   '" class="custom-control-label"></label>' +
+                                   '</div>';
+                           } else {
+                               return '';
+                           }
+                       }
+                   },*/
+            {
+                "data": null,
+                "title": "序號",
+                "render": function (data, type, full, meta) {
+                    return meta.row + 1 + meta.settings._iDisplayStart;
+                }
+            }, // 序号
+
+
+            {
+                "data": "cn_last_name",
+                "title": "姓名",
+                render: function (data, type, row, meta) {
+                    return filterReturnVal(data) + filterReturnVal(row.cn_first_name) + '  ' +
+                        filterReturnVal(row.en_last_name) + ' ' + filterReturnVal(row.en_first_name);
+                }
+            },
+            {
+                "data": "id_card_type_name",
+                "title": "身份證資料",
+                render: function (data, type, row, meta) {
+                    return data + ' ' + row.id_card_number;
+                }
+            },
+            {
+                "data": "date_of_birth",
+                "title": "出生日期",
+            },
+            {
+                "data": "age",
+                "title": "年齡",
+            },
+            {
+                "data": "gender",
+                "title": "性別",
+            },
+            {
+                "data": "martial_status",
+                "title": "婚姻狀況",
+                render: function (data, type, row, meta) {
+                    switch (data) {
+                        case 'Single':
+                            return '未婚';
+                        case 'Married':
+                            return '已婚';
+                        case 'Divorced':
+                            return '離婚';
+                        case 'Widowed':
+                            return '鳏寡';
+                        case 'Deprecated':
+                            return '';
+
+                        default :
+                            return data;
+                    }
+                }
+            },
+            {
+                "data": "address_1",
+                "title": "住址",
+                render: function (data, type, row, meta) {
+                    return filterReturnVal(data) + ' ' +
+                        filterReturnVal(row.address_2) + ' ' +
+                        filterReturnVal(row.address_3);
+                }
+            },
+            {
+                "data": "mobile_1",
+                "title": "聯絡電話1",
+                render: function (data, type, row, meta) {
+                    return filterReturnVal(row.area_code_1) + '-' + filterReturnVal(data);
+                }
+            },
+            {
+                "data": "degree",
+                "title": "教育程度",
+                render: function (data, type, row, meta) {
+                    return filterReturnVal(data) + '  ' + filterReturnVal(row.school_name) + '  ' +
+                        filterReturnVal(row.school_major);
+                }
+            },
+            {
+                "data": "all_certification",
+                "title": "專業資格/證書",
+            },
+            {
+                "data": "all_company",
+                "title": "工作經驗",
+                /* render: function (data, type, row, meta) {
+                     return filterReturnVal(data);
+                 }*/
+                render: function (data, type, row, meta) {
+                    if (data && data.indexOf('||') !== -1) {
+                        return '<p>' + data.replace(/\|\|/g, '</p><p>') + '</p>';
+                    }
+                    return data;
+                }
+            },
+            {
+                "data": "employed_before",
+                "title": "是否曾在</br>本公司工作",
+            },
+            {
+                "data": "applied_baccount_before",
+                "title": "是否曾申請</br>本公司之</br>投注戶口",
+            },
+            {
+                "data": "terminated_before",
+                "title": "是否曾被</br>某個僱主</br>終止/開除/暫停職務",
+            },
+            {
+                "data": "criminal_record",
+                "title": "是否曾在</br>澳門或</br>其它國家/地區</br>涉及任何刑事罪行",
+            },
+            {
+                "data": "is_blacklisted",
+                "title": "是否黑名單",
+                render: function (data, type, row, meta) {
+                    if (data == 1)
+                        return "<img src='/assets/img/tick.png' style='width:30px;'/>";
+                    else
+                        return '';
+                }
+            },
+            {
+                "data": "count_apply_times",
+                "title": "總應徵次數",
+                render: function (data, type, row, meta) {
+                    if (!data)
+                        return "0";
+                    else
+                        return data;
+                }
+            },
+            {
+                "data": "application_history",
+                "title": "應徵職位概覽",
+                render: function (data, type, row, meta) {
+                    if (data && data.indexOf('||') !== -1) {
+                        return '<p>' + data.replace(/\|\|/g, '</p><p>') + '</p>';
+                    }
+                    return data;
+                }
+            },
+
+
+        ];
+
+
+    });
+
+
+    function exportRpt() {
+        /* let batchFinish_checkboxs = [];
+         $('.save_checkboxs:checked').each(function (index, element) {
+             batchFinish_checkboxs.push($(this).attr("applicant_info_id"));
+         });
+         if (batchFinish_checkboxs.length === 0) {
+             alert("沒有選中任何行");
+             return;
+         }*/
+
+        let final_columns = getFinalColumns(false);
+
+        let url = "[[@{/export/candidate_information_report}]]";
+
+        let $form = $(document.createElement('form'))
+            .css({display: 'none'})
+            .attr("method", "post")
+            .attr("action", url)
+            .attr("target", "_blank")
+        ;
+
+
+        let params = getParams();
+        for (let key in params) {
+            $form.append(
+                $(
+                    document.createElement('input')
+                ).attr('name', key)
+                    .val(params[key])
+            );
+        }
+
+        $form.append(
+            $(document.createElement('input'))
+                .attr('name', "idCardTypeNameCn")
+                .val($('#s_idCardTypeName option:selected').text())
+        );
+        $form.append(
+            $(document.createElement('input'))
+                .attr('name', "degreeCn")
+                .val($('#s_degree option:selected').text())
+        );
+        $form.append(
+            $(document.createElement('input'))
+                .attr('name', "isblacklistedCn")
+                .val($('#s_blackList option:selected').text())
+        );
+
+
+        let $titles = $(document.createElement('input')).attr('name', "titles[]").val(getColumnValuesFromJSONArr(final_columns, 'title'));
+        $form.append($titles);
+        let $keys = $(document.createElement('input')).attr('name', "keys[]").val(getColumnValuesFromJSONArr(final_columns, 'data'));
+        $form.append($keys);
+
+        $("body").append($form);
+        $form.submit();
+        $form.remove();
+    }
+
+    function getFinalColumns(need_serial_number) {
+        /*   let finalVisableColumnArr = [];
+
+       $("input[name='allColumns']:checked").each(function () {
+            finalVisableColumnArr.push(String($(this).attr('id')));
+        });*/
+
+        // console.log(finalVisableColumnArr);
+
+        let final_columns = [];
+        if (need_serial_number) {
+            final_columns.push(columns[0]);
+        }
+
+        for (let i = 1;//從1開始，跳過序號
+             i < columns.length; i++) {
+            // console.log(columns[i].data)
+            // if ($.inArray(String(columns[i].data), finalVisableColumnArr)) {
+            // if (finalVisableColumnArr.indexOf(columns[i].data) > -1) {
+            final_columns.push(columns[i]);
+            // }
+            /*  else {
+                  console.log(columns[i].data + "不在可視範圍");
+              }*/
+        }
+        // console.log(final_columns);
+        return final_columns;
+    }
+
+    function getColumnValuesFromJSONArr(jsonArr, attrName) {
+        const jsonStr = JSON.stringify(jsonArr);
+        let attrValArr = [];
+        const regExp = new RegExp('"' + attrName + '":"(.*?)"', 'mg');
+        while (regExp.test(jsonStr)) {
+            attrValArr.push(RegExp.$1);
+        }
+        return attrValArr;
+    }
+
+
+    function getParams() {
+
+        let s_idCardTypeName = $("#s_idCardTypeName").val();
+        let s_degree = $("#s_degree").val();
+        let is_blacklisted = $("#s_blackList").val();
+        let param = {
+            "idCardTypeName": s_idCardTypeName,
+            "degree": s_degree,
+            "is_blacklisted_str": is_blacklisted,
+
+        };
+        if (!s_idCardTypeName) {
+            delete param["idCardTypeName"];
+        }
+        if (!s_degree) {
+            delete param["degree"];
+        }
+        if (!is_blacklisted) {
+            delete param["is_blacklisted"];
+        }
+        return param;
+    }
+
+
+    function searchButton() {
+        let final_columns = columns;
+
+
+        //设置参数，重新加载
+        let params = getParams();
+
+
+        if (dataTable == null) {
+            //初始化DataTables
+            dataTable = App.initDataTables("[[@{/dataTables/getCandidateInformationReportList}]]", final_columns, 0, "desc",
+                [
+                    /*   {
+                           "bSortable": false, "aTargets": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+                               , 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+                       },*/
+
+
+                ]
+            );
+            // setRowSelectedEvent();
+
+        } else {
+            dataTable.settings()[0].ajax.data = params;
+            dataTable.ajax.reload();
+            /*    dataTable.destroy();
+                $('#tableList').empty();
+                dataTable = App.initDataTables("[[@{/dataTables/getCandidateInformationReportList}]]", final_columns, 0, "desc",
+                    []
+                );*/
+
+
+        }
+
+
+    }
+
+    function clearFilter() {
+        $("#s_blackList").val('');
+        $("#s_idCardTypeName").val('');
+        $("#s_degree").val('');
+    }
+
+
+</script>
+<script>
+    function opcheckboxed(objName, type) {
+        var objNameList = document.getElementsByName(objName);
+        if (null != objNameList) {
+            for (var i = 0; i < objNameList.length; i++) {
+                if (objNameList[i].checked == true) {
+                    if (type != 'checkall') {  // 非全选
+                        objNameList[i].checked = false;
+                    }
+
+                } else {
+                    if (type != 'uncheckall') {  // 非取消全选
+                        objNameList[i].checked = true;
+                    }
+                }
+            }
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>E - recruitment</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/dist/css/adminlte.min.css}">
+    <!-- Google Font: Source Sans Pro -->
+    <link th:href="@{/assets/fonts/ssp.css}"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+    <!-- daterange picker -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/daterangepicker/daterangepicker.css}"
+          href="../../plugins/daterangepicker/daterangepicker.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/toastr/toastr.min.css}"
+          href="../../plugins/toastr/toastr.min.css">
+
+    <!--self css-->
+    <link rel="stylesheet" th:href="@{/assets/styles/self_basic.css}">
+
+    <style type="text/css">
+        /* Content > Main */
+
+        table.tablestyle2 {
+            border-width: 0px;
+            margin: 0;
+            padding: 0;
+        }
+
+        table.tablestyle2 td {
+            border-top: 1px solid #C1DAD7;
+            border-right: 1px solid #C1DAD7;
+            border-left: 1px solid #C1DAD7;
+            border-bottom: 1px solid #C1DAD7;
+            background: #fff;
+            padding: 6px 16px 6px 16px;
+            color: #666666;
+            text-align: left;
+            font: normal small Arial, Helvetica, sans-serif;
+            width: auto;
+        }
+
+
+        table.tablestyle2 th {
+            color: #333333;
+            border-right: 1px solid #C1DAD7;
+            border-bottom: 1px solid #C1DAD7;
+            border-top: 1px solid #C1DAD7;
+            border-left: 1px solid #C1DAD7;
+            text-align: left;
+            background: #CAE8EA;
+            font: bold small Arial, Helvetica, sans-serif;
+            padding-left: 14px;
+            padding-right: 14px;
+            white-space: nowrap;
+        }
+
+        table.tablestyle2 th.top {
+            color: #333333;
+            border-right: 1px solid #C1DAD7;
+            border-bottom: 1px solid #C1DAD7;
+            border-top: 1px solid #C1DAD7;
+            border-left: 1px solid #C1DAD7;
+            text-transform: uppercase;
+            text-align: center;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            background: #CAE8EA;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        table.tablestyle2 th.top2 {
+            color: #333333;
+            border-right: 1px solid #C1DAD7;
+            border-bottom: 1px solid #C1DAD7;
+            border-top: 1px solid #C1DAD7;
+            border-left: 1px solid #C1DAD7;
+            text-transform: uppercase;
+            text-align: center;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            padding-left: 12px;
+            padding-right: 12px;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        table.tablestyle2 th.left1 {
+            background: #f5fafa;
+            padding: 6px 12px 6px 12px;
+            margin-left: 6px;
+            margin-right: 6px;
+            color: #666666;
+        }
+
+        table.tablestyle2 TABLE TR TD {
+            border-width: 0px;
+            margin: 0;
+            padding: 0 0 0 5px;
+        }
+
+    </style>
+
+</head>
+<body class="hold-transition sidebar-mini" th:with="p=${personalInfo}, newForm=${p}==null ? true:false,
+ mubanSLT=${#strings.contains(param.applicationOrg,'SLT')}, mubanFLT=${#strings.contains(param.applicationOrg,'FLT')} ">
+<div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 th:if="!${newForm}" class="m-0 text-dark">修改檔案&emsp;[[${p?.enLName}]][[${p?.enFName}]]&emsp;[[${p?.cnLName}]][[${p?.cnFName}]]&emsp;([[${p?.applicantInfoId}]])</h1>
+                    <h1 th:if="${newForm}" class="m-0 text-dark">創建檔案</h1>
+
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">履曆檔案</li>
+                        <li class="breadcrumb-item active">已注冊</li>
+                        <li th:if="!${newForm}" class="breadcrumb-item active">修改檔案</li>
+                        <li th:if="${newForm}" class="breadcrumb-item active">創建檔案</li>
+
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+
+
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title"></h3>
+                        </div>
+
+                        <div class="card-body">
+                            <form id="editApplicantForm" name="editApplicantForm">
+
+                                <span id="errorMsg" class="error"></span>
+
+
+                                <div class="form-group  row">
+                                    <span class="custom-control custom-radio self_margin_left_25">模板：</span>
+                                    <span class="custom-control custom-radio self_margin_left_25">
+                                        <input class="custom-control-input" type="radio" id="customRadio0"
+                                               name="muban01" value="SLT"
+
+                                               th:checked="${mubanSLT}">
+                                        <label for="customRadio0" style="cursor: pointer" class="custom-control-label">SLT</label>
+                                    </span>
+                                    <span class="custom-control custom-radio self_margin_left_25">
+                                        <input class="custom-control-input" type="radio" id="customRadio1"
+                                               name="muban01" value="FLT"
+
+                                               th:checked="${mubanFLT}">
+                                        <label for="customRadio1" style="cursor: pointer" class="custom-control-label">FLT</label>
+                                    </span>
+
+
+                                </div>
+
+
+                                <table class="tablestyle2">
+                                    <tbody>
+                                    <tr>
+                                        <th colspan="3" class="top">(一) 個人資料</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">＊英文姓氏</th>
+                                        <td nowrap=""><input type="text" name="applicantInfo.enLName"
+                                                             style="text-transform:uppercase;" th:value="${p?.getEnLName()}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">＊英文名字</th>
+                                        <td nowrap=""><input type="text" name="applicantInfo.enFName"
+                                                             style="text-transform:uppercase;" th:value="${p?.getEnFName()}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">中文姓氏</th>
+                                        <td nowrap=""><input type="text" name="applicantInfo.cnLName"
+                                                             th:value="${p?.getCnLName()}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">中文名字</th>
+                                        <td nowrap=""><input type="text" name="applicantInfo.cnFName"
+                                                             th:value="${p?.getCnFName()}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">＊身份證類別</th>
+                                        <td nowrap="" colspan="2">
+                                            <select name="applicantInfo.idTypeId">
+                                                <option value="-1"></option>
+                                                <option th:each="m:${messageList}"
+                                                        th:value="${m.id}"
+                                                        th:text="${m.chnDesc}"
+                                                        th:selected="${m.id}==${p?.getType_id()}"></option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">＊身份證編號</th>
+                                        <td nowrap="" colspan="2">
+                                            <input type="text" name="applicantInfo.idCardNumber"
+                                                   th:value="${p?.getIdCardNumber()}">
+                                        </td>
+                                    </tr>
+                                    <!--<tr>
+                                        <th class="left1">国家</th>
+                                        <td nowrap="" colspan="2">${p?.country}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">地区</th>
+                                        <td nowrap="" colspan="2">${p?.district}</td>
+                                    </tr>-->
+                                    <tr th:if="${mubanFLT}" th:with="account=${p?.getAccount()}">
+                                        <th class="left1">户口性质</th>
+                                        <td nowrap="" colspan="2">
+                                            <select class="info_select_small" id="account_0">
+                                                <option value=" "></option>
+                                                <option value="省内"
+                                                        th:selected="${account}!=null and '省内'==${account.split('-')[0]}">
+                                                    省内
+                                                </option>
+                                                <option value="省外"
+                                                        th:selected="${account}!=null and '省外'==${account.split('-')[0]}">
+                                                    省外
+                                                </option>
+                                            </select>
+                                            <select class="info_select_small" id="account_1">
+                                                <option value=" "></option>
+                                                <option value="市内"
+                                                        th:selected="${account}!=null and '市内'==${account.split('-')[1]}">
+                                                    市内
+                                                </option>
+                                                <option value="市外"
+                                                        th:selected="${account}!=null and '市外'==${account.split('-')[1]}">
+                                                    市外
+                                                </option>
+                                            </select>
+                                            <select class="info_select_small" id="account_2">
+                                                <option value=" "></option>
+                                                <option value="城市"
+                                                        th:selected="${account}!=null and '城市'==${account.split('-')[2]}">
+                                                    城市
+                                                </option>
+                                                <option value="农村"
+                                                        th:selected="${account}!=null and '农村'==${account.split('-')[2]}">
+                                                    农村
+                                                </option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">性別</th>
+                                        <td nowrap="" colspan="2">
+                                            <select class="info_select_small" name="applicantInfo.gender">
+                                                <option value="-1" disabled selected style='display:none;'>
+                                                </option>
+                                                <option value="M" th:selected="'M'==${p?.getGender()}">男</option>
+                                                <option value="F" th:selected="'F'==${p?.getGender()}">女</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">出生日期 (年-月-日)</th>
+                                        <td nowrap="" colspan="2"><input placeholder="年-月-日" type="text"
+                                                                         name="applicantInfo.dob" th:value="${p?.dob}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">手提電話</th>
+                                        <td nowrap="" colspan="2">
+                                            <select th:if="${mubanSLT}" class="info_select_small"
+                                                    name="applicantInfo.areaCode">
+                                                <option value="-1" disabled selected style='display:none;'>
+                                                    區號
+                                                </option>
+                                                <option value=""></option>
+                                                <option value="853"
+                                                        th:selected="'853'==${p?.getAreaCode()}">853
+                                                </option>
+                                                <option value="852"
+                                                        th:selected="'852'==${p?.getAreaCode()}">852
+                                                </option>
+                                                <option value="86" th:selected="'86'==${p?.getAreaCode()}">
+                                                    86
+                                                </option>
+                                            </select><select th:if="${mubanFLT}" class="info_select_small"
+                                                             name="applicantInfo.areaCode">
+                                            <option value="86" th:selected="'86'==${p?.getAreaCode()}">
+                                                86
+                                            </option>
+                                        </select> - <input type="text" name="applicantInfo.mobile" value=""
+                                                           th:value="${p?.mobile}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">＊電郵地址</th>
+                                        <td nowrap="" colspan="2">
+                                            <input class="info_nationality" type="text"
+                                                   name="applicantInfo.emailAddress"
+                                                   value="" th:value="${p?.emailAddress}">
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">地區</th>
+                                        <td nowrap="" colspan="2">
+                                            <select class="info_select_small" name="applicantInfo.area">
+                                                <option value=""></option>
+                                                <option value="CN" th:selected="'CN'==${p?.getArea()}">中国大陆</option>
+                                                <option value="MO" th:selected="'MO'==${p?.getArea()}">澳门</option>
+                                                <option value="HK" th:selected="'HK'==${p?.getArea()}">香港</option>
+                                                <option value="OTH" th:selected="'OTH'==${p?.getArea()}">其它</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">地址（地區）</th>
+                                        <td nowrap="" colspan="2">
+                                            <input class="info_nationality" name="applicantInfo.address_1" type="text"
+                                                   value="" th:value="${p?.getAddress_1()}" placeholder="地区">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th class="left1">地址（街道及門牌）</th>
+                                        <td nowrap="" colspan="2">
+                                            <input class="info_nationality" name="applicantInfo.address_2" type="text"
+                                                   value="" th:value="${p?.getAddress_2()}" placeholder="街道及门牌">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th class="left1">地址（大廈及單位）</th>
+                                        <td nowrap="" colspan="2">
+                                            <input class="info_nationality" name="applicantInfo.address_3" type="text"
+                                                   value="" th:value="${p?.getAddress_3()}" placeholder="大厦及单位">
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${mubanFLT}">
+                                        <th class="left1">紧急联系人</th>
+                                        <td nowrap="" colspan="2">
+                                            <input class="info_input_long"
+                                                   type="text" name="applicantInfo.contactName" value=""
+                                                   th:value="${p?.getContactName()}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1" th:text="${mubanSLT}? '聯絡電話2':'联系人电话'">联系人电话</th>
+                                        <td nowrap="" colspan="2">
+                                            <select class="info_select_small"
+                                                    name="applicantInfo.contactPhoneAreaCode">
+                                                <option value="-1" disabled selected
+                                                        style='display:none;'>區號
+                                                </option>
+                                                <option value=""></option>
+                                                <option value="853"
+                                                        th:selected="'853'==${p?.getContactPhoneAreaCode()}">
+                                                    853
+                                                </option>
+                                                <option value="852"
+                                                        th:selected="'852'==${p?.getContactPhoneAreaCode()}">
+                                                    852
+                                                </option>
+                                                <option value="86"
+                                                        th:selected="'86'==${p?.getContactPhoneAreaCode()}">
+                                                    86
+                                                </option>
+
+                                            </select> - <input type="text" name="applicantInfo.contactPhone"
+                                                               id="contact_phone"
+                                                               value="" th:value="${p?.getContactPhone()}">
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${mubanFLT}">
+                                        <th class="left1">联系人关系</th>
+                                        <td nowrap="" colspan="2">
+                                            <input class="info_input_small" type="text"
+                                                   name="applicantInfo.contactRelation"
+                                                   value="" th:value="${p?.contactRelation}">
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${mubanFLT}">
+                                        <th class="left1">社保狀況</th>
+                                        <td nowrap="" colspan="2">
+                                            <select class="info_select_small" name="applicantInfo.social">
+                                                <option value=" "></option>
+                                                <option value="已停止供款" th:selected="'已停止供款'==${p?.getSocial()}">已停止供款
+                                                </option>
+                                                <option value="未停止供款" th:selected="'未停止供款'==${p?.getSocial()}">未停止供款
+                                                </option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${mubanSLT}">
+                                        <th class="left1">婚姻狀況</th>
+                                        <td nowrap="" colspan="2">
+                                            <select class="info_select_small" name="applicantInfo.martialStatus">
+                                                <option value=""></option>
+                                                <option value="Single"
+                                                        th:selected="'Single'==${p?.getMartialStatus()} or '未婚'==${p?.getMartialStatus()}">
+                                                    未婚
+                                                </option>
+                                                <option value="Married"
+                                                        th:selected="'Married'==${p?.getMartialStatus()} or '已婚'==${p?.getMartialStatus()}">
+                                                    已婚
+                                                </option>
+                                                <option value="Divorced"
+                                                        th:selected="'Divorced'==${p?.getMartialStatus()} or '離婚'==${p?.getMartialStatus()}">
+                                                    離婚
+                                                </option>
+                                                <option value="Widowed"
+                                                        th:selected="'Widowed'==${p?.getMartialStatus()} or '鳏寡'==${p?.getMartialStatus()}">
+                                                    鳏寡
+                                                </option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">是否有親戚於本公司任職</th>
+                                        <td nowrap="" colspan="2">
+                                            <select class="info_select_small" id="have_relative">
+                                                <option value="no" th:selected="${p?.relative_name}==null">否</option>
+                                                <option value="yes" th:selected="${p?.relative_name}!=null">是</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">親屬關係</th>
+                                        <td nowrap="" colspan="2">
+                                            <input class="info_input_small" type="text"
+                                                   name="relativeInfo.relationship"
+                                                   value="" th:value="${p?.getRelationship()}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">親屬姓名</th>
+                                        <td nowrap="" colspan="2"><input type="text" name="relativeInfo.name"
+                                                                         value="" th:value="${p?.relative_name}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">親屬所屬部門</th>
+                                        <td nowrap="" colspan="2"><input type="text" name="relativeInfo.departmentName"
+                                                                         value="" th:value="${p?.department}"></td>
+                                    </tr>
+                                    <tr></tr>
+                                    <tr>
+                                        <th class="left1">任职状态</th>
+                                        <td nowrap="" colspan="2">
+                                            <select class="info_select_small" id="inService"
+                                                    name="relativeInfo.inService">
+                                                <option value="-1">
+                                                </option>
+                                                <option value="2" th:selected="2==${p?.getIn_service()}">
+                                                    現職
+                                                </option>
+                                                <option value="1" th:selected="1==${p?.getIn_service()}">
+                                                    已離任
+                                                </option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <br>
+
+
+                                <table class="tablestyle2">
+                                    <tbody id="self_educationList_tbody">
+                                    <tr>
+                                        <th colspan="5" class="top">(二) 教育程度</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="5">
+                                            <div align="center">學歷</div>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">學歷</th>
+                                        <th class="left1">由 (月-年)</th>
+                                        <th class="left1">至 (月-年)</th>
+                                        <th class="left1">學校</th>
+                                        <th class="left1">專科</th>
+                                    </tr>
+                                    <tr th:each="e : ${educationList}">
+                                        <td th:if="${mubanSLT}" nowrap="">
+                                            <select th:name="'educationList['+${eStat.index}+'].degree'">
+                                                <option value="-1"></option>
+                                                <option th:selected="'小學畢業或以下'==${e?.degree} or '小学毕业或以下'==${e?.degree}"
+                                                        value='小學畢業或以下'>小學畢業或以下
+                                                </option>
+                                                <option th:selected="'初中'==${e?.degree} or '初中'==${e?.degree}"
+                                                        value='初中'>初中
+                                                </option>
+                                                <option th:selected="'初中畢業'==${e?.degree} or '初中毕业'==${e?.degree}"
+                                                        value='初中畢業'>初中畢業
+                                                </option>
+                                                <option th:selected="'高中'==${e?.degree} or '高中/中专'==${e?.degree}"
+                                                        value='高中'>高中
+                                                </option>
+                                                <option th:selected="'高中畢業'==${e?.degree} or '高中/中专毕业'==${e?.degree}"
+                                                        value='高中畢業'>高中畢業
+                                                </option>
+                                                <option th:selected="'大專/高級文憑'==${e?.degree} or '大专'==${e?.degree}"
+                                                        value='大專/高級文憑'>大專/高級文憑
+                                                </option>
+                                             <!--   <option th:selected="'大學/大專(中)'==${e?.degree} or '大学/大专(中)'==${e?.degree}"
+                                                        value='大學/大專(中)'>
+                                                    大學/大專(中)
+                                                </option>-->
+                                                <option th:selected="'學士'==${e?.degree} or '本科'==${e?.degree}"
+                                                        value='學士'>學士
+                                                </option>
+                                                <option th:selected="'學士以上'==${e?.degree} or '本科以上'==${e?.degree}"
+                                                        value='學士以上'>學士以上
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td th:if="${mubanFLT}" nowrap="">
+                                            <select th:name="'educationList['+${eStat.index}+'].degree'">
+                                                <option value="-1"></option>
+                                                <option th:selected="'小學畢業或以下'==${e?.degree} or '小学毕业或以下'==${e?.degree}"
+                                                        value='小学毕业或以下'>小学毕业或以下
+                                                </option>
+                                                <option th:selected="'初中'==${e?.degree} or '初中'==${e?.degree}"
+                                                        value='初中'>初中
+                                                </option>
+                                                <option th:selected="'初中畢業'==${e?.degree} or '初中毕业'==${e?.degree}"
+                                                        value='初中毕业'>初中毕业
+                                                </option>
+                                                <option th:selected="'高中'==${e?.degree} or '高中/中专'==${e?.degree}"
+                                                        value='高中/中专'>高中/中专
+                                                </option>
+                                                <option th:selected="'高中畢業'==${e?.degree} or '高中/中专毕业'==${e?.degree}"
+                                                        value='高中/中专毕业'>高中/中专毕业
+                                                </option>
+                                                <option th:selected="'大專/高級文憑'==${e?.degree} or '大专'==${e?.degree}"
+                                                        value='大专'>大专
+                                                </option>
+                                              <!--  <option th:selected="'大學/大專(中)'==${e?.degree} or '大学/大专(中)'==${e?.degree}"
+                                                        value='大学/大专(中)'>
+                                                    大学/大专(中)
+                                                </option>-->
+                                                <option th:selected="'學士'==${e?.degree} or '本科'==${e?.degree}"
+                                                        value='本科'>本科
+                                                </option>
+                                                <option th:selected="'學士以上'==${e?.degree} or '本科以上'==${e?.degree}"
+                                                        value='本科以上'>本科以上
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td nowrap=""><input type="text"
+                                                             th:name="'educationList['+${eStat.index}+'].fromDate'"
+                                                             value="" th:value="${e?.fromDate}"></td>
+                                        <td nowrap=""><input type="text"
+                                                             th:name="'educationList['+${eStat.index}+'].toDate'"
+                                                             value="" th:value="${e?.toDate}"></td>
+                                        <td nowrap=""><input type="text"
+                                                             th:name="'educationList['+${eStat.index}+'].organizationName'"
+                                                             value="" th:value="${e?.organizationName}"></td>
+                                        <td nowrap=""><input type="text"
+                                                             th:name="'educationList['+${eStat.index}+'].major'"
+                                                             value="" th:value="${e?.major}"></td>
+                                    </tr>
+
+                                    </tbody>
+
+                                </table>
+                                <input type="button" value="添加" onclick="add_educationList()">
+                                <input type="button" value="減少" onclick="minus_educationList()">
+
+                                <table class="tablestyle2">
+                                    <tbody id="self_certificationList_tbody">
+                                    <tr>
+                                        <th colspan="3">
+                                            <div align="center">專業資格或證書</div>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">證書/認可資格</th>
+                                        <th class="left1">頒發證書日期(月-年)</th>
+                                        <th class="left1">頒發機構</th>
+                                    </tr>
+                                    <tr th:each="c : ${certificationList}">
+                                        <td nowrap=""><input type="text"
+                                                             th:name="'certificationList['+${cStat.index}+'].certName'"
+                                                             value="" th:value="${c?.certName}"></td>
+                                        <td nowrap=""><input type="text"
+                                                             th:name="'certificationList['+${cStat.index}+'].issueDate'"
+                                                             value="" th:value="${c?.issueDate}"></td>
+                                        <td nowrap=""><input type="text"
+                                                             th:name="'certificationList['+${cStat.index}+'].organizationName'"
+                                                             value="" th:value="${c?.organizationName}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <input type="button" value="添加" onclick="add_certificationList()">
+                                <input type="button" value="減少" onclick="minus_certificationList()">
+                                <br>
+                                <table class="tablestyle2">
+                                    <tbody id="self_experienceList_tbody">
+                                    <tr>
+                                        <th colspan="10" class="top">(三) 工作經驗</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">工作機構</th>
+                                        <th class="left1">職位</th>
+                                        <th class="left1">由 (月-年)</th>
+                                        <th class="left1">至 (月-年)</th>
+                                        <th class="left1">主要職務</th>
+                                        <th class="left1">薪本形式</th>
+                                        <!-- <th class="left1">基本薪酬(幣值)</th> -->
+                                        <th class="left1">基本薪酬</th>
+
+                                        <th class="left1">是否仍在職</th>
+                                        <th class="left1">離職原因</th>
+                                    </tr>
+                                    <tr th:each="experience : ${experienceList}">
+                                        <td nowrap=""><input type="text"
+                                                             th:name="'workingExperienceList['+${experienceStat.index}+'].companyName'"
+                                                             value="" th:value="${experience?.companyName}"></td>
+                                        <td nowrap=""><input type="text"
+                                                             th:name="'workingExperienceList['+${experienceStat.index}+'].position'"
+                                                             value="" th:value="${experience?.position}"></td>
+                                        <td nowrap=""><input type="text"
+                                                             th:name="'workingExperienceList['+${experienceStat.index}+'].fromDate'"
+                                                             value="" th:value="${experience?.fromDate}"></td>
+                                        <td nowrap=""><input type="text"
+                                                             th:name="'workingExperienceList['+${experienceStat.index}+'].toDate'"
+                                                             value="" th:value="${experience?.toDate}"></td>
+                                        <td nowrap=""><input type="text"
+                                                             th:name="'workingExperienceList['+${experienceStat.index}+'].jobDuty'"
+                                                             value="" th:value="${experience?.jobDuty}"></td>
+                                        <td nowrap="">
+                                            <select th:name="'workingExperienceList['+${experienceStat.index}+'].payMethod'">
+                                                <option value=''></option>
+                                                <option value='monthly'
+                                                        th:selected="'monthly'==${experience?.payMethod}">月薪
+                                                </option>
+                                                <option value='daily' th:selected="'daily'==${experience?.payMethod}">
+                                                    日薪
+                                                </option>
+                                                <option value='hourly' th:selected="'hourly'==${experience?.payMethod}">
+                                                    時薪
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td nowrap="">
+                                            <select th:if="${mubanSLT}"
+                                                    th:name="'workingExperienceList['+${experienceStat.index}+'].currency'">
+                                                <option value='-1'></option>
+                                                <option value='HKD' th:selected="'HKD'==${experience?.currency}">HKD
+                                                </option>
+                                                <option value='MOP' th:selected="'MOP'==${experience?.currency}">MOP
+                                                </option>
+                                                <option value='CNY' th:selected="'CNY'==${experience?.currency}">CNY
+                                                </option>
+                                            </select>
+                                            <select th:if="${mubanFLT}">
+                                                <option value='RMB' th:selected="'RMB'==${experience?.currency}">RMB
+                                                </option>
+                                            </select>
+                                            <input type="text"
+                                                   th:name="'workingExperienceList['+${experienceStat.index}+'].salary'"
+                                                   value="" th:value="${experience?.salary}">
+                                        </td>
+                                        <td nowrap="">
+                                            <select class="info_select_small"
+                                                    th:name="'workingExperienceList['+${experienceStat.index}+'].stillEmployed'">
+                                                <option value=''></option>
+                                                <option value="N" th:selected="${experience?.stillEmployed}=='N'">否
+                                                </option>
+                                                <option value="Y" th:selected="${experience?.stillEmployed}=='Y'">是
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td nowrap=""><input type="text"
+                                                             th:name="'workingExperienceList['+${experienceStat.index}+'].leaveReason'"
+                                                             value="" th:value="${experience?.leaveReason}"></td>
+                                    </tr>
+
+
+                                    </tbody>
+                                </table>
+                                <input type="button" value="添加" onclick="add_experienceList()">
+                                <input type="button" value="減少" onclick="minus_experienceList()">
+
+                                <table class="tablestyle2">
+                                    <tbody>
+                                    <tr>
+                                        <td nowrap="">是否曾在本公司工作</td>
+                                        <td nowrap="">
+                                            <select class="info_select_small" name="applicantInfo.employedBefore"
+                                                    id="self_employedBefore_select">
+                                                <!--                                                <option value=''></option>-->
+                                                <option value="N" th:selected="${p?.employedBefore}=='否'">否</option>
+                                                <option value="Y" th:selected="${p?.employedBefore}=='是'">是</option>
+                                            </select>
+                                        </td>
+                                        <td id="self_employedBefore_td" nowrap=""
+                                            th:style="'display:' + @{(${newForm} or ${p?.employedBefore}=='否' ? 'none' : '')} + ''">
+                                            职位:<input type="text" name="applicantInfo.ebPosi"
+                                                      value="" th:value="${p?.ebPosi}">
+                                            部门:<input type="text" name="applicantInfo.ebDept"
+                                                      value="" th:value="${p?.ebDept}">
+                                            員工編號:<input type="text" name="applicantInfo.ebUserName"
+                                                        value="" th:value="${p?.ebUserName}">
+                                        </td>
+                                    </tr>
+                                    <td  th:if="${mubanSLT}" nowrap="">是否曾申請本公司之投注戶口</td>
+                                    <td  th:if="${mubanSLT}" nowrap="">
+                                        <select class="info_select_small" name="applicantInfo.appliedBaccountBefore"
+                                                id="self_appliedBaccountBefore_select">
+                                            <!--                                                <option value=''></option>-->
+                                            <option value="N" th:selected="${p?.appliedBaccountBefore}=='否'">否</option>
+                                            <option value="Y" th:selected="${p?.appliedBaccountBefore}=='是'">是</option>
+                                        </select>
+                                    </td>
+                                    <tr>
+                                        <td nowrap="">是否曾被某個僱主終止/開除/暫停職務</td>
+                                        <td nowrap=""><select class="info_select_small"
+                                                              name="applicantInfo.terminatedBefore"
+                                                              id="self_terminatedBefore_select">
+                                            <!--                                            <option value=''></option>-->
+                                            <option value="N" th:selected="${p?.terminatedBefore}=='否'">否</option>
+                                            <option value="Y" th:selected="${p?.terminatedBefore}=='是'">是</option>
+                                        </select>
+                                        </td>
+                                        <td id="self_terminatedBefore_td" nowrap=""
+                                            th:style="'display:' + @{(${newForm} or ${p?.terminatedBefore}=='否' ? 'none' : '')} + ''">
+                                            原因:<input type="text" name="applicantInfo.tbCause"
+                                                      value="" th:value="${p?.tbCause}"></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td nowrap="">是否涉及任何刑事罪行</td>
+                                        <td nowrap=""><select class="info_select_small"
+                                                              name="applicantInfo.criminalRecord"
+                                                              id="self_criminalRecord_select">
+                                            <!--                                            <option value=''></option>-->
+                                            <option value="N" th:selected="${p?.criminalRecord}=='否'">否</option>
+                                            <option value="Y" th:selected="${p?.criminalRecord}=='是'">是</option>
+                                        </select>
+                                        </td>
+                                        <td id="self_criminalRecord_td" nowrap=""
+                                            th:style="'display:' + @{(${newForm} or ${p?.criminalRecord}=='否' ? 'none' : '')} + ''">
+                                            原因:<input type="text" name="applicantInfo.crCause"
+                                                      value="" th:value="${p?.crCause}"></td>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <br>
+                                <table class="tablestyle2">
+                                    <tbody id="self_languageList_tbody">
+                                    <tr>
+                                        <th colspan="5" class="top">(四) 其他資料</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="left1">語言技能</th>
+                                        <th class="left1">書寫</th>
+                                        <th class="left1">會話</th>
+
+                                    </tr>
+                                    <tr th:each="l : ${languageList}">
+                                        <td nowrap=""><input th:readonly="${lStat.count}<4" type="text"
+                                                             th:name="'languageList['+${lStat.index}+'].name'"
+                                                             value="" th:value="${l?.name}"></td>
+                                        <td nowrap="">
+                                            <select th:if="${mubanSLT}" class="info_select_small"
+                                                    th:name="'languageList['+${lStat.index}+'].written'">
+                                                <option value=""></option>
+                                                <option th:selected="${l?.written}=='流利'" value="流利">流利</option>
+                                                <option th:selected="${l?.written}=='一般'" value="一般">一般</option>
+                                                <option th:selected="${l?.written}=='略懂'" value="略懂">略懂</option>
+                                                <option th:selected="${l?.written}=='不適用' or ${l?.written}=='不适用'"
+                                                        value="不適用">不適用
+                                                </option>
+                                            </select>
+                                            <select th:if="${mubanFLT}" class="info_select_small"
+                                                    th:name="'languageList['+${lStat.index}+'].written'">
+                                                <option value=""></option>
+                                                <option th:selected="${l?.written}=='流利'" value="流利">流利</option>
+                                                <option th:selected="${l?.written}=='一般'" value="一般">一般</option>
+                                                <option th:selected="${l?.written}=='略懂'" value="略懂">略懂</option>
+                                                <option th:selected="${l?.written}=='不適用' or ${l?.written}=='不适用'"
+                                                        value="不适用">不适用
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td nowrap="">
+                                            <select th:if="${mubanSLT}" class="info_select_small"
+                                                    th:name="'languageList['+${lStat.index}+'].spoken'">
+                                                <option value=""></option>
+                                                <option th:selected="${l?.spoken}=='流利'" value="流利">流利</option>
+                                                <option th:selected="${l?.spoken}=='一般'" value="一般">一般</option>
+                                                <option th:selected="${l?.spoken}=='略懂'" value="略懂">略懂</option>
+                                                <option th:selected="${l?.spoken}=='不適用' or ${l?.spoken}=='不适用'"
+                                                        value="不適用">不適用
+                                                </option>
+                                            </select>
+                                            <select th:if="${mubanFLT}" class="info_select_small"
+                                                    th:name="'languageList['+${lStat.index}+'].spoken'">
+                                                <option value=""></option>
+                                                <option th:selected="${l?.spoken}=='流利'" value="流利">流利</option>
+                                                <option th:selected="${l?.spoken}=='一般'" value="一般">一般</option>
+                                                <option th:selected="${l?.spoken}=='略懂'" value="略懂">略懂</option>
+                                                <option th:selected="${l?.spoken}=='不適用' or ${l?.spoken}=='不适用'"
+                                                        value="不适用">不适用
+                                                </option>
+                                            </select>
+                                        </td>
+                                    </tr>
+
+
+                                    </tbody>
+                                </table>
+                                <input type="button" value="添加" onclick="add_languageList()">
+                                <input type="button" value="減少" onclick="minus_languageList()">
+                                <table class="tablestyle2">
+                                    <tbody>
+                                    <tr>
+                                        <th class="left1">電腦技能 / 其他技能</th>
+                                        <th class="left1">描述</th>
+
+                                    </tr>
+                                    <tr th:each="o : ${otherSkillList}">
+                                        <td nowrap=""><input readonly type="text"
+                                                             th:name="'otherSkillList['+${oStat.index}+'].name'"
+                                                             value="" th:value="${o?.name}"></td>
+                                        <td nowrap=""><input type="text"
+                                                             th:name="'otherSkillList['+${oStat.index}+'].degree'"
+                                                             value="" th:value="${o?.degree}"></td>
+                                        <input type="hidden" th:name="'otherSkillList['+${oStat.index}+'].skillType'"
+                                               value="" th:value="${o?.skillType}">
+                                    </tr>
+
+
+                                    </tbody>
+                                </table>
+                                <br>
+
+
+                                <br>
+
+                                <button id="confirmEditButton" type="button" th:if="!${newForm}" class="btn btn-sm btn-primary" onclick="editDetail();">
+                                        <i class="fa fa-save" aria-hidden="true"></i> 保存修改
+                                </button>
+                                <button id="confirmEditButton" type="button" th:if="!${newForm} and ${suspendAllApplicant}" class="btn btn-sm btn-primary" disabled title="目前已有三個應徵申請處理中">
+                                        <i class="fa fa-save" aria-hidden="true"></i> 代申請職位
+                                </button>
+                                <button id="confirmEditButton" type="button" th:if="!${newForm} and !${suspendAllApplicant}" class="btn btn-sm btn-primary" onclick="goToOpeningJobListPage()">
+                                        <i class="fa fa-save" aria-hidden="true"></i> 代申請職位
+                                </button>
+								<button id="confirmEditButton" type="button" th:if="${newForm}" class="btn btn-sm btn-primary" onclick="editDetail();">
+                                        <i class="fa fa-save" aria-hidden="true"></i> 確認創建
+                                </button>
+                                <button type="button" class="btn btn-sm btn-primary fa-pull-right" onclick="goBack();">
+                                        <i class="fa fa-reply" aria-hidden="true"></i> 返回
+                                </button>
+
+                                <!--                                <input type="hidden" id="action" name="action" value="0">-->
+                                <!--                                <input type="hidden" id="updateType" name="updateType" value="0">-->
+                                <input type="hidden" id="applicantId" name="applicantInfo.applicantInfoId" value="0"
+                                       th:value="${personalInfo?.getApplicantInfoId()}">
+
+                                <input type="hidden" id="mubanSLT" th:value="${mubanSLT}">
+                                <input type="hidden" id="mubanFLT" th:value="${mubanFLT}">
+                                <input th:if="${mubanSLT}" type="hidden" name="applicantInfo.applicationOrg"
+                                       value="SLT">
+                                <input th:if="${mubanFLT}" type="hidden" name="applicantInfo.applicationOrg" value="FLT">
+                                <input type="hidden" name="noRepeatToken" th:value="${session.getEditDetailPageNoRepeatTokenList?.get(0)}">
+
+                            </form>
+                        </div>
+
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+
+            </div>
+
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+
+    <!-- /.content-wrapper -->
+
+
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script th:src="@{/AdminLTE/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- date-range-picker -->
+<script th:src="@{/AdminLTE/plugins/daterangepicker/moment.min.js}" src="../../plugins/moment/moment.min.js"></script>
+<script th:src="@{/AdminLTE/plugins/daterangepicker/daterangepicker.js}"
+        src="../../plugins/daterangepicker/daterangepicker.js"></script>
+
+<!-- Toastr -->
+<script th:src="@{/AdminLTE/plugins/toastr/toastr.min.js}" src="../../plugins/toastr/toastr.min.js"></script>
+
+
+<!-- AdminLTE App -->
+<script th:src="@{/AdminLTE/dist/js/adminlte.min.js}"></script>
+
+<!--self js-->
+<script th:src="@{/assets/js/self_basic.js}"></script>
+<script th:src="@{/assets/js/common.js}"></script>
+
+</body>
+
+
+<!-- page script -->
+<script>
+    $(function () {
+        //Toastr
+        toastr.options = {
+            positionClass: "toast-center-center",
+            timeOut: "2000"
+        }
+    })
+
+
+    function goBack() {
+//         location.href = "[[@{/dispatch/application/inbox}]]";
+        history.go(-1);
+    }
+
+
+</script>
+<script>
+
+
+    function validateEmail(email) {
+        const regExp = /^[^@^\s]+@[^\.@^\s]+(\.[^\.@^\s]+)+$/;
+        return !!email.match(regExp);
+    }
+
+
+</script>
+<script>
+    /* function newDetail() {
+         alert($('#editApplicantForm').serialize())
+     }*/
+
+    function editDetail() {
+        // alert($('#editApplicantForm').serialize())
+
+        // if (!checkEditCanPass()) return;
+
+        document.getElementById('confirmEditButton').disabled = true;
+
+        let url = "[[@{/operate/profileDetail/newORupdate}]]"
+
+        // let data = $("#editApplicantForm");
+        let data = '';
+        // console.log($('#mubanFLT').val()+" | "+$('#mubanMSLOT').val())
+        if ($('#mubanFLT').val() === 'true') {
+            data = $.param({'applicantInfo.account': $('#account_0').val() + '-' + $('#account_1').val() + '-' + $('#account_2').val()}) + "&"
+        } else if ($('#mubanSLT').val() === 'true') {
+            data = ''
+        }
+        data += $("#editApplicantForm").serialize();
+
+        $.ajax({
+            "url": url,
+            // "data": JSON.stringify(getFormData(data)),
+            "data": data,
+
+            "type": "post",
+            // "contentType": "application/json;charset=utf-8",
+            "dataType": "json",
+            "success": function (json) {
+                if (json.stateCode === 200) {
+                    // alert("操作成功!");
+                    toastr.success('操作成功!')
+                    setTimeout(function () {
+                        location.href = "[[@{/dispatch/profile/registered}]]";
+                    }, 1500);
+                } else if (json.stateCode === 500) {
+                    toastr.warning(json.message);
+                    document.getElementById('confirmEditButton').disabled = false;
+                } else {
+                    alert("本次操作未能成功!");
+                    document.getElementById('confirmEditButton').disabled = false;
+                }
+            },
+            "error": function (xhr, text, errorThrown) {
+                alert("您的登录信息已经过期！請重新登录！");
+                document.location.replace('[[@{/login.html}]]');
+            }
+        });
+    }
+
+    $(function () {
+        let newForm = '[[${personalInfo}==null]]';
+        let applicant_info_id = '[[${personalInfo?.applicantInfoId}]]';
+        $("input[name='muban01']").on("click", function () {
+            let val = $(this).val();
+            if (val === "SLT") {
+                // console.log("MSLOT");
+
+                location.href = newForm === 'true' ? '[[@{/dispatch/profile/newDetailByHR?applicationOrg=SLT}]]' : '[[@{/dispatch/profile/editDetail/}]]' + applicant_info_id + '?applicationOrg=SLT';
+
+            } else if (val === "FLT") {
+                // console.log("FLT");
+                location.href = newForm === 'true' ? '[[@{/dispatch/profile/newDetailByHR?applicationOrg=FLT}]]' : '[[@{/dispatch/profile/editDetail/}]]' + applicant_info_id + '?applicationOrg=FLT';
+
+            }
+        })
+    })
+</script>
+<script>
+    var educationList_size = 0;
+    var certificationList_size = 0;
+    var experienceList_size = 0;
+    var languageList_size = 3;
+
+</script>
+<script type="text/javascript" th:inline="javascript" th:each="e : ${educationList}" th:if="${eStat.first}">
+    educationList_size = /*[[${eStat.size}]]*/ 0;
+</script>
+<script type="text/javascript" th:inline="javascript" th:each="e : ${certificationList}" th:if="${eStat.first}">
+    certificationList_size = /*[[${eStat.size}]]*/ 0;
+</script>
+<script type="text/javascript" th:inline="javascript" th:each="e : ${experienceList}" th:if="${eStat.first}">
+    experienceList_size = /*[[${eStat.size}]]*/ 0;
+</script>
+<script type="text/javascript" th:inline="javascript" th:each="e : ${languageList}" th:if="${eStat.first}">
+    languageList_size = /*[[${eStat.size}]]*/ 3;
+</script>
+<script>
+    function add_educationList() {
+
+        let TMPselect;
+        if ($('#mubanFLT').val() === 'true') {
+            // alert('flt')
+
+            TMPselect = "\t\t<select name='educationList[#{eStat.index}].degree'>\n" +
+                "\t\t\t<option value=\"-1\"></option>\n" +
+                "\t\t\t<option value='小学毕业或以下'>小学毕业或以下</option>\n" +
+                "\t\t\t<option value='初中'>初中</option>\n" +
+                "\t\t\t<option value='初中毕业'>初中毕业</option>\n" +
+                "\t\t\t<option value='高中/中专'>高中/中专</option>\n" +
+                "\t\t\t<option value='高中/中专毕业'>高中/中专毕业</option>\n" +
+                "\t\t\t<option value='大专'>大专</option>\n" +
+                // "\t\t\t<option value='大学/大专(中)'>大学/大专(中)</option>\n" +
+                "\t\t\t<option value='本科'>本科</option>\n" +
+                "\t\t\t<option value='本科以上'>本科以上</option>\n" +
+                "\t\t</select>\n";
+        } else if ($('#mubanSLT').val() === 'true') {
+            // alert('mslot')
+            TMPselect = "\t\t<select name='educationList[#{eStat.index}].degree'>\n" +
+                "\t\t\t<option value=\"-1\"></option>\n" +
+                "\t\t\t<option value='小學畢業或以下'>小學畢業或以下</option>\n" +
+                "\t\t\t<option value='初中'>初中</option>\n" +
+                "\t\t\t<option value='初中畢業'>初中畢業</option>\n" +
+                "\t\t\t<option value='高中'>高中</option>\n" +
+                "\t\t\t<option value='高中畢業'>高中畢業</option>\n" +
+                "\t\t\t<option value='大專/高級文憑'>大專/高級文憑</option>\n" +
+                // "\t\t\t<option value='大學/大專(中)'>大學/大專(中)</option>\n" +
+                "\t\t\t<option value='學士'>學士</option>\n" +
+                "\t\t\t<option value='學士以上'>學士以上</option>\n" +
+                "\t\t</select>\n";
+        }
+
+
+        let html = "<tr>\n" +
+            "\t<td nowrap=''>\n" + TMPselect +
+            "\t</td>\n" +
+            "\t<td nowrap=''><input type='text' name='educationList[#{eStat.index}].fromDate' value=''></td>\n" +
+            "\t<td nowrap=''><input type='text' name='educationList[#{eStat.index}].toDate' value=''></td>\n" +
+            "\t<td nowrap=''><input type='text' name='educationList[#{eStat.index}].organizationName' value=''></td>\n" +
+            "\t<td nowrap=''><input type='text' name='educationList[#{eStat.index}].major' value=''></td>\n" +
+            "</tr>";
+        html = html.replace(/#{eStat.index}/g, educationList_size);
+        educationList_size += 1;
+        $("#self_educationList_tbody").append(html);
+
+    }
+
+    function minus_educationList() {
+        educationList_size -= 1;
+        if (educationList_size < 0) {
+            educationList_size = 0;
+            return;
+        }
+        $("#self_educationList_tbody tr:last").remove();
+    }
+
+    function add_certificationList() {
+        let html = "<tr>\n" +
+            "\t<td nowrap=''><input type='text' name='certificationList[#{cStat.index}].certName' value=''></td>\n" +
+            "\t<td nowrap=''><input type='text' name='certificationList[#{cStat.index}].issueDate' value=''></td>\n" +
+            "\t<td nowrap=''><input type='text' name='certificationList[#{cStat.index}].organizationName' value=''></td>\n" +
+            "</tr>";
+        html = html.replace(/#{cStat.index}/g, certificationList_size);
+        certificationList_size += 1;
+        $("#self_certificationList_tbody").append(html);
+    }
+
+    function minus_certificationList() {
+        certificationList_size -= 1;
+        if (certificationList_size < 0) {
+            certificationList_size = 0;
+            return;
+        }
+        $("#self_certificationList_tbody tr:last").remove();
+    }
+
+    function add_experienceList() {
+
+        let TMPselect;
+        if ($('#mubanFLT').val() === 'true') {
+            // alert('flt')
+
+            TMPselect = "\t\t<select name='workingExperienceList[#{experienceStat.index}].currency'>\n" +
+                "\t\t\t<option value='RMB'>RMB</option>\n" +
+                "\t\t</select>\n";
+        } else if ($('#mubanSLT').val() === 'true') {
+            TMPselect = "\t\t<select name='workingExperienceList[#{experienceStat.index}].currency'>\n" +
+                "\t\t\t<option value='-1'></option>\n" +
+                "\t\t\t<option value='HKD'>HKD</option>\n" +
+                "\t\t\t<option value='MOP'>MOP</option>\n" +
+                "\t\t\t<option value='CNY'>CNY</option>\n" +
+                "\t\t</select>\n";
+        }
+
+        let html = "<tr>\n" +
+            "\t<td nowrap=''><input type='text' name='workingExperienceList[#{experienceStat.index}].companyName' value=''></td>\n" +
+            "\t<td nowrap=''><input type='text' name='workingExperienceList[#{experienceStat.index}].position' value=''></td>\n" +
+            "\t<td nowrap=''><input type='text' name='workingExperienceList[#{experienceStat.index}].fromDate' value=''></td>\n" +
+            "\t<td nowrap=''><input type='text' name='workingExperienceList[#{experienceStat.index}].toDate' value=''></td>\n" +
+            "\t<td nowrap=''><input type='text' name='workingExperienceList[#{experienceStat.index}].jobDuty' value=''></td>\n" +
+            "\t<td nowrap=''>\n" +
+            "\t\t<select name='workingExperienceList[#{experienceStat.index}].payMethod'>\n" +
+            "\t\t\t<option value=''></option>\n" +
+            "\t\t\t<option value='monthly'>月薪</option>\n" +
+            "\t\t\t<option value='daily'>日薪</option>\n" +
+            "\t\t\t<option value='hourly'>時薪</option>\n" +
+            "\t\t</select>\n" +
+            "\t</td>\n" +
+            "\t<td nowrap=''>\n" + TMPselect +
+            "\t\t<input type='text' name='workingExperienceList[#{experienceStat.index}].salary' value=''>\n" +
+            "\t</td>\n" +
+            "\t<td nowrap=''>\n" +
+            "\t\t<select class='info_select_small' name='workingExperienceList[#{experienceStat.index}].stillEmployed'>\n" +
+            "\t\t\t<option value=''></option>\n" +
+            "\t\t\t<option value='N'>否</option>\n" +
+            "\t\t\t<option value='Y'>是</option>\n" +
+            "\t\t</select>\n" +
+            "\t</td>\n" +
+            "\t<td nowrap=''><input type='text' name='workingExperienceList[#{experienceStat.index}].leaveReason' value=''></td>\n" +
+            "</tr>";
+        html = html.replace(/#{experienceStat.index}/g, experienceList_size);
+        experienceList_size += 1;
+        $("#self_experienceList_tbody").append(html);
+    }
+
+    function minus_experienceList() {
+        experienceList_size -= 1;
+        if (experienceList_size < 0) {
+            experienceList_size = 0;
+            return;
+        }
+        $("#self_experienceList_tbody tr:last").remove();
+    }
+
+
+    function add_languageList() {
+
+        let TMPselectWritten;
+        let TMPselectSpoken;
+
+        if ($('#mubanFLT').val() === 'true') {
+            // alert('flt')
+
+            TMPselectWritten = "\t\t<select class='info_select_small' name='languageList[#{lStat.index}].written'>\n" +
+                "\t\t\t<option value='-1'></option>\n" +
+                "\t\t\t<option value='流利'>流利</option>\n" +
+                "\t\t\t<option value='一般'>一般</option>\n" +
+                "\t\t\t<option value='略懂'>略懂</option>\n" +
+                "\t\t\t<option value='不适用'>不适用\n" +
+                "\t\t\t</option>\n" +
+                "\t\t</select>\n";
+            TMPselectSpoken = "\t\t<select class='info_select_small' name='languageList[#{lStat.index}].spoken'>\n" +
+                "\t\t\t<option value='-1'></option>\n" +
+                "\t\t\t<option value='流利'>流利</option>\n" +
+                "\t\t\t<option value='一般'>一般</option>\n" +
+                "\t\t\t<option value='略懂'>略懂</option>\n" +
+                "\t\t\t<option value='不适用'>不适用\n" +
+                "\t\t\t</option>\n" +
+                "\t\t</select>\n";
+
+        } else if ($('#mubanSLT').val() === 'true') {
+            TMPselectWritten = "\t\t<select class='info_select_small' name='languageList[#{lStat.index}].written'>\n" +
+                "\t\t\t<option value='-1'></option>\n" +
+                "\t\t\t<option value='流利'>流利</option>\n" +
+                "\t\t\t<option value='一般'>一般</option>\n" +
+                "\t\t\t<option value='略懂'>略懂</option>\n" +
+                "\t\t\t<option value='不適用'>不適用\n" +
+                "\t\t\t</option>\n" +
+                "\t\t</select>\n";
+            TMPselectSpoken = "\t\t<select class='info_select_small' name='languageList[#{lStat.index}].spoken'>\n" +
+                "\t\t\t<option value='-1'></option>\n" +
+                "\t\t\t<option value='流利'>流利</option>\n" +
+                "\t\t\t<option value='一般'>一般</option>\n" +
+                "\t\t\t<option value='略懂'>略懂</option>\n" +
+                "\t\t\t<option value='不適用'>不適用\n" +
+                "\t\t\t</option>\n" +
+                "\t\t</select>\n";
+
+        }
+
+
+        let html = "<tr>\n" +
+            "\t<td nowrap=''><input type='text' name='languageList[#{lStat.index}].name' value=''></td>\n" +
+            "\t<td nowrap=''>\n" +
+            TMPselectWritten +
+            "\t</td>\n" +
+            "\t<td nowrap=''>\n" +
+            TMPselectSpoken +
+            "\t</td>\n" +
+            "</tr>";
+        html = html.replace(/#{lStat.index}/g, languageList_size);
+
+        languageList_size += 1;
+        $("#self_languageList_tbody").append(html);
+    }
+
+    function minus_languageList() {
+        languageList_size -= 1;
+        if (languageList_size < 3) {
+            languageList_size = 3;
+            return;
+        }
+        $("#self_languageList_tbody tr:last").remove();
+    }
+
+</script>
+<script>
+    $("#self_employedBefore_select").on("change",
+        function () {
+            //做顯示/隱藏: 當N時，不顯示，但不會刪除db數據，前端也不顯示的。
+            let val = $(this).val();
+            // alert(val)
+            if (val === "Y") {
+                document.getElementById('self_employedBefore_td').style.display = '';
+            } else if (val === "N") {
+                document.getElementById('self_employedBefore_td').style.display = 'none';
+            }
+        }
+    );
+    $("#self_terminatedBefore_select").on("change",
+        function () {
+            //做顯示/隱藏: 當N時，不顯示，但不會刪除db數據，前端也不顯示的。
+            let val = $(this).val();
+            // alert(val)
+            if (val === "Y") {
+                document.getElementById('self_terminatedBefore_td').style.display = '';
+            } else if (val === "N") {
+                document.getElementById('self_terminatedBefore_td').style.display = 'none';
+            }
+        }
+    );
+    $("#self_criminalRecord_select").on("change",
+        function () {
+            //做顯示/隱藏: 當N時，不顯示，但不會刪除db數據，前端也不顯示的。
+            let val = $(this).val();
+            // alert(val)
+            if (val === "Y") {
+                document.getElementById('self_criminalRecord_td').style.display = '';
+            } else if (val === "N") {
+                document.getElementById('self_criminalRecord_td').style.display = 'none';
+            }
+        }
+    );
+
+
+</script>
+<script>
+    function goToOpeningJobListPage() {
+        let applicant_info_id = '[[${personalInfo?.applicantInfoId}]]';
+
+        let applicationOrg1 = '[[${param.applicationOrg}]]';
+        let applicationOrg2 = '[[${personalInfo?.applicationOrg}]]';
+        if(applicationOrg1.toLowerCase() !== applicationOrg2.toLowerCase()) {
+            toastr.warning('檔案模板改變，請先保存修改')
+            return ;
+        }
+
+        location.href = '[[@{/dispatch/profile/getOpeningJobListPage}]]' +
+            '?applicationOrg=' + applicationOrg2 + '&' +
+            'applicant_info_id=' + applicant_info_id
+        ;
+    }
+</script>
+</html>

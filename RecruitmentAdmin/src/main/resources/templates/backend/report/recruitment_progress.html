@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>E - recruitment</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/dist/css/adminlte.min.css}">
+    <!-- Google Font: Source Sans Pro -->
+    <link th:href="@{/assets/fonts/ssp.css}"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+    <!-- DataTables -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+
+    <!-- daterange picker -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/daterangepicker/daterangepicker.css}"
+          href="../../plugins/daterangepicker/daterangepicker.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/toastr/toastr.min.css}"
+          href="../../plugins/toastr/toastr.min.css">
+
+    <!--self css-->
+    <link rel="stylesheet" th:href="@{/assets/styles/self_basic.css}">
+    <link rel="stylesheet" th:href="@{/assets/styles/self_datatable.css}">
+
+
+</head>
+<body id="frameContent">
+<div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">招聘空缺進度</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">統計報告</li>
+                        <li class="breadcrumb-item active">招聘空缺進度</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+
+
+            <div class="row">
+
+                <div>
+                    <!--                        class="col-12"-->
+                    <div class="card">
+                        <div class="card-header">
+                            <!--                                <h3 class="card-title">&ensp;</h3>-->
+
+
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+
+                            <table id="tableList" class="table table-bordered table-hover table-striped text-nowrap">
+                                <thead>
+                                <tr>
+                                    <th>序號</th>
+                                    <th>職位編號</th>
+                                    <th>職位名稱</th>
+                                    <th>已填補/空缺</th>
+                                    <th>進度</th>
+                                    <th>狀態</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+
+
+    <!-- /.content-wrapper -->
+
+
+</div>
+ <button type="button" id="showModalBtn" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal" style="display:none;">
+          <i class="fa" aria-hidden="true"></i> show
+ </button>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg" style=''>
+                <div class="modal-content" style="width:820px; height:230px;">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel" style='text-align:center;width:100%;'>
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    <table style='text-align:center;'><tr>
+                    <td><table style='background-image:url(/assets/img/bg.png);background-size:100% 100%;width:110px;height:53px;'><tr><td> HR篩選簡曆</td></tr><tr><td><span id='stage1span'></span></td></tr></table></td>
+                    <td><div style='background-image:url(/assets/img/arrow.png);background-size:100% 100%;width:21px;height:30px;'></div></td>
+                    <td><table style='background-image:url(/assets/img/bg.png);background-size:100% 100%;width:110px;height:53px;'><tr><td> 部門篩選簡曆</td></tr><tr><td><span id='stage2span'></span></td></tr></table></td>
+                    <td><div style='background-image:url(/assets/img/arrow.png);background-size:100% 100%;width:21px;height:30px;'></div></td>
+                    <td><table style='background-image:url(/assets/img/bg.png);background-size:100% 100%;width:110px;height:53px;'><tr><td>預約面試</td></tr><tr><td><span id='stage3span'></span></td></tr></table></td>
+                    <td><div style='background-image:url(/assets/img/arrow.png);background-size:100% 100%;width:21px;height:30px;'></div></td>
+                    <td><table style='background-image:url(/assets/img/bg.png);background-size:100% 100%;width:110px;height:53px;'><tr><td>HR面試</td></tr><tr><td><span id='stage4span'></span></td></tr></table></td>
+                    <td><div style='background-image:url(/assets/img/arrow.png);background-size:100% 100%;width:21px;height:30px;'></div></td>
+                    <td><table style='background-image:url(/assets/img/bg.png);background-size:100% 100%;width:110px;height:53px;'><tr><td>部門面試</td></tr><tr><td><span id='stage5span'></span></td></tr></table></td>
+                    <td><div style='background-image:url(/assets/img/arrow.png);background-size:100% 100%;width:21px;height:30px;'></div></td>
+                    <td><table style='background-image:url(/assets/img/bg.png);background-size:100% 100%;width:110px;height:53px;'><tr><td>部門審批</td></tr><tr><td><span id='stage6span'></span></td></tr></table></td>
+                    </tr><tr>
+                    <td><table style='background-image:url(/assets/img/bg.png);background-size:100% 100%;width:110px;height:53px;'><tr><td>HR審批</td></tr><tr><td><span id='stage7span'></span></td></tr></table></td>
+                    <td><div style='background-image:url(/assets/img/arrow.png);background-size:100% 100%;width:21px;height:30px;'></div></td>
+                    <td><table style='background-image:url(/assets/img/bg.png);background-size:100% 100%;width:110px;height:53px;'><tr><td>HR發出聘請</td></tr><tr><td><span id='stage8span'></span></td></tr></table></td>
+                    <td><div style='background-image:url(/assets/img/arrow.png);background-size:100% 100%;width:21px;height:30px;'></div></td>
+                    <td><table style='background-image:url(/assets/img/bg.png);background-size:100% 100%;width:110px;height:53px;'><tr><td>簽約</td></tr><tr><td><span id='stage9span'></span></td></tr></table></td>
+                    <td><div style='background-image:url(/assets/img/arrow.png);background-size:100% 100%;width:21px;height:30px;'></div></td>
+                    <td><table style='background-image:url(/assets/img/bg.png);background-size:100% 100%;width:110px;height:53px;'><tr><td>入職</td></tr><tr><td><span id='stage10span'></span></td></tr></table></td>
+                    <td><div style='background-image:url(/assets/img/arrow.png);background-size:100% 100%;width:21px;height:30px;'></div></td>
+                    <td><table style='background-image:url(/assets/img/bg.png);background-size:100% 100%;width:110px;height:53px;'><tr><td>已入職</td></tr><tr><td><span id='stage12span'></span></td></tr></table></td>
+                    </tr></table>
+
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script th:src="@{/AdminLTE/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- DataTables -->
+<script th:src="@{/AdminLTE/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+
+<!-- date-range-picker -->
+<script th:src="@{/AdminLTE/plugins/daterangepicker/moment.min.js}" src="../../plugins/moment/moment.min.js"></script>
+<script th:src="@{/AdminLTE/plugins/daterangepicker/daterangepicker.js}"
+        src="../../plugins/daterangepicker/daterangepicker.js"></script>
+
+<!-- Toastr -->
+<script th:src="@{/AdminLTE/plugins/toastr/toastr.min.js}" src="../../plugins/toastr/toastr.min.js"></script>
+
+<!-- AdminLTE App -->
+<script th:src="@{/AdminLTE/dist/js/adminlte.min.js}"></script>
+<!-- self js -->
+<script th:src="@{/assets/js/myTable_checkbox.js}"></script>
+<script th:src="@{/assets/js/common.js}"></script>
+
+
+</body>
+<!-- page script -->
+<script>
+
+var dataTable = null;
+var columns;
+    $(function () {
+
+
+        //Toastr
+        toastr.options = {
+            positionClass: "toast-center-center",
+            timeOut: "2000"
+        }
+
+        columns = [
+            {"data" : null,
+           	 "render" : function(data, type, full, meta){
+           	 return meta.row + 1 + meta.settings._iDisplayStart;
+           	 }}, // 序号
+            {"data": "job_code",},
+            {"data": "job_title",},
+            {"data": "recruited",
+            	 render: function (data, type, row, meta) {
+            		 if(row.recruited>0){
+                         return "<a class='' href='[[@{/dispatch/application/specified/recruitmentProgress/recruited/}]]"+ row.dept_pos_detail_id +
+                         "'>" +
+                             "<i class='fas'>" +
+                             "</i>" +
+                             row.recruited+"/"+row.headcount;
+                             "</a>";
+                     }
+                 	else{
+                        return row.recruited+"/"+row.headcount;
+                    }
+
+                 }
+            },
+            {
+                "data": "dept_pos_detail_id",
+                render: function (data, type, row, meta) {
+                    return "<a href='javascript:void(0)' id='showDetailBtn_"+data+"' onclick='showDetail("+data+",\""+row.dept+"\",\""+row.job_code+"\",\""+row.job_title+"\")'>查看</a>";
+                }
+            },
+            {"data": "job_status",
+            },
+        ];
+
+        loadData();
+
+    });
+
+    function showDetail(jobId,dept,job_code,job_title){
+    	$("#myModalLabel").html(dept+" "+job_code+" "+job_title+" 招聘進度");
+
+    	let url = '[[@{/dataTables/getJobStageHeadCount}]]';
+    	$.ajax({
+                "url": url,
+                "data": {
+                    'jobId': jobId
+                },
+                "type": "post",
+                "dataType": "json",
+                "success": function (json) {
+                    if (json.stateCode === 200) {
+                    	console.log(json);
+                    	for(var i=1;i<=12;i++){
+                    		if(i!=11){
+                    			$("#stage"+i+"span").html(0);
+                    		}
+                    	}
+                    	for(var i=0;i<json.data.length;i++){
+                    		if(json.data[i]!=11){
+                    			$("#stage"+json.data[i].key+"span").html(json.data[i].value);
+                    		}
+                    	}
+
+
+                    } else if (json.stateCode === 500) {
+                        toastr.warning(json.message);
+                    } else {
+                        alert("本次操作未能成功!");
+                    }
+                },
+                "error": function (xhr, text, errorThrown) {
+                    alert("您的登录信息已经过期！請重新登录！");
+                    document.location.replace('[[@{/login.html}]]');
+                }
+            });
+
+    	$("#showModalBtn").click();
+
+    }
+
+
+    function getParams() {
+        let param = {
+        };
+
+        return param;
+    }
+
+    function validateDate(fromDate, toDate) {
+        let from = new Date(fromDate);
+        let to = new Date(toDate);
+        let dateDiff = (to.getTime() - from.getTime()) / 60 / 60 / 1000 / 24;
+        return dateDiff >= 1;
+    }
+
+    function loadData() {
+        //设置参数，重新加载
+        let params = getParams();
+
+        if (dataTable == null) {
+            //初始化DataTables
+            dataTable = App.initDataTables("[[@{/dataTables/getRecruitmentProgress}]]", columns, 3, "desc",
+                [
+                    {"bSortable": false, "aTargets": [0,4]},
+                    {
+                        aTargets: [1, 2, 3, 4, 5],
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            let rowspan = rowData.rowSpan;
+                            if (rowspan > 1) {
+                                $(td).attr('rowspan', rowspan)
+                            }
+                            if (rowspan == 0) {
+                                // $(td).remove();
+                                $(td).attr('style', 'display:none')
+
+                            }
+
+                        }
+                    }
+                ]
+            );
+        } else {
+            dataTable.settings()[0].ajax.data = params;
+            dataTable.ajax.reload();
+        }
+
+
+    }
+</script>
+
+</html>

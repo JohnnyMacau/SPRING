@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>E - recruitment</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/dist/css/adminlte.min.css}">
+    <!-- Google Font: Source Sans Pro -->
+    <link th:href="@{/assets/fonts/ssp.css}"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+    <!-- DataTables -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+    <!--self css-->
+    <link rel="stylesheet" th:href="@{/assets/styles/self_basic.css}">
+    <link rel="stylesheet" th:href="@{/assets/styles/self_datatable.css}">
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/toastr/toastr.min.css}" href="../../plugins/toastr/toastr.min.css">
+
+
+
+</head>
+<body id="frameContent">
+<div class="wrapper">
+
+
+
+
+    <!-- Content Wrapper. Contains page content -->
+
+
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">管理職位</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item active">職位空缺</li>
+                            <li class="breadcrumb-item active">管理職位</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="container-fluid">
+
+
+                <div class="row">
+
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <!--                                <h3 class="card-title">&ensp;</h3>-->
+
+
+                                <table id="searchCondition1">
+                                    <tr>
+                                        <td>部門</td>
+                                        <td>
+                                            <select id="s_dept" class="custom-select">
+                                                <option value="">全部</option>
+                                                <option th:each="dept : ${departmentList}"
+                                                        th:value="${dept.code}">
+                                                    [[${dept.description}]]
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td>&emsp;</td>
+                                        <td>狀態</td>
+                                        <td>
+                                            <select id="s_status" class="custom-select">
+                                                <option value="">全部</option>
+                                                <option value='D'>草稿</option>
+                                                <option value='A'>生效</option>
+                                                <option value='O'>離線</option>
+                                                <option value='S'>關閉</option>
+                                            </select>
+                                        </td>
+                                        <td>&emsp;</td>
+
+                                        <td>職位編號</td>
+                                        <td><input type="text" class="form-control" id="s_jobCode"
+                                                   maxlength="20"/>
+                                        </td>
+                                        <td>&emsp;</td>
+
+                                        <td><button type="button"
+                                                   class="btn btn-block bg-gradient-primary"
+                                                   onclick="searchButton()"><i class="fa fa-search fa-align-left"></i></button>
+                                        </td>
+                                    <td>&emsp;</td>
+                                    <td>
+                                        <button type="button" style="width: 42px"
+                                                class="btn btn-block bg-gradient-primary"
+                                                onclick="clearFilter()"><i class="fa fa-times fa-align-left"></i>
+                                        </button>
+                                    </td>
+                                    </tr>
+                                </table>
+
+
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+
+                                <table id="tableList" class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>序號</th>
+                                        <th>單位</th>
+                                        <th>部門</th>
+                                        <th>職位編碼</th>
+                                        <th>職位</th>
+                                        <th>狀態</th>
+                                        <th>開啟時間</th>
+                                        <th>關閉時間</th>
+                                        <th>編輯</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+
+
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+
+
+                    </div>
+                    <!-- /.col -->
+
+
+                </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content -->
+
+
+    <!-- /.content-wrapper -->
+
+
+
+
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script th:src="@{/AdminLTE/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- DataTables -->
+<script th:src="@{/AdminLTE/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/toastr/toastr.min.js}" src="../../plugins/toastr/toastr.min.js"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/AdminLTE/dist/js/adminlte.min.js}"></script>
+<!-- self js -->
+<script th:src="@{/assets/js/myTable.js}"></script>
+<script th:src="@{/assets/js/common.js}"></script>
+
+
+</body>
+<!-- page script -->
+<script>
+
+
+    var dataTable;
+    $(function () {
+
+        toastr.options = {
+            positionClass: "toast-center-center",
+            timeOut: "2000"
+        }
+
+        var columns = [
+        	{"data" : null,
+           	 "render" : function(data, type, full, meta){
+           	 return meta.row + 1 + meta.settings._iDisplayStart;
+           	 }}, // 序号
+            {"data": "org",},
+            {"data": "dept_name",},
+            {"data": "job_code",},
+            {"data": "job_title",},
+            {"data": "post_status",},
+            {"data": "cr_date",},
+            {"data": "close_date",},
+            {
+                "data": "detail_id",
+                render: function (data, type, row, meta) {
+                    return "<a class='btn btn-info btn-sm' href='[[@{/dispatch/job/edit/}]]" + data +
+                        "'>" +
+                        "<i class='fas fa-pencil-alt'>" +
+                        "</i>" +
+                        "Edit" +
+                        "</a>";
+                }
+            },
+        ];
+        //初始化DataTables
+        dataTable = App.initDataTables("[[@{/dataTables/getJobList}]]", columns, 3, "asc",
+            [
+                {"bSortable": false, "aTargets": [0,7,8]},
+            ]
+        );
+
+    });
+
+    function getParams() {
+        let s_dept = $("#s_dept").val();
+        let s_status = $("#s_status").val();
+        let s_jobCode = $("#s_jobCode").val();
+
+        let param = {
+            "dept_code": s_dept,
+            "post_status": s_status,
+            "job_code": s_jobCode,
+        };
+
+        if (!s_dept) {
+            delete param["dept_code"];
+        }
+        if (!s_status) {
+            delete param["post_status"];
+        }
+        if (!s_jobCode) {
+            delete param["job_code"];
+        }
+
+        // console.log(param)
+        return param;
+    }
+
+    function searchButton() {
+        //设置参数，重新加载
+        dataTable.settings()[0].ajax.data = getParams();
+        dataTable.ajax.reload();
+    }
+
+    function clearFilter() {
+    	$("#s_dept").val("");
+    	$("#s_status").val("");
+    	$("#s_jobCode").val("");
+    }
+</script>
+
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>E - recruitment</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/dist/css/adminlte.min.css}">
+    <!-- Google Font: Source Sans Pro -->
+    <link th:href="@{/assets/fonts/ssp.css}"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+    <!-- daterange picker -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/daterangepicker/daterangepicker.css}"
+          href="../../plugins/daterangepicker/daterangepicker.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/toastr/toastr.min.css}"
+          href="../../plugins/toastr/toastr.min.css">
+
+    <!--self css-->
+    <link rel="stylesheet" th:href="@{/assets/styles/self_basic.css}">
+
+    <style type="text/css">
+
+        table.tablestyle1 {
+            margin-top: 20px;
+            margin-bottom: 20px;
+
+        }
+
+        table.tablestyle1 TABLE TR TD {
+            border-width: 0px;
+            margin: 0;
+            padding: 0 0 0 5px;
+        }
+
+        table.tablestyle1 td a {
+            color: #3B9C9C;
+        }
+
+        table.tablestyle1 th {
+            color: #333333;
+            border-right: 1px solid #C1DAD7;
+            border-bottom: 1px solid #C1DAD7;
+            border-top: 1px solid #C1DAD7;
+            border-left: 1px solid #C1DAD7;
+            text-align: left;
+            background: #CAE8EA;
+            font: bold small Arial, Helvetica, sans-serif;
+            padding-left: 14px;
+            padding-right: 14px;
+            white-space: nowrap;
+        }
+
+        table.tablestyle1 th.top {
+            color: #333333;
+            border-right: 1px solid #C1DAD7;
+            border-bottom: 1px solid #C1DAD7;
+            border-top: 1px solid #C1DAD7;
+            border-left: 1px solid #C1DAD7;
+            text-transform: uppercase;
+            text-align: center;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            background: #CAE8EA;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        table.tablestyle1 th.top2 {
+            color: #333333;
+            border-right: 1px solid #C1DAD7;
+            border-bottom: 1px solid #C1DAD7;
+            border-top: 1px solid #C1DAD7;
+            border-left: 1px solid #C1DAD7;
+            text-transform: uppercase;
+            text-align: center;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            padding-left: 12px;
+            padding-right: 12px;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+
+        table.tablestyle1 th.left1 {
+            background: #f5fafa;
+            padding: 6px 12px 6px 12px;
+            margin-left: 6px;
+            margin-right: 6px;
+            color: #666666;
+        }
+
+        table.tablestyle1 th.left2 {
+            /*background: #f5fafa url(../images/bullet2.gif) no-repeat;*/
+            padding: 6px 18px 6px 18px;
+            color: #666666;
+        }
+
+
+        table.tablestyle1 td {
+            border-top: 1px solid #C1DAD7;
+            border-right: 1px solid #C1DAD7;
+            border-left: 1px solid #C1DAD7;
+            border-bottom: 1px solid #C1DAD7;
+            background: #fff;
+            padding: 6px 16px 6px 16px;
+            color: #666666;
+            text-align: center;
+            font: normal small Arial, Helvetica, sans-serif;
+            width: auto;
+        }
+
+        table.tablestyle1 td.altcenter {
+            background: #FFFFFF;
+            color: #666666;
+            text-align: center;
+        }
+
+        table.tablestyle1 td.alt {
+            background: #F5FAFA;
+            color: #666666;
+            width: 100%;
+        }
+
+
+        table.tablestyle1 td.nobor {
+            border-right: 0;
+            border-bottom: 0;
+        }
+
+
+    </style>
+
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6" th:with="p=${personalInfo}">
+                    <h1 class="m-0 text-dark">應徵記錄&emsp;[[${p.enLName}]][[${p.enFName}]]&emsp;[[${p.cnLName}]][[${p.cnFName}]]&emsp;([[${p.applicantInfoId}]])</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#" th:href="@{/dispatch/main}" target="_parent">招聘管理</a></li>
+                        <li class="breadcrumb-item active">應徵記錄</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+
+
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title"></h3>
+                        </div>
+
+                        <div class="card-body">
+                            <form id="applyHistoryForm">
+                                <table id="records" class="tablestyle1">
+                                    <tbody>
+                                    <tr>
+                                        <th colspan="4" class="top">應徵記錄</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="top">應徵日期</th>
+
+                                        <th class="top">職位</th>
+                                        <th class="top">職位編號</th>
+                                        <th class="top">狀態</th>
+                                    </tr>
+                                    <tr th:each="jobApplyHistory : ${jobApplyHistoryList}">
+                                        <td nowrap="">[[${#dates.format( jobApplyHistory.cr_date,'yyyy-MM-dd HH:mm:ss')}]]</td>
+                                        <td nowrap="">[[${jobApplyHistory.job_title}]]</td>
+                                        <td nowrap="">[[${jobApplyHistory.job_code}]]</td>
+                                        <td nowrap="">[[${jobApplyHistory.process_stage}]]</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+
+                            </form>
+                        </div>
+
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+
+            </div>
+
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+
+    <!-- /.content-wrapper -->
+
+
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script th:src="@{/AdminLTE/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- date-range-picker -->
+<script th:src="@{/AdminLTE/plugins/daterangepicker/moment.min.js}" src="../../plugins/moment/moment.min.js"></script>
+<script th:src="@{/AdminLTE/plugins/daterangepicker/daterangepicker.js}"
+        src="../../plugins/daterangepicker/daterangepicker.js"></script>
+
+<!-- Toastr -->
+<script th:src="@{/AdminLTE/plugins/toastr/toastr.min.js}" src="../../plugins/toastr/toastr.min.js"></script>
+
+
+<!-- AdminLTE App -->
+<script th:src="@{/AdminLTE/dist/js/adminlte.min.js}"></script>
+
+<!--self js-->
+<script th:src="@{/assets/js/self_basic.js}"></script>
+<script th:src="@{/assets/js/common.js}"></script>
+
+</body>
+
+
+<!-- page script -->
+<script>
+/*    $(function () {
+        //Toastr
+        toastr.options = {
+            positionClass: "toast-center-center",
+            timeOut: "2000"
+        }
+    })
+
+
+    function goBack() {
+        location.href = "[[@{/dispatch/application/search}]]";
+    }*/
+
+
+</script>
+
+
+</html>

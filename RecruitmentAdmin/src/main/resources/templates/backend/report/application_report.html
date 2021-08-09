@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>E - recruitment</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/dist/css/adminlte.min.css}">
+    <!-- Google Font: Source Sans Pro -->
+    <link th:href="@{/assets/fonts/ssp.css}"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+    <!-- DataTables -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+
+    <!-- daterange picker -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/daterangepicker/daterangepicker.css}"
+          href="../../plugins/daterangepicker/daterangepicker.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" th:href="@{/AdminLTE/plugins/toastr/toastr.min.css}"
+          href="../../plugins/toastr/toastr.min.css">
+
+    <!--self css-->
+    <link rel="stylesheet" th:href="@{/assets/styles/self_basic.css}">
+    <link rel="stylesheet" th:href="@{/assets/styles/self_datatable.css}">
+
+
+
+    <style>
+        #self_multSelect_table > tbody > tr > td {
+            padding-left: 20px;
+        }
+        .custom-checkbox{
+        text-align:left;
+        }
+
+        /*#tableList .selected{
+            background-color: lemonchiffon;
+        }*/
+    </style>
+
+</head>
+<body id="frameContent">
+<div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">申請記錄總表</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">統計報告</li>
+                        <li class="breadcrumb-item active">申請記錄總表</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <input style="display: none" type="text" name="applicant_pos_id" id="applicant_pos_id"/>
+                <div>
+                    <!--                        class="col-12"-->
+                    <div class="card">
+                        <div class="card-header">
+                            <!--                                <h3 class="card-title">&ensp;</h3>-->
+
+
+                            <table id="self_multSelect_table" >
+                                <tr>
+                                    <td>
+                                    <button class="btn-xs btn-info" onclick="opcheckboxed('allColumns', 'checkall')">全選</button>
+                                    <button class="btn-xs btn-info" onclick="opcheckboxed('allColumns', 'uncheckall')">取消全選</button>
+                                    <button class="btn-xs btn-info" onclick="opcheckboxed('allColumns', 'reversecheck')">反選</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="applicantPosId" type="checkbox" checked name='allColumns'>
+                                            <label for="applicantPosId" class="custom-control-label">申請編號</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="applicationOrg" type="checkbox" checked name='allColumns'>
+                                            <label for="applicationOrg" class="custom-control-label">所屬公司</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="jobCode" type="checkbox" checked name='allColumns'>
+                                            <label for="jobCode" class="custom-control-label">招聘序號</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="applicantCrDate" type="checkbox" checked name='allColumns'>
+                                            <label for="applicantCrDate" class="custom-control-label">申請日期</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="applicantDeptName" type="checkbox" checked name='allColumns'>
+                                            <label for="applicantDeptName" class="custom-control-label">應徵部門</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="jobTitle" type="checkbox" checked name='allColumns'>
+                                            <label for="jobTitle" class="custom-control-label">應徵職位</label>
+                                        </div>
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="recruitmentSource1" type="checkbox" checked name='allColumns'>
+                                            <label for="recruitmentSource1" class="custom-control-label" title="如何得知此職位空缺(招聘來源/廣告來源)">招聘來源/廣告來源</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="isBlacklisted" type="checkbox" checked name='allColumns'>
+                                            <label for="isBlacklisted" class="custom-control-label">是否黑名單</label>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="cnLastName" type="checkbox" checked name='allColumns'>
+                                            <label for="cnLastName" class="custom-control-label">姓名</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="idCardTypeName" type="checkbox" checked name='allColumns'>
+                                            <label for="idCardTypeName" class="custom-control-label">身份證資料</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="age" type="checkbox" checked name='allColumns'>
+                                            <label for="age" class="custom-control-label">年齡</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="gender" type="checkbox" checked name='allColumns'>
+                                            <label for="gender" class="custom-control-label">性別</label>
+                                        </div>
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="martialStatus" type="checkbox" checked name='allColumns'>
+                                            <label for="martialStatus" class="custom-control-label">婚姻狀況</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="address1" type="checkbox" checked name='allColumns'>
+                                            <label for="address1" class="custom-control-label">住址</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="emailAddress" type="checkbox" checked name='allColumns'>
+                                            <label for="emailAddress" class="custom-control-label">電郵地址</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="mobile1" type="checkbox" checked name='allColumns'>
+                                            <label for="mobile1" class="custom-control-label">聯絡電話1</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="relativeName" type="checkbox" checked name='allColumns'>
+                                            <label for="relativeName"
+                                                   class="custom-control-label" title="是否有親屬曾任職/現職於本公司">是否有親屬於本公司</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="degree" type="checkbox" checked name='allColumns'>
+                                            <label for="degree" class="custom-control-label">教育程度</label>
+                                        </div>
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="allCertification" type="checkbox" checked name='allColumns'>
+                                            <label for="allCertification" class="custom-control-label">專業資格/證書</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="hiCompanyName" type="checkbox" checked name='allColumns'>
+                                            <label for="hiCompanyName" class="custom-control-label">工作經驗</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="expectedSalary" type="checkbox" checked name='allColumns'>
+                                            <label for="expectedSalary" class="custom-control-label">要求待遇</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="allShiftDate" type="checkbox" checked name='allColumns'>
+                                            <label for="allShiftDate" class="custom-control-label">可輪班之時間</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="employedBefore" type="checkbox" checked name='allColumns'>
+                                            <label for="employedBefore" class="custom-control-label">是否曾在本公司工作</label>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="appliedBaccountBefore" type="checkbox" checked name='allColumns'>
+                                            <label for="appliedBaccountBefore" class="custom-control-label">是否曾申請本公司之投注戶口</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="terminatedBefore" type="checkbox" checked name='allColumns'>
+                                            <label for="terminatedBefore" class="custom-control-label" title="是否曾被某個僱主終止/開除/暫停職務">是否曾被開除</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="criminalRecord" type="checkbox" checked name='allColumns'>
+                                            <label for="criminalRecord" class="custom-control-label" title="是否曾在澳門或其它國家/地區涉及任何刑事罪行">是否涉及罪行</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="processStage" type="checkbox" checked name='allColumns'>
+                                            <label for="processStage" class="custom-control-label">狀態</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="archivedResult" type="checkbox" checked name='allColumns'>
+                                            <label for="archivedResult" class="custom-control-label">歸檔結果</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="appointmentDeptCode" type="checkbox" checked name='allColumns'>
+                                            <label for="appointmentDeptCode" class="custom-control-label">任用部門</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="save_checkboxs custom-control-input"
+                                                   id="appointmentJobTitle" type="checkbox" checked name='allColumns'>
+                                            <label for="appointmentJobTitle" class="custom-control-label">任用職位</label>
+                                        </div>
+                                    </td>
+
+
+                                </tr>
+
+                            </table>
+
+
+                            <table id="searchCondition1">
+                                <tr>
+
+                                    <td>申請日期</td>
+                                    <td>
+                                        <input onkeydown="return false" type="text"
+                                               placeholder="全部" autocomplete="off"
+                                               class="form-control self_date_picker" id="start_date"
+                                               value="">
+                                    </td>
+                                    <td>-</td>
+                                    <td>
+                                        <input onkeydown="return false" type="text"
+                                               placeholder="全部" autocomplete="off"
+                                               class="form-control self_date_picker" id="end_date"
+                                               value="">
+                                    </td>
+
+                                    <!--  <td>&emsp;</td>
+                                      <td style="text-align: right">招聘來源</td>
+                                      <td>
+                                          <select id="s_recruitmentSource1" name="recruitmentSource1"
+                                                  class="custom-select">
+                                              <option value="">全部</option>
+                                              <option th:each="r : {recruitmentSourceList"
+                                                      th:value="{r.messageId">
+                                                  [{r.messageStatus]&ensp;-&ensp;[{r.messageGroupDesc]&ensp;-&ensp;[{r.messageDesc]
+                                              </option>
+                                          </select>
+                                      </td>-->
+
+                                    <td>&emsp;</td>
+                                    <td>所屬公司</td>
+                                    <td>
+                                        <select id="s_applicationOrg" name="applicationOrg" class="custom-select">
+                                            <option value="">全部</option>
+                                            <option th:each="org : ${organizationList}" th:value="${org.getCode()}">
+                                                [[${org.code}]]&ensp;|&ensp;[[${org.desc}]]
+                                            </option>
+                                        </select>
+                                    </td>
+
+                                    <td>&emsp;</td>
+                                    <td style="text-align: right">應徵部門</td>
+                                    <td colspan="1">
+                                        <select id="s_applicantDepartmentCode" class="custom-select">
+                                            <option value="">全部</option>
+                                            <option th:each="dept : ${departmentList}"
+                                                    th:value="${dept.code}">
+                                                [[${dept.description}]]
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <!--  <tr>
+
+
+
+                                    <td>&emsp;</td>
+                                      <td style="text-align: right">應徵職位</td>
+                                      <td>
+                                          <select id="s_jobTitle" class="custom-select">
+                                              <option value="">全部</option>
+                                              <option th:each="n : {departmentPositionJobTitleList"
+                                                      th:value="{">
+                                                  [[{n]
+                                              </option>
+                                          </select>
+                                      </td>
+                                </tr>-->
+
+
+                                <tr>
+                                    <!--    <td style="text-align: right">姓名</td>
+                                        <td colspan="3"><input type="text" class="form-control" id="s_name" maxlength="50"/>
+                                        </td>
+                                        <td>&emsp;</td>-->
+                                    <td style="text-align: right">身份證類別</td>
+                                    <td colspan="3">
+                                        <select id="s_idCardTypeName" class="custom-select">
+                                            <option value="">全部</option>
+                                            <option th:each="n : ${msgIdTypeList}"
+                                                    th:value="${n.getCode()}"
+                                                    th:text="${n.getChnDesc()}">
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <!-- <td>&emsp;</td>
+                                     <td style="text-align: right">電郵地址</td>
+                                     <td><input type="text" class="form-control" id="s_archivedResult"
+                                                maxlength="50"/>
+                                     </td>-->
+
+                                    <td>&emsp;</td>
+                                    <td style="text-align: right">歸檔結果</td>
+                                    <td>
+                                        <select id="s_archivedResult" class="custom-select">
+                                            <option value="">全部</option>
+                                            <option th:each="n : ${processResultList}"
+                                                    th:value="${n.getDesc()}"
+                                                    th:text="${n.getIndex()}+' - '+${n.getDesc()}">
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td colspan='2'>
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <button type="button" style="width: 42px"
+                                                            class="btn btn-block bg-gradient-primary"
+                                                            onclick="searchButton()"><i
+                                                            class="fa fa-search fa-align-left"></i>
+                                                    </button>
+                                                </td>
+                                                <td>&emsp;</td>
+                                                <td>
+                                                    <button type="button" style="width: 42px"
+                                                            class="btn btn-block bg-gradient-primary"
+                                                            onclick="clearFilter()"><i
+                                                            class="fa fa-times fa-align-left"></i>
+                                                    </button>
+                                                </td>
+                                                <td>&emsp;</td>
+                                                <td>
+                                                    <button type="button" style="width: 42px" title="打印"
+                                                            class="btn btn-block bg-gradient-info"
+                                                            onclick="exportRpt()"><i
+                                                            class="fa fa-print fa-align-left"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+                        </div>
+                        <!-- /.card-header -->
+                        <!--                         <div class="card-body" style='width:100%;height:auto;overflow:scroll;'> -->
+                        <div class="card-body" style=''>
+
+                            <table id="tableList" class="table table-bordered table-hover table-striped text-nowrap">
+                                <!--   <thead>
+                                   <tr>
+                                       <th>序號</th>
+                                       <th>招聘來源</th>
+                                       <th>招聘公司</th>
+                                       <th>招聘序號</th>
+                                       <th>申請編號</th>
+                                       <th>申請日期</th>
+
+                                       <th>應徵部門</th>
+                                       <th>應徵職位</th>
+                                       <th>應徵次數</th>
+                                       <th>黑名單</th>
+                                       <th>聘請形式</th>
+
+                                       <th>姓名</th>
+                                       <th>證件類型</th>
+                                       <th>證件編號</th>
+                                       <th>出生日期</th>
+                                       <th>年齡</th>
+
+                                       <th>性別</th>
+                                       <th>婚姻狀況</th>
+                                       <th>聯絡電話1</th>
+                                       <th>聯絡電話2</th>
+                                       <th>電郵地址</th>
+
+                                       <th>住址</th>
+
+                                       <th>學歷</th>
+                                       <th>專業資格/證書</th>
+                                       <th>工作經驗</th>
+                                       <th>可否輪班</th>
+                                       <th>提供輪班時段</th>
+
+                                       <th>HR轉介日期</th>
+
+                                       <th>面試情況</th>
+                                       <th>入職審批</th>
+                                       <th>發出聘請</th>
+                                       <th>入職日期</th>
+                                       <th>任用部門</th>
+
+                                       <th>任用職位</th>
+                                       <th>任用形式</th>
+                                       <th>歸檔結果</th>
+
+                                   </tr>
+                                   </thead>
+                                   <tbody>
+
+                                   </tbody>-->
+
+
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+
+
+                </div>
+                <!-- /.col -->
+
+
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+
+
+        <!-- <button type="button" id="batchMoveToBeTransferBtn1" class="btn btn-sm btn-primary">
+          <i class="fa" aria-hidden="true"></i> 轉交部門查看
+          </button>
+         <button type="button" id="batchMoveToBeTransferBtn2" class="btn btn-sm btn-primary" style='display:none;'>
+          <i class="fa" aria-hidden="true"></i> 轉交部門查看
+          </button>
+          <button type="button" id="batchBookMarkBtn1" name="batchBookMarkBtn1" class="btn btn-sm btn-primary">
+          <i class="fa" aria-hidden="true"></i> 分類到已開職位
+          </button>
+          <button type="button" id="batchBookMarkBtn2" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal" style='display:none;'>
+          <i class="fa" aria-hidden="true"></i> 分類到已開職位
+          </button>
+           <button type="button" id="batchSaveBtn1" class="btn btn-sm btn-primary">
+          <i class="fa" aria-hidden="true"></i> 存儲結果
+          </button>
+           <button type="button" id="batchSaveBtn2" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal2" style='display:none;'>
+          <i class="fa" aria-hidden="true"></i> 存儲結果
+          </button>-->
+    </div>
+    <!-- /.content -->
+
+
+    <!-- /.content-wrapper -->
+
+
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                </button>
+                <button id="bookmarkBtn" type="button" data-dismiss="modal" class="btn btn-primary"> 確定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                確定存儲結果？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                </button>
+                <button id="confirmSaveBtn" type="button" data-dismiss="modal" class="btn btn-primary"> 確定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- ./wrapper -->
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script th:src="@{/AdminLTE/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- DataTables -->
+<script th:src="@{/AdminLTE/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/AdminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+
+<!-- date-range-picker -->
+<script th:src="@{/AdminLTE/plugins/daterangepicker/moment.min.js}" src="../../plugins/moment/moment.min.js"></script>
+<script th:src="@{/AdminLTE/plugins/daterangepicker/daterangepicker.js}"
+        src="../../plugins/daterangepicker/daterangepicker.js"></script>
+
+<!-- Toastr -->
+<script th:src="@{/AdminLTE/plugins/toastr/toastr.min.js}" src="../../plugins/toastr/toastr.min.js"></script>
+
+<!-- AdminLTE App -->
+<script th:src="@{/AdminLTE/dist/js/adminlte.min.js}"></script>
+<!-- self js -->
+<script th:src="@{/assets/js/myTable_noOrder.js}"></script>
+<script th:src="@{/assets/js/common.js}"></script>
+
+
+</body>
+<!-- page script -->
+<script>
+    function filterReturnVal(str) {
+        return str ? str : "";
+    }
+
+    function filterReturnValAndStringNull(str) {
+        if (!str || str == 'null') {
+            return '';
+        }
+        return str;
+    }
+
+    var dataTable = null;
+    var columns;
+    $(function () {
+
+        //Date range picker
+        let currentYear = parseInt(moment().format('YYYY'), 10);
+        $('.self_date_picker').daterangepicker({
+            // timePicker: true,        // 选择时间
+            opens: 'right',
+            autoUpdateInput: false,
+            singleDatePicker: true,  // 只选一个
+            showDropdowns: true,
+            locale: {
+                format: 'MM/DD/YYYY'
+            },
+            minYear: 2000,
+            maxYear: currentYear + 1
+        })
+
+        //Toastr
+        toastr.options = {
+            positionClass: "toast-center-center",
+            timeOut: "2000"
+        }
+
+
+        columns = [
+            /*       {
+                       "data": "applicant_pos_id",
+                       render: function (data, type, row, meta) {
+                           if (row.process_stage_code != 11 && row.process_stage_code != 12) {
+                               return '<div class="custom-control custom-checkbox">' +
+                                   "<input class='save_checkboxs custom-control-input' stage=" + row.process_stage_code +
+                                   " id='checkbox_" + data +
+                                   "' type=\"checkbox\" value='" + data + "' applicant_info_id='" + row.applicant_info_id + "'/>" +
+                                   '<label for="checkbox_' + data +
+                                   '" class="custom-control-label"></label>' +
+                                   '</div>';
+                           } else {
+                               return '';
+                           }
+                       }
+                   },*/
+            {
+                "data": null,
+                "title": "序號",
+                "render": function (data, type, full, meta) {
+                    return meta.row + 1 + meta.settings._iDisplayStart;
+                }
+            }, // 序号
+
+
+            {
+                "data": "applicantPosId",
+                "title": "申請編號",
+            },
+            {
+                "data": "applicationOrg",
+                "title": "所屬公司",
+               /* render: function (data, type, row, meta) {
+                    if (!data || data == 'null') {
+                        return 'MSLOT';
+                    }
+                    return data;
+                }*/
+            },
+            {
+                "data": "jobCode",
+                "title": "招聘序號",
+                /*  render: function (data, type, row, meta) {
+                      return "<p title='" + row.jobTitle + "'>" + data + "</p>";
+                  }*/
+            },
+            {
+                "data": "applicantCrDate",
+                "title": "申請日期",
+            },
+            {
+                "data": "applicantDeptName",
+                "title": "應徵部門",
+                render: function (data, type, row, meta) {
+                    return row.applicantDeptCode + ' ' + data;
+                }
+            },
+            {
+                "data": "jobTitle",
+                "title": "應徵職位",
+            },
+            {
+                "data": "recruitmentSource1",
+                "title": "如何得知</br>此職位空缺</br>(招聘來源/廣告來源)",
+                render: function (data, type, row, meta) {
+                    return filterReturnVal(data) + '  ' + filterReturnVal(row.recruitmentSource3) + filterReturnVal(row.recruitmentSource2);
+                }
+            },
+            {
+                "data": "isBlacklisted",
+                "title": "是否黑名單",
+                render: function (data, type, row, meta) {
+                    if (data == 1)
+                        return "<img src='/assets/img/tick.png' style='width:30px;'/>";
+                    else
+                        return '';
+                }
+            },
+
+            {
+                "data": "cnLastName",
+                "title": "姓名",
+                render: function (data, type, row, meta) {
+                    return filterReturnVal(data) + filterReturnVal(row.cnFirstName) + '  ' +
+                        filterReturnVal(row.enLastName) + ' ' + filterReturnVal(row.enFirstName);
+                }
+            },
+
+            {
+                "data": "idCardTypeName",
+                "title": "身份證資料",
+                render: function (data, type, row, meta) {
+                    return data + ' ' + row.idCardNumber;
+                }
+            },
+            // {"data": "idCardNumber", "title": "證件編號",},
+
+            {
+                "data": "age",
+                "title": "年齡",
+            },
+            {
+                "data": "gender",
+                "title": "性別",
+            },
+            {
+                "data": "martialStatus",
+                "title": "婚姻狀況",
+                render: function (data, type, row, meta) {
+                    switch (data) {
+                        case 'Single':
+                            return '未婚';
+                        case 'Married':
+                            return '已婚';
+                        case 'Divorced':
+                            return '離婚';
+                        case 'Widowed':
+                            return '鳏寡';
+                        case 'Deprecated':
+                            return '';
+
+                        default :
+                            return data;
+                    }
+                }
+            },
+            {
+                "data": "address1",
+                "title": "住址",
+                render: function (data, type, row, meta) {
+                    return filterReturnVal(data) + ' ' +
+                        filterReturnVal(row.address2) + ' ' +
+                        filterReturnVal(row.address3);
+                }
+            },
+            {
+                "data": "emailAddress",
+                "title": "電郵地址",
+            },
+            {
+                "data": "mobile1",
+                "title": "聯絡電話1",
+                render: function (data, type, row, meta) {
+                    return filterReturnVal(row.areaCode1) + '-' + filterReturnVal(data);
+                }
+            },
+            /* {
+                 "data": "mobile2", "title": "聯絡電話2",
+                 render: function (data, type, row, meta) {
+                     return filterReturnVal(row.areaCode2) + '-' + filterReturnVal(data);
+                 }
+             },*/
+
+            // {"data": "countApplyTimes", "title": "應徵次數",},
+
+            /* {
+                 "data": "recruitmentForm", "title": "聘請形式",
+                 render: function (data, type, row, meta) {
+                     return (data);
+                 }
+             },*/
+
+            // {"data": "dateOfBirth", "title": "出生日期",},
+
+            {
+                "data": "relativeName",
+                "title": "是否有親屬曾任職/現職於本公司",
+                render: function (data, type, row, meta) {
+                    if (data == null) {
+                        return '否';
+                    } else {
+                        return '是 (' + data + ')';
+                    }
+                }
+            },
+
+            {
+                "data": "degree",
+                "title": "教育程度",
+                render: function (data, type, row, meta) {
+                    return filterReturnVal(data) + '  ' + filterReturnVal(row.schoolName) + '  ' +
+                        filterReturnVal(row.schoolMajor);
+                }
+            },
+            {
+                "data": "allCertification",
+                "title": "專業資格/證書",
+            },
+            {
+                "data": "hiCompanyName",
+                "title": "工作經驗",
+                render: function (data, type, row, meta) {
+                    return filterReturnVal(data) + '  ' + filterReturnVal(row.hiPosition) + '  ' +
+                        filterReturnVal(row.hiPayMethod) + '  ' + filterReturnVal(row.hiCurrency) + '  ' +
+                        filterReturnVal(row.hiSalary);
+                }
+            },
+            {
+                "data": "expectedSalary",
+                "title": "要求待遇",
+                render: function (data, type, row, meta) {
+                    return filterReturnVal(row.expectedSalaryType) + '  ' + filterReturnVal(data);
+                }
+            },
+
+            // {"data": "isOnshift", "title": "可否輪班",},
+
+            {
+                "data": "allShiftDate",
+                "title": "可輪班之時間",
+            },
+            {
+                "data": "employedBefore",
+                "title": "是否曾在</br>本公司工作",
+            },
+            {
+                "data": "appliedBaccountBefore",
+                "title": "是否曾申請</br>本公司之</br>投注戶口",
+            },
+            {
+                "data": "terminatedBefore",
+                "title": "是否曾被</br>某個僱主</br>終止/開除/暫停職務",
+            },
+            {
+                "data": "criminalRecord",
+                "title": "是否曾在</br>澳門或</br>其它國家/地區</br>涉及任何刑事罪行",
+            },
+            {
+                "data": "processStage",
+                "title": "狀態",
+            },
+            {
+                "data": "archivedResult",
+                "title": "歸檔結果",
+            },
+            {
+                "data": "appointmentDeptCode",
+                "title": "任用部門",
+            },
+            {
+                "data": "appointmentJobTitle",
+                "title": "任用職位",
+            },
+
+
+            // {"data": "hrRefferralDate", "title": "HR轉介日期",},
+
+            /*         {"data": "interviewStatus", "title": "面試情況",},
+                     {"data": "entryApproval", "title": "入職審批",},
+                     {"data": "sendOffer", "title": "發出聘請",},
+                     {"data": "entryDate", "title": "入職日期",},
+                     {"data": "appointmentForm", "title": "任用形式",},*/
+
+
+        ];
+
+
+        // console.log(JSON.stringify(columns[2]))
+
+        /*  $("#batchBookMarkBtn1").click(function () {
+              let batchProcess_checkboxs = [];
+              let checkStage = true;
+              $('.save_checkboxs:checked').each(function (index, element) {
+                  if ($(this).attr("stage") != '1.0') {
+                      checkStage = false;
+                      return;
+                  } else {
+                      batchProcess_checkboxs.push($(this).val());
+                  }
+              });
+
+              if (!checkStage) {
+                  alert("所選資料需處於HR篩選簡曆階段才可做此操作");
+                  return;
+              }
+              if (batchProcess_checkboxs.length === 0) {
+                  alert("沒有選中任何行");
+                  return;
+              }
+              $("#batchBookMarkBtn2").click();
+          });
+
+          $("#bookmarkBtn").click(function () {
+
+              let batchProcess_checkboxs = [];
+              let checkStage = true;
+              $('.save_checkboxs:checked').each(function (index, element) {
+                  if ($(this).attr("stage") != '1.0') {
+                      checkStage = false;
+                  } else {
+                      batchProcess_checkboxs.push($(this).val());
+                  }
+              });
+
+              if (!checkStage) {
+                  alert("所選資料需處於 HR篩選簡曆 階段才可做此操作");
+                  return;
+              }
+              if (batchProcess_checkboxs.length === 0) {
+                  alert("沒有選中任何行");
+                  return;
+              }
+
+              let bookmarkJobId = $("#bookmarkJobId").val();
+              let url = "[[@{/operate/application/batchBookmark}]]";
+
+              $.ajax({
+                  "url": url,
+                  "data": {
+                      'batchProcess_checkboxs[]': batchProcess_checkboxs,
+                      'bookmarkJobId': bookmarkJobId
+                  },
+                  "type": "post",
+                  "dataType": "json",
+                  "success": function (json) {
+                      if (json.stateCode === 200) {
+                          toastr.success('修改成功!');
+                          dataTable.ajax.reload();
+                      } else if (json.stateCode === 500) {
+                          toastr.warning(json.message);
+                      } else {
+                          alert("本次操作未能成功!");
+                      }
+                  },
+                  "error": function (xhr, text, errorThrown) {
+                      alert("您的登录信息已经过期！請重新登录！");
+                      document.location.replace('[[@{/login.html}]]');
+                  }
+              });
+
+          });
+
+
+          $("#batchMoveToBeTransferBtn1").click(function () {
+              let batchProcess_checkboxs = [];
+              let checkStage = true;
+              $('.save_checkboxs:checked').each(function (index, element) {
+                  if ($(this).attr("stage") != '1.0') {
+                      checkStage = false;
+                      return;
+                  } else {
+                      batchProcess_checkboxs.push($(this).val());
+                  }
+              });
+
+              if (!checkStage) {
+                  alert("所選資料需處於HR篩選簡曆階段才可做此操作");
+                  return;
+              }
+              if (batchProcess_checkboxs.length === 0) {
+                  alert("沒有選中任何行");
+                  return;
+              }
+              $("#batchMoveToBeTransferBtn2").click();
+          });
+
+
+          $("#batchMoveToBeTransferBtn2").click(function () {
+              let batchProcess_checkboxs = [];
+              let checkStage = true;
+              $('.save_checkboxs:checked').each(function (index, element) {
+                  if ($(this).attr("stage") != '1.0') {
+                      checkStage = false;
+                      return;
+                  } else {
+                      batchProcess_checkboxs.push($(this).val());
+                  }
+              });
+
+              if (!checkStage) {
+                  alert("所選資料需處於HR篩選簡曆階段才可做此操作");
+                  return;
+              }
+              if (batchProcess_checkboxs.length === 0) {
+                  alert("沒有選中任何行");
+                  return;
+              }
+
+              let url = "[[@{/operate/application/batchToBeTransfer}]]";
+
+              $.ajax({
+                  "url": url,
+                  "data": {
+                      'batchProcess_checkboxs[]': batchProcess_checkboxs
+                  },
+                  "type": "post",
+                  "dataType": "json",
+                  "success": function (json) {
+                      if (json.stateCode === 200) {
+                          toastr.success('修改成功!');
+                          dataTable.ajax.reload();
+                      } else if (json.stateCode === 500) {
+                          toastr.warning(json.message);
+                      } else {
+                          alert("本次操作未能成功!");
+                      }
+                  },
+                  "error": function (xhr, text, errorThrown) {
+                      alert("您的登录信息已经过期！請重新登录！");
+                      document.location.replace('[[@{/login.html}]]');
+                  }
+              });
+
+          });
+
+          $("#batchSaveBtn1").click(function () {
+              let batchProcess_checkboxs = [];
+              let checkResult = true;
+              $('.save_checkboxs:checked').each(function (index, element) {
+                  batchProcess_checkboxs.push($(this).val());
+                  console.log($("#result_" + $(this).val()).val());
+                  if ($("#result_" + $(this).val()).val() == '') {
+                      checkResult = false;
+                  }
+              });
+              if (!checkResult) {
+                  alert("請為所有勾選擇行選擇結果");
+                  return;
+              }
+              if (batchProcess_checkboxs.length === 0) {
+                  alert("沒有選中任何行");
+                  return;
+              }
+              $("#batchSaveBtn2").click();
+          });
+
+          $("#confirmSaveBtn").click(function () {
+              let batchProcess_checkboxs = [];
+              let batchProcess_result = [];
+              let checkResult = true;
+              $('.save_checkboxs:checked').each(function (index, element) {
+                  batchProcess_checkboxs.push($(this).val());
+                  console.log($("#result_" + $(this).val()).val());
+                  if ($("#result_" + $(this).val()).val() == '') {
+                      checkResult = false;
+                      return;
+                  } else {
+                      batchProcess_result.push($("#result_" + $(this).val()).val());
+                  }
+              });
+              if (!checkResult) {
+                  alert("請為所有勾選擇行選擇結果");
+                  return;
+              }
+              if (batchProcess_checkboxs.length === 0) {
+                  alert("沒有選中任何行");
+                  return;
+              }
+
+              let url = "[[@{/operate/application/batchSaveResult}]]";
+
+              $.ajax({
+                  "url": url,
+                  "data": {
+                      'batchProcess_checkboxs[]': batchProcess_checkboxs,
+                      'batchProcess_result[]': batchProcess_result
+                  },
+                  "type": "post",
+                  "dataType": "json",
+                  "success": function (json) {
+                      if (json.stateCode === 200) {
+                          toastr.success('存儲成功!')
+                          dataTable.ajax.reload();
+                      } else if (json.stateCode === 500) {
+                          toastr.warning(json.message);
+                      } else {
+                          alert("本次操作未能成功!");
+                      }
+                  },
+                  "error": function (xhr, text, errorThrown) {
+                      alert("您的登录信息已经过期！請重新登录！");
+                      document.location.replace('[[@{/login.html}]]');
+                  }
+              });
+          });*/
+
+    });
+
+    function exportRpt() {
+        /* let batchFinish_checkboxs = [];
+         $('.save_checkboxs:checked').each(function (index, element) {
+             batchFinish_checkboxs.push($(this).attr("applicant_info_id"));
+         });
+         if (batchFinish_checkboxs.length === 0) {
+             alert("沒有選中任何行");
+             return;
+         }*/
+
+        let final_columns = getFinalColumns(false);
+
+        let url = "[[@{/export/application_report}]]";
+
+        let $form = $(document.createElement('form'))
+            .css({display: 'none'})
+            .attr("method", "post")
+            .attr("action", url)
+            .attr("target", "_blank")
+        ;
+
+
+        let params = getParams();
+        for (let key in params) {
+            $form.append(
+                $(
+                    document.createElement('input')
+                ).attr('name', key)
+                    .val(params[key])
+            );
+        }
+
+        $form.append(
+            $(document.createElement('input'))
+                .attr('name', "applicationOrgCn")
+                .val($('#s_applicationOrg option:selected').text().trim())
+        );
+        $form.append(
+            $(document.createElement('input'))
+                .attr('name', "applicantDeptCn")
+                .val($('#s_applicantDepartmentCode option:selected').text().trim())
+        );
+        $form.append(
+            $(document.createElement('input'))
+                .attr('name', "idCardTypeNameCn")
+                .val($('#s_idCardTypeName option:selected').text())
+        );
+
+
+
+        let $titles = $(document.createElement('input')).attr('name', "titles[]").val(getColumnValuesFromJSONArr(final_columns, 'title'));
+        $form.append($titles);
+        let $keys = $(document.createElement('input')).attr('name', "keys[]").val(getColumnValuesFromJSONArr(final_columns, 'data'));
+        $form.append($keys);
+
+        $("body").append($form);
+        $form.submit();
+        $form.remove();
+    }
+
+
+    function getColumnValuesFromJSONArr(jsonArr, attrName) {
+        const jsonStr = JSON.stringify(jsonArr);
+        let attrValArr = [];
+        const regExp = new RegExp('"' + attrName + '":"(.*?)"', 'mg');
+        while (regExp.test(jsonStr)) {
+            attrValArr.push(RegExp.$1);
+        }
+        return attrValArr;
+    }
+
+    function getParams() {
+
+        let start_date = $("#start_date").val();
+        let end_date = $("#end_date").val();
+
+        let dateCheckIsPass = true;
+        if ((start_date && !end_date) || (!start_date && end_date)) {
+            toastr.warning("請輸入完整日期範圍")
+            dateCheckIsPass = false;
+        } else if (start_date && end_date) {
+            if (!validateDate(start_date, end_date)) {
+                toastr.warning("invalid date input")
+                dateCheckIsPass = false;
+            }
+        }
+
+        // let recruitmentSource1 = $("#s_recruitmentSource1").val();
+        let applicationOrg = $("#s_applicationOrg").val();
+        let applicantDepartmentCode = $("#s_applicantDepartmentCode").val();
+        // let jobTitle = $("#s_jobTitle").val();
+
+        // let s_name = $("#s_name").val();
+        let s_idCardTypeName = $("#s_idCardTypeName").val();
+        let s_archivedResult = $("#s_archivedResult").val();
+
+        let param = {
+            "dateCheckIsPass": dateCheckIsPass,
+
+            "applicant_postition_start_date": start_date,
+            "applicant_postition_end_date": end_date,
+            // "recruitmentSource1": recruitmentSource1,
+            "applicationOrg": applicationOrg,
+            "applicantDepartmentCode": applicantDepartmentCode,
+            // "jobTitle": jobTitle,
+
+            // "nameLike": s_name,
+            "idCardTypeName": s_idCardTypeName,
+            "archivedResult": s_archivedResult,
+
+
+        };
+
+        if (!start_date) {
+            delete param["applicant_postition_start_date"];
+        }
+        if (!end_date) {
+            delete param["applicant_postition_end_date"];
+        }
+        /*   if (!recruitmentSource1) {
+               delete param["recruitmentSource1"];
+           }*/
+        if (!applicationOrg) {
+            delete param["applicationOrg"];
+        }
+        if (!applicantDepartmentCode) {
+            delete param["applicantDepartmentCode"];
+        }
+        /*   if (!jobTitle) {
+               delete param["jobTitle"];
+           }*/
+
+
+        /*   if (!s_name) {
+               delete param["nameLike"];
+           }*/
+        if (!s_idCardTypeName) {
+            delete param["idCardTypeName"];
+        }
+        if (!s_archivedResult) {
+            delete param["archivedResult"];
+        }
+
+
+        return param;
+    }
+
+    function validateDate(fromDate, toDate) {
+        let from = new Date(fromDate);
+        let to = new Date(toDate);
+        let dateDiff = (to.getTime() - from.getTime()) / 60 / 60 / 1000 / 24;
+        return dateDiff >= 1;
+    }
+
+    function getFinalColumns(need_serial_number) {
+        let finalVisableColumnArr = [];
+
+        $("input[name='allColumns']:checked").each(function () {
+            finalVisableColumnArr.push(String($(this).attr('id')));
+        });
+
+        // console.log(finalVisableColumnArr);
+
+        let final_columns = [];
+        if (need_serial_number) {
+            final_columns.push(columns[0]);
+        }
+
+        for (let i = 1;//從1開始，跳過序號
+             i < columns.length; i++) {
+            // console.log(columns[i].data)
+            // if ($.inArray(String(columns[i].data), finalVisableColumnArr)) {
+            if (finalVisableColumnArr.indexOf(columns[i].data) > -1) {
+                final_columns.push(columns[i]);
+            }
+            /*  else {
+                  console.log(columns[i].data + "不在可視範圍");
+              }*/
+        }
+        // console.log(final_columns);
+        return final_columns;
+    }
+
+    function searchButton() {
+        let final_columns = getFinalColumns(true);
+
+
+        //设置参数，重新加载
+        let params = getParams();
+        if (!params["dateCheckIsPass"]) return;
+
+        if (dataTable == null) {
+            //初始化DataTables
+            dataTable = App.initDataTables("[[@{/dataTables/getApplicantReportList}]]", final_columns, 0, "desc",
+                [
+                    /*   {
+                           "bSortable": false, "aTargets": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+                               , 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+                       },*/
+
+
+                ]
+            );
+            // setRowSelectedEvent();
+
+        } else {
+            // dataTable.settings()[0].ajax.data = params;
+            // dataTable.ajax.reload();
+            dataTable.destroy();
+            $('#tableList').empty();
+            dataTable = App.initDataTables("[[@{/dataTables/getApplicantReportList}]]", final_columns, 0, "desc",
+                []
+            );
+            // setRowSelectedEvent();
+
+
+        }
+        /*       dataTable.on('click', 'tr', function () {
+                   let batchProcess_checkboxs = [];
+                   $('.save_checkboxs:checked').each(function (index, element) {
+                       batchProcess_checkboxs.push($(this).data('v'));
+                   });
+                   $("#bookmarkJobId").val(batchProcess_checkboxs[0]);
+               });*/
+    }
+
+    function clearFilter() {
+        $("#start_date").val('');
+        $("#end_date").val('');
+        $("#s_recruitmentSource1").val('');
+        $("#s_applicationOrg").val('');
+        $("#s_applicantDepartmentCode").val('');
+        $("#s_jobTitle").val('');
+        $("#s_name").val('');
+        $("#s_idCardTypeName").val('');
+        $("#s_archivedResult").val('');
+    }
+
+   function opcheckboxed(objName, type) {
+        var objNameList = document.getElementsByName(objName);
+        if (null != objNameList) {
+            for (var i = 0; i < objNameList.length; i++) {
+                if (objNameList[i].checked == true) {
+                    if (type != 'checkall') {  // 非全选
+                        objNameList[i].checked = false;
+                    }
+
+                } else {
+                    if (type != 'uncheckall') {  // 非取消全选
+                        objNameList[i].checked = true;
+                    }
+                }
+            }
+        }
+    }
+
+</script>
+</html>

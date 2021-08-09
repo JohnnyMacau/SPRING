@@ -1,0 +1,340 @@
+<!--
+
+.t1 {
+    width: 100%;
+    height: 485px;
+    overflow-y: auto;
+}
+
+.top {
+    width: 1024px;
+    height: 179px;
+}
+
+.leftfloat {
+    width: 130px;
+    height: 542px;
+    float: left;
+    padding-top: 0px;
+}
+
+
+.rightfloat {
+    width: 126px;
+    height: 100px;
+    float: left;
+}
+
+.bottom {
+    width: 1024px;
+    height: 50px;
+}
+
+.bg {
+    background-attachment: scroll;
+    /*background-image: url(../images/form_bg.gif);*/
+    background-repeat: no-repeat;
+    background-position: right bottom;
+}
+
+.title {
+    text-indent: 10pt;
+    letter-spacing: 2px;
+}
+
+.word {
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+-->
+
+body {
+    text-align: center;
+    font-family: "微軟正黑體", "黑体", sans-serif;
+
+}
+
+#body_div {
+    display: inline-block;
+}
+
+
+.word {
+    font-size: 17px;
+}
+
+.center {
+    width: 1000px;
+    height: 620px;
+
+    float: left;
+}
+
+.content {
+    width: 1300px;
+    height: 179px;
+}
+
+
+.tr_color > td {
+    background-color: rgba(191, 192, 193, 1)
+}
+
+.center > table {
+    width: 95%;
+}
+
+.bg > table {
+    width: 95%;
+}
+
+/*---------------------------------------------------------------------------------*/
+
+input::-ms-input-placeholder {
+    text-align: center;
+}
+
+input::-webkit-input-placeholder {
+    text-align: center;
+}
+
+.info_title {
+    font-size: 12px;
+    padding-right: 20px;
+    margin-left: 4px;
+
+}
+
+.info_mustFill_div {
+    background-color: rgba(209, 226, 247, 0.85);
+    width: 180px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+
+    border: 1px solid rgba(0, 112, 192, 0.75);
+    margin-left: 15px;
+
+}
+
+.info_mustFill {
+    font-size: 12px;
+    color: rgba(0, 112, 192, 0.75);
+}
+
+.page_title {
+    color: rgba(0, 112, 192, 0.75);
+    font-size: 16px;
+}
+
+.page_title_small {
+    color: rgba(0, 112, 192, 0.75);
+    font-size: 14px;
+}
+
+.page_title_small_black {
+    color: black;
+    font-size: 14px;
+}
+
+.info_select {
+    width: 171px;
+    background: url("../img/arrow.png") no-repeat scroll 150px 0px transparent;
+    /*padding-right:20px;*/
+    background-size: 0.9rem 0.9rem;
+}
+
+.info_select_long_1 {
+    width: 340px;
+    background: url("../img/arrow.png") no-repeat scroll 320px 0px transparent;
+    /*padding-right:20px;*/
+    background-size: 0.9rem 0.9rem;
+}
+
+.info_select_small {
+    width: 80px;
+    height: 21px;
+    background: url("../img/arrow.png") no-repeat scroll 62px 0px transparent;
+    /*padding-right:20px;*/
+    background-size: 0.9rem 0.9rem;
+}
+.self_select_top2_middle {
+    width: 160px;
+    height: 21px;
+    background: url("../img/arrow.png") no-repeat scroll 142px 0px transparent;
+    /*padding-right:20px;*/
+    background-size: 0.9rem 0.9rem;
+}
+
+.info_select_middle {
+    width: 160px;
+    height: 21px;
+    background: url("../img/arrow.png") no-repeat scroll 142px 0px transparent;
+    /*padding-right:20px;*/
+    background-size: 0.9rem 0.9rem;
+}
+
+.info_input_small {
+    width: 80px;
+}
+.info_input_medium {
+    width: 160px;
+}
+.self_top4_input_small {
+    width: 80px;
+    height: 21px;
+    text-align: center;
+}
+
+.info_id_remind {
+    background-color: rgba(209, 226, 247, 0.85);
+    color: rgba(0, 112, 192, 0.75);
+
+    width: 140px;
+    height: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-size: 3px;
+    border-top: 1px solid rgba(0, 112, 192, 0.75);
+    border-left: 1px solid rgba(0, 112, 192, 0.75);
+    border-right: 1px solid rgba(0, 112, 192, 0.75);
+
+    margin-left: 26px;
+
+
+}
+
+.info_nationality {
+    width: 250px;
+}
+.self_top4_input_large {
+    width: 240px;
+}
+.self_top4_input_middle {
+    width: 154px;
+}
+
+.info_email_remind {
+    background-color: rgba(209, 226, 247, 0.85);
+    color: rgba(0, 112, 192, 0.75);
+
+    width: 725px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-size: 3px;
+    border: 1px solid rgba(0, 112, 192, 0.75);
+    /*border-left: 1px solid rgba(0, 112, 192, 0.75);*/
+    /*border-right: 1px solid rgba(0, 112, 192, 0.75);*/
+
+    margin-left: 4px;
+
+
+}
+
+.info_phonenumber_remind {
+    background-color: rgba(209, 226, 247, 0.85);
+    color: rgba(0, 112, 192, 0.75);
+
+    width: 40px;
+    height: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-size: 3px;
+    border-top: 1px solid rgba(0, 112, 192, 0.75);
+    border-left: 1px solid rgba(0, 112, 192, 0.75);
+    border-right: 1px solid rgba(0, 112, 192, 0.75);
+
+    margin-left: 200px;
+
+
+}
+
+input {
+    border: 1px solid rgba(169, 169, 169, 0.85);
+    border-radius: 4px;
+}
+
+/*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+select::-ms-expand {
+    display: none;
+}
+
+select {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    padding-right: 35px;
+    padding-left: 4px;
+    border-radius: 4px;
+
+
+    width: auto;
+    padding: 0 1%;
+    margin: 0;
+    text-align: center;
+    text-align-last: center;
+}
+
+option {
+    text-align: center;
+}
+
+.cls_allowance {
+    display: none;
+}
+
+/*----------------------------------------- tab 样式 -----------------------------------------------------*/
+#tab {
+    position: relative;
+}
+
+#tab a {
+
+    text-decoration: none;
+    color: #333;
+
+}
+
+#tab .tabList ul li {
+    list-style: none;
+    float: left;
+    background: #fefefe;
+    background: -moz-linear-gradient(top, #fefefe, #ededed);
+    background: -o-linear-gradient(left top, left bottom, from(#fefefe), to(#ededed));
+    background: -webkit-gradient(linear, left top, left bottom, from(#fefefe), to(#ededed));
+    border: 1px solid #ccc;
+    padding: 0px 0;
+    width: 100px;
+    text-align: center;
+
+    margin-left: -1px;
+    position: relative;
+    cursor: pointer;
+}
+
+
+#tab .tabList li.cur {
+    border-bottom: none;
+    background: #fff;
+}
+
+
+/*----------------------------------------- 职位空缺 样式 突显字形-----------------------------------------------------*/
+
+/* "职位空缺"是图片来的.. */
+
+.self_job_vacancies {
+    transform: scale(1.2);
+    -ms-transform: scale(1.2);
+}
+
