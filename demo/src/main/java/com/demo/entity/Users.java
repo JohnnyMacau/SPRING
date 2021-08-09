@@ -25,7 +25,7 @@ import lombok.ToString;
 @DynamicUpdate
 @DynamicInsert
 @AllArgsConstructor
-@Table(name="users")
+@Table(name="Users")
 public class Users {
     private Integer id;
     private String username;

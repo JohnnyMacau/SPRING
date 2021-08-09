@@ -130,20 +130,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
 
-    let nowDo2 = function () {
-        if (roleTag === 'dept') {
-            $("#menuFrame").attr("src", "/dispatch/process/deptReply");
-        } else {
-            $("#menuFrame").attr("src", "/dispatch/main_sub");
-        }
-
-
-    };
-
-    setTimeout(function () {
-        nowDo2();
-    }, 500);//延時是防止側邊欄加載問題
-
 
     const iframe = document.getElementById('menuFrame');
 
