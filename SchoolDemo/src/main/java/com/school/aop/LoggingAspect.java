@@ -53,7 +53,7 @@ public class LoggingAspect {
     }
 
 
-    @After(value = "execution(* com.schoolo.repository.*.*(..))")
+    @After(value = "execution(* com.school.repository.*.*(..))")
     public void daoLogAfter(JoinPoint point) throws Throwable {
         strLog ="Ending method: "
                 + point.getTarget().getClass().getName() + "."

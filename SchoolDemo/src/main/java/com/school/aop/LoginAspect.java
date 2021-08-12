@@ -14,19 +14,13 @@ import com.school.annotation.UserLoginvalidation;
 @Order(3)
 
 public class LoginAspect {
-
-
     @Around(value = "execution(* com.school.controller.*.*(..)) && @annotation(userLoginvalidation)")
     public Object checkLogin(ProceedingJoinPoint point, UserLoginvalidation userLoginvalidation) throws Throwable {
         Object[] args = point.getArgs();
-
-
         Signature signature = point.getSignature();
         String methodName = signature.getName();
 
         Object result = null;
-
-
         return result;
     }
 

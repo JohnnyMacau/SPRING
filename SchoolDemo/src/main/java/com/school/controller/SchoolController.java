@@ -44,7 +44,7 @@ public class SchoolController {
 
     private static final Integer SUCCESS = 200;
     private static final Integer FAILURE = 500;
-    private static final Logger logger = LoggerFactory.getLogger(DataTablesController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SchoolController.class);
 
 //    private final IUserService userService;
 
